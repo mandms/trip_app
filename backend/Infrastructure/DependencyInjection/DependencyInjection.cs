@@ -1,7 +1,7 @@
-﻿using Infrastructure.Foundation;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿//using Infrastructure.Foundation;
+//using Microsoft.EntityFrameworkCore;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.DependencyInjection
 {

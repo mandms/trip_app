@@ -3,20 +3,30 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Foundation.Configurations;
-internal class ImageMomentConfiguration : IEntityTypeConfiguration<ImageMoment>
+internal class LocationConfiguration : IEntityTypeConfiguration<Location>
 {
 
-    public void Configure( EntityTypeBuilder<ImageMoment> builder )
+    public void Configure( EntityTypeBuilder<Location> builder )
     {
-        builder.ToTable( nameof( ImageMoment ) );
-        builder.HasKey( i => i.Id );
+        builder.ToTable( nameof( Location ) );
+        builder.HasKey( l => l.Id );
 
-        builder.Property( i => i.Image )
-               .HasMaxLength( 150 )
+        builder.Property( l => l.Order )
                .IsRequired();
 
-        builder.HasOne( i => i.Moment )
-               .WithMany()
-               .HasForeignKey( i => i.MomentId );
+        builder.Property( l => l.Coordination )
+               .IsRequired()
+               .HasColumnType( "geography (point)" );
+
+        builder.Property( l => l.Description )
+               .IsRequired();
+
+        builder.Property( l => l.Name )
+               .HasMaxLength( 100 )
+               .IsRequired();
+
+        builder.HasMany<ImageLocation>()
+               .WithOne()
+               .HasForeignKey( i => i.LocationId );
     }
 }

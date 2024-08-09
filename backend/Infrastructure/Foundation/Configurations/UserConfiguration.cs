@@ -34,5 +34,23 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Avatar)
               .HasMaxLength(150)
               .IsRequired();
+
+        builder.HasMany<Moment>()
+               .WithOne()
+               .HasForeignKey( m => m.UserId );
+
+        builder.HasMany<Review>()
+               .WithOne()
+               .HasForeignKey( r => r.UserId );
+
+        builder.HasMany<Route>()
+               .WithOne()
+               .HasForeignKey( r => r.UserId );
+
+        builder.HasMany<Route>()
+        .WithMany()
+        .UsingEntity<UserRoute>(
+            j => j.Property( r => r.State )
+            );
     }
 }

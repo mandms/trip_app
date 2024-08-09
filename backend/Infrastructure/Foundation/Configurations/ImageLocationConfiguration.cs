@@ -14,9 +14,5 @@ internal class ImageLocationConfiguration : IEntityTypeConfiguration<ImageLocati
         builder.Property( i => i.Image )
                .HasMaxLength( 150 )
                .IsRequired();
-
-        builder.HasOne( i => i.Location )
-               .WithMany()              
-               .HasForeignKey( i => i.LocationId );
     }
 }

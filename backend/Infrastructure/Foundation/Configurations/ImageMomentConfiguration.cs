@@ -14,9 +14,5 @@ internal class ImageMomentConfiguration : IEntityTypeConfiguration<ImageMoment>
         builder.Property( i => i.Image )
                .HasMaxLength( 150 )
                .IsRequired();
-
-        builder.HasOne( i => i.Moment )
-               .WithMany()
-               .HasForeignKey( i => i.MomentId );
     }
 }
