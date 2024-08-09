@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Foundation\Configurations\" />
     <Folder Include="Foundation\Repositories\" />
   </ItemGroup>
 
