@@ -10,7 +10,7 @@ internal class MomentConfiguration : IEntityTypeConfiguration<Moment>
         builder.ToTable( nameof( Moment ) );
         builder.HasKey( m => m.Id );
 
-        builder.Property( m => m.Coordination )
+        builder.Property( m => m.Coordinates )
                .IsRequired()
                .HasColumnType( "geography (point)" );
 

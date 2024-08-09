@@ -14,7 +14,7 @@ internal class LocationConfiguration : IEntityTypeConfiguration<Location>
         builder.Property( l => l.Order )
                .IsRequired();
 
-        builder.Property( l => l.Coordination )
+        builder.Property( l => l.Coordinates )
                .IsRequired()
                .HasColumnType( "geography (point)" );
 
