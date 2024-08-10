@@ -36,21 +36,15 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
               .IsRequired();
 
         builder.HasMany<Moment>()
-               .WithOne()
+               .WithOne( m => m.User)
                .HasForeignKey( m => m.UserId );
 
         builder.HasMany<Review>()
-               .WithOne()
+               .WithOne(r => r.User)
                .HasForeignKey( r => r.UserId );
 
         builder.HasMany<Route>()
-               .WithOne()
+               .WithOne( r => r.User )
                .HasForeignKey( r => r.UserId );
-
-        builder.HasMany<Route>()
-        .WithMany()
-        .UsingEntity<UserRoute>(
-            j => j.Property( r => r.State )
-            );
     }
 }

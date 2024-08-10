@@ -20,7 +20,7 @@ internal class CategoryConfiguration : IEntityTypeConfiguration<Category>
                .IsRequired();
 
         builder.HasMany<Tag>()
-               .WithOne()
+               .WithOne( t => t.Category)
                .HasForeignKey( t => t.CategoryId );
     }
 }
