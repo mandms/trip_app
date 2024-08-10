@@ -2,25 +2,24 @@
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 
-namespace Infrastructure.Foundation
+namespace Infrastructure.Foundation;
+
+public class TripAppDbContext : DbContext
 {
-    public class TripAppDbContext: DbContext
+    public TripAppDbContext(
+        DbContextOptions<TripAppDbContext> options
+        ) : base(options)
     {
-        public TripAppDbContext(
-            DbContextOptions<TripAppDbContext> options
-            ) : base(options)
-        {
-            Database.EnsureCreated();
-        }
+    }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
-        }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+    }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasPostgresExtension("postgis");
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
