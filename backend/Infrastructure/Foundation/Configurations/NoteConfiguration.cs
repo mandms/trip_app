@@ -16,7 +16,7 @@ internal class NoteConfiguration : IEntityTypeConfiguration<Note>
         builder.Property( n => n.CreatedAt )
                .IsRequired();
 
-        builder.Property( n => n.Status )
-               .IsRequired();
+        //builder.Property( n => n.Route )
+        //       .IsRequired();
     }
 }
