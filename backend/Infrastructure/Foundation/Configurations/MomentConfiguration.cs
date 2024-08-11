@@ -24,7 +24,7 @@ internal class MomentConfiguration : IEntityTypeConfiguration<Moment>
                .IsRequired();
 
         builder.HasMany<ImageMoment>()
-               .WithOne()
+               .WithOne(i => i.Moment)
                .HasForeignKey( i => i.MomentId );
     }
 }

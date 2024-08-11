@@ -8,7 +8,7 @@ internal class RouteConfiguration : IEntityTypeConfiguration<Route>
     public void Configure( EntityTypeBuilder<Route> builder )
     {
         builder.ToTable( nameof( Route ) );
-        builder.HasKey( r => r.Id );
+        builder.HasKey( c => c.Id );
 
         builder.Property( с => с.Name )
                .HasMaxLength( 100 )
@@ -24,15 +24,15 @@ internal class RouteConfiguration : IEntityTypeConfiguration<Route>
                .IsRequired();
 
         builder.HasMany<Note>()
-               .WithOne()
+               .WithOne( n => n.Route)
                .HasForeignKey( n => n.RouteId );
 
         builder.HasMany<Review>()
-               .WithOne()
+               .WithOne( r => r.Route)
                .HasForeignKey( r => r.RouteId );
 
         builder.HasMany<Location>()
-               .WithOne()
+               .WithOne(l => l.Route)
                .HasForeignKey( l => l.RouteId );
 
         builder.HasMany( r => r.Tags)
