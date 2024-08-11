@@ -10,6 +10,7 @@ public class TripAppDbContext : DbContext
         DbContextOptions<TripAppDbContext> options
         ) : base(options)
     {
+
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -21,5 +22,6 @@ public class TripAppDbContext : DbContext
     {
         modelBuilder.HasPostgresExtension("postgis");
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        new DbInitializer(modelBuilder).Seed();
     }
 }
