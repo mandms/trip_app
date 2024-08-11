@@ -12,7 +12,7 @@ public static class DependencyInjection
 
         services.AddDbContext<TripAppDbContext>(options =>
         {
-            options.UseNpgsql(connectionString, x => { x.UseNetTopologySuite(); x.MigrationsAssembly("WebApi"); });
+            options.UseNpgsql(connectionString, x => { x.UseNetTopologySuite(); x.MigrationsAssembly("Infrastructure"); });
         });
         services.InitRepositories();
     }
