@@ -1,4 +1,4 @@
-﻿using WebApi.Services.User;
+﻿using UseCases.Services.User;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace UseCases.DependencyInjection
@@ -9,7 +9,7 @@ namespace UseCases.DependencyInjection
         {
             services.InitServices();
         }
-            private static void InitServices(this IServiceCollection services)
+        private static void InitServices(this IServiceCollection services)
         {
             services.AddTransient<IUserService, UserService>();
         }

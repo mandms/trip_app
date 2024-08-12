@@ -1,4 +1,4 @@
-﻿namespace WebApi.DTOs
+﻿namespace UseCases.DTOs
 {
     public class CreateUserDto
     {

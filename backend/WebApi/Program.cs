@@ -1,4 +1,5 @@
 using Infrastructure.DependencyInjection;
+using UseCases.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDataAccessLayer(builder.Configuration);
+builder.Services.AddDataAccessLayer();
 
 var app = builder.Build();
 

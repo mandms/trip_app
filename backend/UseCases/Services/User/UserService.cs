@@ -1,18 +1,18 @@
-﻿using Infrastructure.Foundation.Repositories;
+﻿using Domain.Repositories;
 
-namespace WebApi.Services.User
+namespace UseCases.Services.User
 {
     public class UserService: IUserService
     {
-        private readonly UserRepository _repository;
-        public UserService(UserRepository repository) 
+        private readonly IUserRepository _repository;
+        public UserService(IUserRepository repository) 
         {
             _repository = repository;
         }
 
-        public Domain.Entities.User Get()
+        public Domain.Entities.User GetById(long id)
         {
-            return _repository.GetById(id: 1);
+            return _repository.GetById(id);
         }
     }
 }

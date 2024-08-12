@@ -31,7 +31,7 @@ namespace Infrastructure.Foundation.Repositories
             return _context.Set<T>().ToList();
         }
 
-        public T GetById(int id)
+        public T GetById(long id)
         {
             return _context.Set<T>().Find(id);
         }
