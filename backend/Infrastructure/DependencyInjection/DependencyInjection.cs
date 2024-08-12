@@ -1,4 +1,5 @@
-﻿using Infrastructure.Foundation;
+﻿using Domain.Repositories;
+using Infrastructure.Foundation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,5 +19,7 @@ public static class DependencyInjection
     }
 
     private static void InitRepositories(this IServiceCollection services)
-    { }
+    { 
+        services.AddScoped<IUserRepository>();
+    }
 }
