@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDataAccessLayer(builder.Configuration);
-builder.Services.AddDataAccessLayer();
+builder.Services.AddBusinessLogicLayer();
 
 var app = builder.Build();
 

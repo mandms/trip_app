@@ -5,7 +5,7 @@ namespace UseCases.DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static void AddDataAccessLayer(this IServiceCollection services)
+        public static void AddBusinessLogicLayer(this IServiceCollection services)
         {
             services.InitServices();
         }
