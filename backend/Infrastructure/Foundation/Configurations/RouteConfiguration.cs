@@ -14,8 +14,7 @@ internal class RouteConfiguration : IEntityTypeConfiguration<Route>
                .HasMaxLength( 100 )
                .IsRequired();
 
-        builder.Property( r => r.Description )
-               .IsRequired();
+        builder.Property( r => r.Description );
 
         builder.Property( r => r.Duration )
                .IsRequired();

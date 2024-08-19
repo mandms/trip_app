@@ -15,9 +15,8 @@ internal class CategoryConfiguration : IEntityTypeConfiguration<Category>
                .HasMaxLength( 50 )
                .IsRequired();
 
-        builder.Property( с => с.Description )
-               .HasMaxLength( 250 )
-               .IsRequired();
+        builder.Property(с => с.Description)
+               .HasMaxLength(250);
 
         builder.HasMany<Tag>()
                .WithOne( t => t.Category)

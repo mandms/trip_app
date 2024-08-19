@@ -20,8 +20,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
                .IsRequired();
 
         builder.Property(u => u.Biography)
-               .HasMaxLength(500)
-               .IsRequired();
+               .HasMaxLength(500);
 
         builder.Property(u => u.Email)
                .HasMaxLength(320)

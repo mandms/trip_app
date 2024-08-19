@@ -14,8 +14,7 @@ internal class MomentConfiguration : IEntityTypeConfiguration<Moment>
                .IsRequired()
                .HasColumnType( "geography (point)" );
 
-        builder.Property( m => m.Description )
-               .IsRequired();
+        builder.Property( m => m.Description );
 
         builder.Property( m => m.CreatedAt )
                .IsRequired();

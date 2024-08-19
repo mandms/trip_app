@@ -18,8 +18,7 @@ internal class LocationConfiguration : IEntityTypeConfiguration<Location>
                .IsRequired()
                .HasColumnType( "geography (point)" );
 
-        builder.Property( l => l.Description )
-               .IsRequired();
+        builder.Property( l => l.Description );
 
         builder.Property( l => l.Name )
                .HasMaxLength( 100 )
