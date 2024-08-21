@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using UseCases.Services.User;
 
 namespace WebApi.Controllers
 {
@@ -8,16 +8,16 @@ namespace WebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _service;
-        public UserController(IUserService service)
+        private readonly IUserRepository _userRepository;
+        public UserController(IUserRepository userRepository)
         {
-            _service = service;
+            _userRepository = userRepository;
         }
 
         [HttpGet("{id}")]
         public ActionResult<User> GetUser(long id)
         {
-            User user = _service.GetById(id);
+            User user = _userRepository.GetById(id);
             return new ObjectResult(user);
         }
     }
