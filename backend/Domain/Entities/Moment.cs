@@ -1,10 +1,9 @@
 ﻿using Domain.Interfaces;
 using NetTopologySuite.Geometries;
-using System;
 
 namespace Domain.Entities;
 
-public class Moment: IEntity
+public class Moment : IEntity
 {
     public long Id { get; set; }
     public Point Coordinates { get; set; } = null!;

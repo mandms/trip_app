@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class UserRoute: IEntity
+public class UserRoute : IEntity
 {
     public long Id { get; set; }
     public int State { get; set; }

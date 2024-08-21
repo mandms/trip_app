@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class ImageLocation: IEntity
+public class ImageLocation : IEntity
 {
     public long Id { get; set; }
     public string Image { get; set; } = null!;

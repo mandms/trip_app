@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class User: IEntity
+public class User : IEntity
 {
     public long Id { get; set; }
     public string Username { get; set; } = null!;

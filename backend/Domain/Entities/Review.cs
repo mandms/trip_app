@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Review: IEntity
+public class Review : IEntity
 {
     public long Id { get; set; }
     public int Rate { get; set; }

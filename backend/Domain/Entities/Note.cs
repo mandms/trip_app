@@ -1,9 +1,8 @@
 ﻿using Domain.Interfaces;
-using System;
 
 namespace Domain.Entities;
 
-public class Note: IEntity
+public class Note : IEntity
 {
     public long Id { get; set; }
     public string Text { get; set; } = null!;
