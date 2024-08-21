@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.Entities;
 
 namespace Infrastructure.Foundation.Configurations;
 
@@ -35,15 +35,15 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
               .IsRequired();
 
         builder.HasMany<Moment>()
-               .WithOne( m => m.User)
-               .HasForeignKey( m => m.UserId );
+               .WithOne(m => m.User)
+               .HasForeignKey(m => m.UserId);
 
         builder.HasMany<Review>()
                .WithOne(r => r.User)
-               .HasForeignKey( r => r.UserId );
+               .HasForeignKey(r => r.UserId);
 
         builder.HasMany<Route>()
-               .WithOne( r => r.User )
-               .HasForeignKey( r => r.UserId );
+               .WithOne(r => r.User)
+               .HasForeignKey(r => r.UserId);
     }
 }

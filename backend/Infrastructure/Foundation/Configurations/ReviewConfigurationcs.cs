@@ -1,22 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Domain.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Foundation.Configurations;
 internal class ReviewConfigurationcs : IEntityTypeConfiguration<Review>
 {
-    public void Configure( EntityTypeBuilder<Review> builder )
+    public void Configure(EntityTypeBuilder<Review> builder)
     {
-        builder.ToTable( nameof( Review ) );
-        builder.HasKey( r => r.Id );
+        builder.ToTable(nameof(Review));
+        builder.HasKey(r => r.Id);
 
-        builder.Property( r => r.Rate )
+        builder.Property(r => r.Rate)
                .IsRequired();
 
-        builder.Property( r => r.Text )
+        builder.Property(r => r.Text)
                .IsRequired();
 
-        builder.Property( r => r.CreatedAt )
+        builder.Property(r => r.CreatedAt)
                .IsRequired();
     }
 }
