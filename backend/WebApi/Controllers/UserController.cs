@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
+using Infrastructure.Foundation.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -8,17 +9,24 @@ namespace WebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly IBaseRepository<User> _userRepository;
+        public UserController(IBaseRepository<User> userRepository)
         {
             _userRepository = userRepository;
         }
 
         [HttpGet("{id}")]
-        public ActionResult<User> GetUser(long id)
+        public async Task<ActionResult<User>> GetUser(long id)
         {
-            User user = _userRepository.GetById(id);
+            User user = await _userRepository.GetById(id);
             return new ObjectResult(user);
+        }
+
+        [HttpGet]
+        public ActionResult<IQueryable<User>> GetUsers()
+        {
+            IQueryable<User> users = _userRepository.GetAll();
+            return new ObjectResult(users);
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using Domain.Repositories;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using Domain.Interfaces;
+using System.Threading;
 
 namespace Infrastructure.Foundation.Repositories
 {
-    public class BaseRepository<T>: IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
     {
         protected readonly TripAppDbContext _context;
         public BaseRepository(TripAppDbContext context)
@@ -11,39 +14,43 @@ namespace Infrastructure.Foundation.Repositories
             _context = context;
         }
 
-        public void Add(T entity)
+        public async Task Add(T entity, CancellationToken cancellationToken)
         {
-            _context.Set<T>().Add(entity);
+            await _context.Set<T>().AddAsync(entity);
+            await SaveAsync(cancellationToken);
         }
 
-        public void AddRange(IEnumerable<T> entities)
+        public async Task AddRange(IEnumerable<T> entities, CancellationToken cancellationToken)
         {
-            _context.Set<T>().AddRange(entities);
+            await _context.Set<T>().AddRangeAsync(entities);
+            await SaveAsync( cancellationToken );
         }
 
-        public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
+        public IQueryable<T> Find(Expression<Func<T, bool>> expression)
         {
-            return _context.Set<T>().Where(expression);
+            return _context.Set<T>().AsNoTracking().Where(expression);
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return _context.Set<T>().AsNoTracking().Where(u => u.Id == 1);
         }
 
-        public T GetById(long id)
+
+        public async Task<T?> GetById(long id)
         {
-            return _context.Set<T>().Find(id);
+            return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public void Remove(T entity)
+        public async Task Remove(T entity, CancellationToken cancellationToken)
         {
             _context.Set<T>().Remove(entity);
+            await SaveAsync(cancellationToken);
         }
 
-        public void RemoveRange(IEnumerable<T> entities)
+        protected async Task SaveAsync(CancellationToken cancellationToken)
         {
-            _context.Set<T>().RemoveRange(entities);
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
