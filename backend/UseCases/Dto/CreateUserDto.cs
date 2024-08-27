@@ -1,6 +1,20 @@
-﻿namespace UseCases.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
+
+namespace UseCases.DTOs
 {
+    [DisplayName("Create user")]
     public class CreateUserDto
     {
+        [MaxLength(320)]
+        [EmailAddress(ErrorMessage = "The Email field is not a valid email address.")]
+        [Required]
+        public string Email { get; set; } = null!;
+
+        [MaxLength(64)]
+        [MinLength(8)]
+        [PasswordPropertyText]
+        [Required]
+        public string Password { get; set; } = null!;
     }
 }

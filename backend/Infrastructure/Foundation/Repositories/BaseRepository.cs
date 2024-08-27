@@ -1,4 +1,4 @@
-﻿using Domain.Repositories;
+﻿using Domain.Contracts.Repositories;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Foundation.Repositories

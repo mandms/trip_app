@@ -1,4 +1,4 @@
-﻿using UseCases.Services.User;
+﻿using UseCases.Services.UserService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace UseCases.DependencyInjection

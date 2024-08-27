@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using UseCases.Services.User;
+using UseCases.DTOs;
+using UseCases.Services.UserService;
 
 namespace WebApi.Controllers
 {
@@ -14,11 +15,11 @@ namespace WebApi.Controllers
             _service = service;
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<User> GetUser(long id)
+        [HttpPost]
+        public async Task<ActionResult<CreateUserDto>> Post([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
-            User user = _service.GetById(id);
-            return new ObjectResult(user);
+            _service.Create(createUserDto, cancellationToken);
+            return Ok();
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Domain.Repositories;
+﻿using Domain.Contracts.Repositories;
+using Domain.Entities;
 
 namespace Infrastructure.Foundation.Repositories
 {

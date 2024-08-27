@@ -45,5 +45,8 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany<Route>()
                .WithOne(r => r.User)
                .HasForeignKey(r => r.UserId);
+
+        builder.HasIndex(u => u.Email)
+               .IsUnique();
     }
 }
