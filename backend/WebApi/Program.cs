@@ -1,6 +1,6 @@
 using Infrastructure.DependencyInjection;
 using System.ComponentModel;
-using UseCases.DependencyInjection;
+using Application.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,7 +1,7 @@
-﻿using UseCases.Services.UserService;
+﻿using Application.Services.UserService;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace UseCases.DependencyInjection
+namespace Application.DependencyInjection
 {
     public static class DependencyInjection
     {

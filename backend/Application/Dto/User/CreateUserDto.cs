@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace UseCases.DTOs
+namespace Application.Dto.User
 {
     [DisplayName("Create user")]
     public class CreateUserDto

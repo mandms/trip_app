@@ -1,7 +1,8 @@
-﻿using Domain.Entities;
+﻿using Application.Dto.User;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using UseCases.DTOs;
-using UseCases.Services.UserService;
+using Application.Services.UserService;
+using Application.Mappers;
 
 namespace WebApi.Controllers
 {
@@ -18,8 +19,31 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<CreateUserDto>> Post([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
-            _service.Create(createUserDto, cancellationToken);
+            await _service.Create(createUserDto, cancellationToken);
             return Ok();
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CurrentUserDto>> GetUser(long id)
+        {
+            var user = await _service.GetUser(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(user);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<UpdateUserDto>> Put(long id, UpdateUserDto updateUserDto, CancellationToken cancellationToken)
+        {
+            if (updateUserDto == null)
+            {
+                return BadRequest();
+            }
+            await _service.Put(id, updateUserDto, cancellationToken);
+            return Ok();
+        }
+
     }
 }
