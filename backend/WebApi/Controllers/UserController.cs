@@ -1,5 +1,6 @@
 ﻿using Application.Dto.User;
 using Domain.Entities;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Application.Services.UserService;
 using Application.Mappers;
@@ -27,10 +28,6 @@ namespace WebApi.Controllers
         public async Task<ActionResult<CurrentUserDto>> GetUser(long id)
         {
             var user = await _service.GetUser(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
             return new ObjectResult(user);
         }
 

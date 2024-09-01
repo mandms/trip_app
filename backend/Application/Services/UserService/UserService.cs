@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Exceptions;
 using Application.Mappers;
 using Domain.Contracts.Repositories;
 using Application.Dto.User;
@@ -27,7 +28,7 @@ namespace Application.Services.UserService
             var user = await _repository.GetCurrentUser(id);
             if (user == null)
             {
-                return null;
+                throw new UserNotFoundException(id);
             }
             CurrentUserDto userDto = UserMapper.UserCurrentUser(user);
             return userDto;
