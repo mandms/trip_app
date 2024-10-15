@@ -1,4 +1,5 @@
-﻿using Application.Services.UserService;
+﻿using Application.Services.RouteService;
+using Application.Services.UserService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.DependencyInjection
@@ -12,6 +13,7 @@ namespace Application.DependencyInjection
         private static void InitServices(this IServiceCollection services)
         {
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRouteService, RouteService>();
         }
     }
 }

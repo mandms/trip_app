@@ -18,6 +18,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddBusinessLogicLayer();
+builder.Services.AddAuthentication();
 
 var app = builder.Build();
 
@@ -31,6 +32,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllers();
 

@@ -20,7 +20,6 @@ namespace Infrastructure.Foundation
                 Avatar = "avatar1.jpg",
                 Biography = "Biography1..",
                 Email = "one@mail.com",
-                Name = "John",
                 Password = "ddfsdfwfe",
                 Username = "john1"
             };
@@ -31,7 +30,6 @@ namespace Infrastructure.Foundation
                 Avatar = "avatar2.jpg",
                 Biography = "Biography2..",
                 Email = "two@mail.com",
-                Name = "Paul",
                 Password = "ddfsdfwfe",
                 Username = "paul1"
             };
@@ -42,7 +40,6 @@ namespace Infrastructure.Foundation
                 Avatar = "avatar3.jpg",
                 Biography = "Biography3..",
                 Email = "three@mail.com",
-                Name = "Bob",
                 Password = "dfghjkj",
                 Username = "bob1"
             };

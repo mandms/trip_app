@@ -5,9 +5,9 @@ namespace Application.Mappers
 {
     public static class UserMapper
     {
-        public static CurrentUserDto UserCurrentUser(User user)
+        public static UserDto UserCurrentUser(User user)
         {
-            return new CurrentUserDto
+            return new UserDto
             {
                 Id = user.Id,
                 Username = user.Username,
@@ -18,7 +18,6 @@ namespace Application.Mappers
 
         public static void UpdateUserDtoUser(User user, UpdateUserDto userDto)
         {
-            user.Name = userDto.Name;
             user.Avatar = userDto.Avatar;
             user.Biography = userDto.Biography;
             user.Username = userDto.Username;
@@ -33,7 +32,7 @@ namespace Application.Mappers
             };
         }
 
-        public static List<CurrentUserDto> UsersToUserDtos(List<User> users)
+        public static List<UserDto> UsersToUserDtos(List<User> users)
         {
             return users.Select(UserCurrentUser).ToList();
         }

@@ -19,7 +19,12 @@ namespace Infrastructure.Foundation.Repositories
                     Email = u.Email,
                     Username = u.Username,
                     Avatar = u.Avatar
-                }).FirstOrDefaultAsync(e => e.Id == id);
+                }).FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken)
+        {
+            return await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
     }
 }

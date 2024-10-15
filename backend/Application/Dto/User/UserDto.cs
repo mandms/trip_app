@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Application.Dto.User
 {
     [DisplayName("Current user")]
-    public class CurrentUserDto
+    public class UserDto
     {
         [JsonIgnore]
         public long Id { get; set; }

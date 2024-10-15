@@ -2,34 +2,43 @@
 using Application.Mappers;
 using Domain.Contracts.Repositories;
 using Application.Dto.User;
+using Domain.Contracts.Utils;
 
 namespace Application.Services.UserService
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _repository;
-        public UserService(IUserRepository repository) 
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly IJwtProvider _jwtProvider;
+        private const string UsernamePrefix = "user";
+
+        public UserService(
+            IUserRepository repository, 
+            IPasswordHasher passwordHasher,
+            IJwtProvider jwtProvider) 
         {
             _repository = repository;
+            _passwordHasher = passwordHasher;
+            _jwtProvider = jwtProvider;
         }
 
         public async Task Create(CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
             User user = UserMapper.CreateUserDtoUser(createUserDto);
-            user.Username = Guid.NewGuid().ToString().Substring(0, 15);
-            user.Name = Guid.NewGuid().ToString().Substring(0, 15);
-
+            user.Username = user.Email.Substring(0, 14);
+            user.Password = _passwordHasher.Hash(user.Password);
             await _repository.Add(user, cancellationToken);
         }
 
-        public async Task<CurrentUserDto?> GetUser(long id)
+        public async Task<UserDto?> GetUser(long id)
         {
             var user = await _repository.GetCurrentUser(id);
             if (user == null)
             {
                 return null;
             }
-            CurrentUserDto userDto = UserMapper.UserCurrentUser(user);
+            UserDto userDto = UserMapper.UserCurrentUser(user);
             return userDto;
         }
 
@@ -42,6 +51,22 @@ namespace Application.Services.UserService
             }
             UserMapper.UpdateUserDtoUser(user, updateUserDto);
             await _repository.Update(user, cancellationToken);
+        }
+
+        public async Task<string> Login(CreateUserDto createUserDto, CancellationToken cancellationToken)
+        {
+            var user = await _repository.GetUserByEmail(createUserDto.Email, cancellationToken);
+
+            if (user == null)
+            {
+                throw new Exception();
+            }
+
+            var result = _passwordHasher.Verify(createUserDto.Password, user.Password);
+
+            string jwt = _jwtProvider.GenerateToken(user);
+
+            return jwt;
         }
     }
 }
