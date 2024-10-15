@@ -2,9 +2,6 @@
 using Domain.Contracts.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Domain.Interfaces;
-using System.Threading;
 
 namespace Infrastructure.Foundation.Repositories
 {

@@ -1,9 +1,7 @@
 ﻿using Application.Dto.User;
 using Domain.Entities;
-using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Application.Services.UserService;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
@@ -12,10 +10,10 @@ namespace WebApi.Controllers
     //[Authorize]
     public class UserController : ControllerBase
     {
-        private readonly IBaseRepository<User> _userRepository;
-        public UserController(IBaseRepository<User> userRepository)
+        private readonly IUserService _service;
+        public UserController(IUserService service)
         {
-            _userRepository = userRepository;
+            _service = service;
         }
 
         [HttpPost("/registration")]
