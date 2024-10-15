@@ -1,12 +1,15 @@
-﻿using Domain.Entities;
-using Domain.Repositories;
-using Infrastructure.Foundation.Repositories;
+﻿using Application.Dto.User;
+using Domain.Entities;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using Application.Services.UserService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class UserController : ControllerBase
     {
         private readonly IBaseRepository<User> _userRepository;
@@ -15,18 +18,37 @@ namespace WebApi.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        [HttpPost("/registration")]
+        public async Task<ActionResult<CreateUserDto>> Post([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
-            User user = await _userRepository.GetById(id);
+            await _service.Create(createUserDto, cancellationToken);
+            return Ok();
+        }
+
+        [HttpPost("/login")]
+        public async Task<ActionResult<CreateUserDto>> PostLogin([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
+        {
+            string token = await _service.Login(createUserDto, cancellationToken);
+            return Ok(token);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserDto>> GetUser(long id)
+        {
+            var user = await _service.GetUser(id);
             return new ObjectResult(user);
         }
 
-        [HttpGet]
-        public ActionResult<IQueryable<User>> GetUsers()
+        [HttpPut("{id}")]
+        public async Task<ActionResult<UpdateUserDto>> Put(long id, UpdateUserDto updateUserDto, CancellationToken cancellationToken)
         {
-            IQueryable<User> users = _userRepository.GetAll();
-            return new ObjectResult(users);
+            if (updateUserDto == null)
+            {
+                return BadRequest();
+            }
+            await _service.Put(id, updateUserDto, cancellationToken);
+            return Ok();
         }
+
     }
 }

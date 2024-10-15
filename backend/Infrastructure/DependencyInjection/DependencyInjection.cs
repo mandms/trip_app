@@ -1,6 +1,9 @@
-﻿using Domain.Repositories;
+﻿using Domain.Contracts.Repositories;
+using Domain.Contracts.Utils;
 using Infrastructure.Foundation;
 using Infrastructure.Foundation.Repositories;
+using Infrastructure.Providers;
+using Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,10 +21,18 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString, x => { x.UseNetTopologySuite(); x.MigrationsAssembly("Infrastructure"); }).LogTo(Console.WriteLine, LogLevel.Information);
         });
         services.InitRepositories();
+        services.InitUtils();
     }
 
     private static void InitRepositories(this IServiceCollection services)
+    { 
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRouteRepository, RouteRepository>();
+    }
+
+    private static void InitUtils(this IServiceCollection services)
     {
-        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
     }
 }

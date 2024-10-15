@@ -1,4 +1,4 @@
-﻿using Domain.Interfaces;
+﻿using Domain.Contracts.Entities;
 using NetTopologySuite.Geometries;
 
 namespace Domain.Entities;

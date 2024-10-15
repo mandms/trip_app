@@ -1,4 +1,4 @@
-﻿namespace Domain.Interfaces
+﻿namespace Domain.Contracts.Entities
 {
     public interface IEntity
     {

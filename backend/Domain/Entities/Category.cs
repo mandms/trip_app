@@ -1,4 +1,4 @@
-﻿using Domain.Interfaces;
+﻿using Domain.Contracts.Entities;
 
 namespace Domain.Entities;
 

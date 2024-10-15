@@ -1,4 +1,4 @@
-﻿using Domain.Interfaces;
+﻿using Domain.Contracts.Entities;
 
 namespace Domain.Entities;
 
@@ -9,6 +9,5 @@ public class User : IEntity
     public string Email { get; set; } = null!;
     public string? Biography { get; set; }
     public string Password { get; set; } = null!;
-    public string Name { get; set; } = null!;
     public string Avatar { get; set; } = null!;
 }
