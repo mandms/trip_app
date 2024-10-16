@@ -110,7 +110,7 @@ namespace Infrastructure.Foundation
                 Name = "Moscow - Saint Petersburg",
                 Description = "Route description 1",
                 Duration = 1,
-                Status = 4,
+                Status = 1,
                 UserId = john.Id
             };
 
@@ -120,7 +120,7 @@ namespace Infrastructure.Foundation
                 Name = "Mountain tour",
                 Description = "Route description 2",
                 Duration = 10,
-                Status = 5,
+                Status = 1,
                 UserId = paul.Id
             };
 
@@ -130,7 +130,7 @@ namespace Infrastructure.Foundation
                 Name = "European travel",
                 Description = "Route description 3",
                 Duration = 20,
-                Status = 3,
+                Status = 0,
                 UserId = bob.Id
             };
 

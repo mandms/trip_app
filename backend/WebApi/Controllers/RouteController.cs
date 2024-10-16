@@ -15,9 +15,10 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IQueryable<GetAllRoutesDto>> Get()
         {
-            return new string[] { "value1", "value2" };
+            var routes = _service.GetAllRoutes(); 
+            return Ok(routes.ToList()); 
         }
 
         [HttpGet("{id}")]
@@ -29,6 +30,13 @@ namespace WebApi.Controllers
                 return NotFound();
             }
             return new ObjectResult(route);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id, CancellationToken cancellationToken)
+        {
+            await _service.DeleteRoute(id, cancellationToken);
+            return Ok();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Infrastructure.Foundation.Repositories
 
         public IQueryable<T> GetAll()
         {
-            return _context.Set<T>().AsNoTracking().Where(u => u.Id == 1);
+            return _context.Set<T>().AsNoTracking();
         }
 
         public async Task<T?> GetById(long id)

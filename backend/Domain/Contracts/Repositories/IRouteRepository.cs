@@ -2,8 +2,9 @@
 
 namespace Domain.Contracts.Repositories
 {
-    public interface IRouteRepository
+    public interface IRouteRepository : IBaseRepository<Route>
     {
+        IQueryable<Route> GetAllRoutes();
         Task<Route?> GetRouteById(long id);
     }
 }

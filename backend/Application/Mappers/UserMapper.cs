@@ -36,5 +36,15 @@ namespace Application.Mappers
         {
             return users.Select(UserCurrentUser).ToList();
         }
+
+        public static UserRouteDto UserUserRoute(User user)
+        {
+            return new UserRouteDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Avatar = user.Avatar,
+            };
+        }
     }
 }
