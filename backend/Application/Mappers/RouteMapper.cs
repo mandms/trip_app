@@ -31,5 +31,27 @@ namespace Application.Mappers
                 User = UserMapper.UserCurrentUser(route.User)
             };
         }
+
+        public static Route CreateRouteDtoToRoute(CreateRouteDto createRouteDto, List<Tag> tags)
+        {
+            return new Route
+            {
+                Description = createRouteDto.Description,
+                Duration = createRouteDto.Duration,
+                Status = createRouteDto.Status,
+                Name = createRouteDto.Name,
+                UserId = createRouteDto.UserId,
+                Tags = tags,
+            };
+        }
+
+        public static UserRoute ToUserRoute(long userId, long routeId)
+        {
+            return new UserRoute
+            {
+                UserId = userId,
+                RouteId = routeId,
+            };
+        }
     }
 }

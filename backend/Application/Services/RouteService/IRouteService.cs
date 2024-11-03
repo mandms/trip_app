@@ -7,5 +7,6 @@ namespace Application.Services.RouteService
         IQueryable<GetAllRoutesDto> GetAllRoutes();
         Task<RouteDto?> GetRoute(long id);
         Task DeleteRoute(long id, CancellationToken cancellationToken);
+        Task Create(CreateRouteDto createRouteDto, CancellationToken cancellationToken);
     }
 }

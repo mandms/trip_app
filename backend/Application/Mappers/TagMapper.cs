@@ -1,5 +1,4 @@
 ﻿using Application.Dto.Tag;
-using Application.Dto.User;
 using Domain.Entities;
 
 namespace Application.Mappers

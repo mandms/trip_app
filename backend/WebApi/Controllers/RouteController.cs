@@ -38,5 +38,12 @@ namespace WebApi.Controllers
             await _service.DeleteRoute(id, cancellationToken);
             return Ok();
         }
+
+        [HttpPost]
+        public async Task<ActionResult<CreateRouteDto>> Post([FromBody] CreateRouteDto createRouteDto, CancellationToken cancellationToken)
+        {
+            await _service.Create(createRouteDto, cancellationToken);
+            return Ok();
+        }
     }
 }

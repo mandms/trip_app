@@ -12,4 +12,5 @@ public class Route : IEntity
     public long UserId { get; set; }
     public User User { get; set; } = null!;
     public List<Tag> Tags { get; set; } = new List<Tag>();
+    public List<Location> Locations { get; set; } = new List<Location>();
 }

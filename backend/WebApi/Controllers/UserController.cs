@@ -1,9 +1,7 @@
 ﻿using Application.Dto.User;
 using Domain.Entities;
-using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Application.Services.UserService;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
