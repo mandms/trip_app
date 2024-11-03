@@ -1,4 +1,5 @@
-﻿using Application.Dto.User;
+﻿using Application.Dto.Tag;
+using Application.Dto.User;
 using System.ComponentModel;
 
 namespace Application.Dto.Route
@@ -12,5 +13,6 @@ namespace Application.Dto.Route
         public int? Duration { get; set; }
         public UserRouteDto User { get; set; } = null!;
         public int Status { get; set; }
+        public List<TagDto> Tags { get; set; } = new();
     }
 }

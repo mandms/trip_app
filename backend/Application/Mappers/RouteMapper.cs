@@ -14,7 +14,8 @@ namespace Application.Mappers
                 Name = route.Name,
                 Duration = route.Duration,
                 Status = route.Status,
-                User = UserMapper.UserUserRoute(route.User)
+                User = UserMapper.UserUserRoute(route.User),
+                Tags = TagMapper.TagsToTagDtos(route.Tags)
             };
         }
 
@@ -27,8 +28,9 @@ namespace Application.Mappers
                 Name = route.Name,
                 Duration = route.Duration,
                 Status = route.Status,
-                tags = TagMapper.TagsToTagDtos(route.Tags),
-                User = UserMapper.UserCurrentUser(route.User)
+                Tags = TagMapper.TagsToTagDtos(route.Tags),
+                User = UserMapper.UserCurrentUser(route.User),
+                Locations = LocationMapper.LocationsToLocationDto(route.Locations)
             };
         }
     }

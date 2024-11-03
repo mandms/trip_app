@@ -13,38 +13,19 @@ namespace Infrastructure.Foundation.Repositories
         public IQueryable<Route> GetAllRoutes()
         {
             var query = _context.Set<Route>().
-                Join(_context.Set<User>(),
-                r => r.UserId,
-                u => u.Id,
-                (r, u) => new Route
-                {
-                    Id = r.Id,
-                    Description = r.Description,
-                    Status = r.Status,
-                    Duration = r.Duration,
-                    Name = r.Name,
-                    User = r.User,
-                })
-                .Where(r => r.Status == 1);
+                Include(r => r.User).
+                Include(r => r.Tags).
+                Where(r => r.Status == 1);
             return query.AsNoTracking();
         }
 
         public async Task<Route?> GetRouteById(long id)
         {
             var query = _context.Set<Route>().
-                Join(_context.Set<User>(),
-                r => r.UserId,
-                u => u.Id,
-                (r, u) => new Route
-                {
-                    Id = r.Id,
-                    Description = r.Description,
-                    Status = r.Status,
-                    Duration = r.Duration,
-                    Name = r.Name,
-                    User = r.User,
-                    Tags = r.Tags,
-                });
+            Include(r => r.User).
+            Include(r => r.Tags).
+            Include(r => r.Locations).
+            ThenInclude(l => l.Images);
             return await query.FirstOrDefaultAsync(r => r.Id == id);
         }
     }
