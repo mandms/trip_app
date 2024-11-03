@@ -1,11 +1,17 @@
 ﻿using NetTopologySuite.Geometries;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Location
 {
+    [DisplayName("Location")]
     public class LocationDto
     {
-        public long Id { get; set; }
+        [Required]
+        [MinLength(1)]
+        public long Id { get; set; }        
         public string Name { get; set; } = null!;
+        [DataType(DataType.MultilineText)]
         public string? Description { get; set; }
         public Point Coordinates { get; set; } = null!;
         public int Order { get; set; }

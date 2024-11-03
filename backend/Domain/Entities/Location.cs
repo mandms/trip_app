@@ -12,5 +12,5 @@ public class Location : IEntity
     public string Name { get; set; } = null!;
     public long RouteId { get; set; }
     public Route Route { get; set; } = null!;
-    public List<ImageLocation> Images { get; set; } = new List<ImageLocation>();
+    public List<ImageLocation> Images { get; set; } = new();
 }

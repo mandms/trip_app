@@ -1,4 +1,5 @@
 ﻿using Application.Dto.Location;
+using Application.Dto.Route;
 using Domain.Entities;
 
 namespace Application.Mappers
@@ -21,6 +22,23 @@ namespace Application.Mappers
         public static List<LocationDto> LocationsToLocationDto(List<Location> location)
         {
             return location.Select(LocationToLocationDto).ToList();
+        }
+
+        public static List<Location> ToLocations(CreateRouteDto createRouteDto, long routeId)
+        {
+            return createRouteDto.Locations.Select(
+               (CreateLocationDto location) => new Location
+               {
+                   Coordinates = new NetTopologySuite.Geometries.Point(
+                       new NetTopologySuite.Geometries.Coordinate(
+                           location.Coordinates.Longitude,
+                           location.Coordinates.Latitude)
+                       ),
+                   Description = location.Description,
+                   Name = location.Name,
+                   Order = location.Order,
+                   RouteId = routeId
+               }).ToList();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Application.Dto.Location;
-using Application.Dto.Route;
+﻿using Application.Dto.Route;
 using Application.Mappers;
 using Domain.Contracts.Repositories;
 using Domain.Entities;
@@ -75,7 +74,7 @@ namespace Application.Services.RouteService
 
                 if (tag == null)
                 {
-                    throw new Exception("Tag does not exists");
+                    throw new Exception($"Tag with id: {tagId} does not exists");
                 }
 
                 return tag;
@@ -96,19 +95,7 @@ namespace Application.Services.RouteService
 
             UserRoute userRoute = RouteMapper.ToUserRoute(createRouteDto.UserId, route.Id);
 
-            List<Location> locations = createRouteDto.Locations.Select(
-                (CreateLocationDto location) => new Location
-                {
-                    Coordinates = new NetTopologySuite.Geometries.Point(
-                        new NetTopologySuite.Geometries.Coordinate(
-                            location.Coordinates.Longitude,
-                            location.Coordinates.Latitude)
-                        ),
-                    Description = location.Description,
-                    Name = location.Name,
-                    Order = location.Order,
-                    RouteId = route.Id
-                }).ToList();
+            List<Location> locations = LocationMapper.ToLocations(createRouteDto, route.Id);
 
             await _userRouteRepository.Add(userRoute, cancellationToken);
             await _locationRepository.AddRange(locations, cancellationToken);
