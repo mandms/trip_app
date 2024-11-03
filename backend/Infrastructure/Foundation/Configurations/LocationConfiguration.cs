@@ -24,7 +24,7 @@ internal class LocationConfiguration : IEntityTypeConfiguration<Location>
                .HasMaxLength(100)
                .IsRequired();
 
-        builder.HasMany<ImageLocation>()
+        builder.HasMany(l => l.Images)
                .WithOne(i => i.Location)
                .HasForeignKey(i => i.LocationId);
     }
