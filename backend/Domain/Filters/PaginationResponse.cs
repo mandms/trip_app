@@ -1,5 +1,8 @@
-﻿namespace Domain.Filters
+﻿using System.ComponentModel;
+
+namespace Domain.Filters
 {
+    [DisplayName("Pagination response")]
     public record PaginationResponse<T>
     {
         public int PageNumber { get; set; }

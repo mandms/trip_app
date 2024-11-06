@@ -106,11 +106,14 @@ namespace Application.Services.RouteService
 
         public async Task<RouteDto> UpdateRoute(long id,  UpdateRouteDto updateRouteDto, CancellationToken cancellationToken)
         {
-            if (id != updateRouteDto.Id)
+            Route? foundRoute = await _routeRepository.GetRouteById(id);
+            if (foundRoute == null)
             {
                 throw new RouteNotFoundException(id);
             }
-            Route foundRoute = await _routeRepository.CheckRouteExist(id);
+
+            RouteMapper.UpdateRoute(foundRoute, updateRouteDto);
+
             Route route = await _routeRepository.Update(foundRoute, cancellationToken);
             return RouteMapper.RouteToRouteDto(route);
         }

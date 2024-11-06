@@ -5,8 +5,6 @@ namespace Application.Dto.Route
     public class UpdateRouteDto
     {
         [Required]
-        public long Id { get; set; }
-        [Required]
         [MaxLength(100)]
         [MinLength(1)]
         public string Name { get; set; } = null!;
@@ -14,8 +12,7 @@ namespace Application.Dto.Route
         [MaxLength(1000)]
         [MinLength(1)]
         public string? Description { get; set; }
-        [MaxLength(1000)]
-        [MinLength(1)]
+        [Range(1, System.Int32.MaxValue)]
         public int? Duration { get; set; }
         [Required]
         public int Status { get; set; }

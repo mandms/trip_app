@@ -47,6 +47,14 @@ namespace Application.Mappers
             };
         }
 
+        public static void UpdateRoute(Route route, UpdateRouteDto updateRouteDto)
+        {
+            route.Description = updateRouteDto.Description;
+            route.Duration = updateRouteDto.Duration;
+            route.Status = updateRouteDto.Status;
+            route.Name = updateRouteDto.Name;
+        }
+
         public static UserRoute ToUserRoute(long userId, long routeId)
         {
             return new UserRoute

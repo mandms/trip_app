@@ -1,6 +1,7 @@
 ﻿using Application.Dto.Route;
 using Application.Services.RouteService;
 using Domain.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -16,6 +17,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult<PaginationResponse<GetAllRoutesDto>> GetAll([FromQuery] FilterParams filterParams)
         {
             var pagedResponse = _service.GetAllRoutes(filterParams); 
@@ -59,6 +61,13 @@ namespace WebApi.Controllers
         {
             await _service.DeleteTag(routeId, tagId, cancellationToken);
             return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<RouteDto>> Put(long id, UpdateRouteDto updateRouteDto, CancellationToken cancellationToken)
+        {
+            var route = await _service.UpdateRoute(id, updateRouteDto, cancellationToken);
+            return Ok(route);
         }
     }
 }

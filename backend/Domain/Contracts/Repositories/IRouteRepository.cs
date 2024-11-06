@@ -7,7 +7,6 @@ namespace Domain.Contracts.Repositories
     {
         IQueryable<Route> GetAllRoutes(FilterParams filterParams);
         Task<Route?> GetRouteById(long id);
-        Task<Route> CheckRouteExist(long id);
         Task AddTag(Route route, Tag tag, CancellationToken cancellationToken);
         Task DeleteTag(Route route, Tag tag, CancellationToken cancellationToken);
     }
