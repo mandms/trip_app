@@ -33,18 +33,41 @@ namespace Application.Mappers
         public static List<Location> ToLocations(CreateRouteDto createRouteDto, long routeId)
         {
             return createRouteDto.Locations.Select(
-               (CreateLocationDto location) => new Location
+               (CreateLocationDto location, int i) => new Location
                {
-                   Coordinates = new NetTopologySuite.Geometries.Point(
-                       new NetTopologySuite.Geometries.Coordinate(
-                           location.Coordinates.Longitude,
-                           location.Coordinates.Latitude)
-                       ),
+                   Coordinates = CreatePoint(location.Coordinates),
                    Description = location.Description,
                    Name = location.Name,
-                   Order = location.Order,
-                   RouteId = routeId
+                   RouteId = routeId,
+                   Order = i++
                }).ToList();
+        }
+
+        public static Location ToLocation(CreateLocationDto createRouteDto, long routeId)
+        {
+            return new Location
+            {
+                Coordinates = CreatePoint(createRouteDto.Coordinates),
+                Description = createRouteDto.Description,
+                Name = createRouteDto.Name,
+                RouteId = routeId
+            };
+        }
+
+        private static NetTopologySuite.Geometries.Point CreatePoint(Coordinates coordinates)
+        {
+            return new NetTopologySuite.Geometries.Point( 
+                new NetTopologySuite.Geometries.Coordinate(
+                    coordinates.Longitude,
+                    coordinates.Latitude));
+        }
+
+        public static void UpdateLocationDtoLocation(Location location, UpdateLocationDto updateLocationDto)
+        {
+            location.Coordinates = CreatePoint(updateLocationDto.Coordinates);
+            location.Description = updateLocationDto.Description;
+            location.Name = updateLocationDto.Name;
+            location.Order = updateLocationDto.Order;
         }
     }
 }

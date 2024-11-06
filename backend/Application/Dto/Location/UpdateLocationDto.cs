@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Location
 {
-    [DisplayName("Create location")]
-    public class CreateLocationDto
+    [DisplayName("Update location")]
+    public class UpdateLocationDto
     {
         [Required]
         [MaxLength(100)]
@@ -19,6 +19,8 @@ namespace Application.Dto.Location
         [Required]
         public Coordinates Coordinates { get; set; } = null!;
 
-        public List<string>? Images { get; set; } = null!;
+        [Required]
+        [Range(1, Int32.MaxValue)]
+        public int Order { get; set; } = 0!;
     }
 }

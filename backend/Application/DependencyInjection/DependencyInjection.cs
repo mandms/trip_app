@@ -1,4 +1,5 @@
-﻿using Application.Services.RouteService;
+﻿using Application.Services.LocationService;
+using Application.Services.RouteService;
 using Application.Services.UserService;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +15,7 @@ namespace Application.DependencyInjection
         {
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRouteService, RouteService>();
+            services.AddTransient<ILocationService, LocationService>();
         }
     }
 }

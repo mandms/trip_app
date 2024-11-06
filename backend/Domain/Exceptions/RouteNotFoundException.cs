@@ -3,7 +3,7 @@
     public class RouteNotFoundException : Exception
     {
         public RouteNotFoundException(long id)
-        : base($"Маршрут с ID {id} не найден")
+        : base($"Route with ID {id} does not exist")
         {
         }
     }
