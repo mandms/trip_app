@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts.Repositories;
 using Domain.Entities;
+using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Foundation.Repositories
@@ -10,12 +11,26 @@ namespace Infrastructure.Foundation.Repositories
         {
         }
 
-        public IQueryable<Route> GetAllRoutes()
+        public async Task AddTag(Route route, Tag tag, CancellationToken cancellationToken)
+        {
+            route.Tags.Add(tag);
+            await SaveAsync(cancellationToken);
+        }
+
+        public async Task DeleteTag(Route route, Tag tag, CancellationToken cancellationToken)
+        {
+            route.Tags.Remove(tag);
+            await SaveAsync(cancellationToken);
+        }
+
+        public IQueryable<Route> GetAllRoutes(FilterParams filterParams)
         {
             var query = _context.Set<Route>().
                 Include(r => r.User).
                 Include(r => r.Tags).
-                Where(r => r.Status == 1);
+                Where(r => r.Status == 1).
+                Sort(filterParams);
+
             return query.AsNoTracking();
         }
 

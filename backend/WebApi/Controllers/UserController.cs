@@ -16,14 +16,14 @@ namespace WebApi.Controllers
             _service = service;
         }
 
-        [HttpPost("/registration")]
+        [HttpPost("registration")]
         public async Task<ActionResult<CreateUserDto>> Post([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
             await _service.Create(createUserDto, cancellationToken);
             return Ok();
         }
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<ActionResult<CreateUserDto>> PostLogin([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
             string token = await _service.Login(createUserDto, cancellationToken);

@@ -3,6 +3,7 @@ using Application.Mappers;
 using Domain.Contracts.Repositories;
 using Domain.Entities;
 using Domain.Exceptions;
+using Domain.Filters;
 
 namespace Application.Services.RouteService
 {
@@ -29,13 +30,15 @@ namespace Application.Services.RouteService
             _userRouteRepository = userRouteRepository;
         }
 
-        public IQueryable<GetAllRoutesDto> GetAllRoutes()
+        public PaginationResponse<GetAllRoutesDto> GetAllRoutes(FilterParams filterParams)
         {
-            var routes = _routeRepository.GetAllRoutes();
+            var route = _routeRepository.GetAllRoutes(filterParams);
 
-            var routeDtos = routes.Select(route => RouteMapper.RouteToGetAllRoutesDto(route));
+            var routeDtos = route.Select(route => RouteMapper.RouteToGetAllRoutesDto(route));
 
-            return routeDtos;
+            var pagedResponse = PaginationResponse<GetAllRoutesDto>.CreatepagedResponse(routeDtos, filterParams.PageNumber, filterParams.PageSize);
+
+            return pagedResponse;
         }
 
         public async Task<RouteDto?> GetRoute(long id)
@@ -74,7 +77,7 @@ namespace Application.Services.RouteService
 
                 if (tag == null)
                 {
-                    throw new Exception($"Tag with id: {tagId} does not exists");
+                    throw new TagNotFoundException(tagId);
                 }
 
                 return tag;
@@ -99,6 +102,40 @@ namespace Application.Services.RouteService
 
             await _userRouteRepository.Add(userRoute, cancellationToken);
             await _locationRepository.AddRange(locations, cancellationToken);
+        }
+
+        public async Task AddTag(long routeId, long tagId, CancellationToken cancellationToken)
+        {
+            var route = await _routeRepository.GetRouteById(routeId);
+            if (route == null)
+            {
+                throw new RouteNotFoundException(routeId);
+            }
+
+            var tag = await _tagRepository.GetById(tagId);
+            if (tag == null)
+            {
+                throw new TagNotFoundException(routeId);
+            }
+
+            await _routeRepository.AddTag(route, tag, cancellationToken);
+        }
+
+        public async Task DeleteTag(long routeId, long tagId, CancellationToken cancellationToken)
+        {
+            var route = await _routeRepository.GetRouteById(routeId);
+            if (route == null)
+            {
+                throw new RouteNotFoundException(routeId);
+            }
+
+            var tag = await _tagRepository.GetById(tagId);
+            if (tag == null)
+            {
+                throw new TagNotFoundException(routeId);
+            }
+
+            await _routeRepository.DeleteTag(route, tag, cancellationToken);
         }
     }
 }
