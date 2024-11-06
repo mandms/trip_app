@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts.Repositories;
 using Domain.Entities;
+using Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Foundation.Repositories
@@ -27,6 +28,16 @@ namespace Infrastructure.Foundation.Repositories
             Include(r => r.Locations).
             ThenInclude(l => l.Images);
             return await query.FirstOrDefaultAsync(r => r.Id == id);
+        }
+
+        public async Task<Route> CheckRouteExist(long id)
+        {
+            Route? route = await GetById(id);
+            if (route == null)
+            {
+                throw new RouteNotFoundException(id);
+            }
+            return route;
         }
     }
 }

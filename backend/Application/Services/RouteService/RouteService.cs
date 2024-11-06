@@ -100,5 +100,16 @@ namespace Application.Services.RouteService
             await _userRouteRepository.Add(userRoute, cancellationToken);
             await _locationRepository.AddRange(locations, cancellationToken);
         }
+
+        public async Task<RouteDto> UpdateRoute(long id,  UpdateRouteDto updateRouteDto, CancellationToken cancellationToken)
+        {
+            if (id != updateRouteDto.Id)
+            {
+                throw new RouteNotFoundException(id);
+            }
+            Route foundRoute = await _routeRepository.CheckRouteExist(id);
+            Route route = await _routeRepository.Update(foundRoute, cancellationToken);
+            return RouteMapper.RouteToRouteDto(route);
+        }
     }
 }

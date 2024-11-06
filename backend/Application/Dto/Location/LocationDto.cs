@@ -1,5 +1,4 @@
-﻿using NetTopologySuite.Geometries;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Location
@@ -13,7 +12,7 @@ namespace Application.Dto.Location
         public string Name { get; set; } = null!;
         [DataType(DataType.MultilineText)]
         public string? Description { get; set; }
-        public Point Coordinates { get; set; } = null!;
+        public Coordinates Coordinates { get; set; } = null!;
         public int Order { get; set; }
         public List<string> Images { get; set; } = new();
     }

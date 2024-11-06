@@ -6,5 +6,6 @@ namespace Domain.Contracts.Repositories
     {
         IQueryable<Route> GetAllRoutes();
         Task<Route?> GetRouteById(long id);
+        Task<Route> CheckRouteExist(long id);
     }
 }

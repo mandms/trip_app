@@ -8,12 +8,18 @@ namespace Application.Mappers
     {
         public static LocationDto LocationToLocationDto(Location location)
         {
+            var coordinates = location.Coordinates.Coordinate.CoordinateValue;
+
             return new LocationDto
             {
                 Id = location.Id,
                 Description = location.Description,
                 Name = location.Name,
-                Coordinates = location.Coordinates,
+                Coordinates = new Coordinates
+                {
+                    Latitude = coordinates.X,
+                    Longitude = coordinates.Y,
+                },
                 Order = location.Order,
                 Images = ImageMapper.ImageLocationToString(location.Images)
             };
