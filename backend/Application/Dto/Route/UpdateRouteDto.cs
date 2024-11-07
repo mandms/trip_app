@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Route
 {
+    [DisplayName("Update route")]
     public class UpdateRouteDto
     {
         [Required]

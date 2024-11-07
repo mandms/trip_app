@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Application.Dto.Coordinates;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Location
@@ -8,12 +9,20 @@ namespace Application.Dto.Location
     {
         [Required]
         [MinLength(1)]
-        public long Id { get; set; }        
+        public long Id { get; set; }
+        [Required]
+        [MaxLength(100)]
+        [MinLength(1)]
         public string Name { get; set; } = null!;
         [DataType(DataType.MultilineText)]
+        [MaxLength(1000)]
+        [MinLength(1)]
         public string? Description { get; set; }
-        public Coordinates Coordinates { get; set; } = null!;
+        [Required]
+        public CoordinatesDto Coordinates { get; set; } = null!;
+        [Required]
         public int Order { get; set; }
+        [Required]
         public List<string> Images { get; set; } = new();
     }
 }

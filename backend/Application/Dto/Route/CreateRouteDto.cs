@@ -8,13 +8,14 @@ namespace Application.Dto.Route
     public class CreateRouteDto
     {
         [Required]
-        [MaxLength(5)]
+        [MaxLength(100)]
         [MinLength(1)]
         public string Name { get; set; } = null!;
         [DataType(DataType.MultilineText)]
         [MaxLength(1000)]
         [MinLength(1)]
         public string? Description { get; set; }
+        [Required]
         [MaxLength(1000)]
         [MinLength(1)]
         public int Duration { get; set; }
@@ -24,6 +25,7 @@ namespace Application.Dto.Route
         public List<long> Tags { get; set; } = new();
         [Required]
         public List<CreateLocationDto> Locations { get; set; } = new();
+        [Required]
         public int Status { get; set; }
     }
 }

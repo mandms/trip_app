@@ -1,5 +1,4 @@
 using Infrastructure.DependencyInjection;
-using System.ComponentModel;
 using Application.DependencyInjection;
 using WebApi.ExeptionHandlers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,10 +17,7 @@ builder.Services.AddControllers().AddJsonOptions(options => {
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.CustomSchemaIds(x => x.GetCustomAttributes(false).OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.Name);
-});
+builder.Services.InitSwaggerGen();
 
 builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddBusinessLogicLayer();

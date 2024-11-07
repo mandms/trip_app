@@ -4,6 +4,7 @@ using Domain.Contracts.Repositories;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Filters;
+using Application.Dto.Pagination;
 
 namespace Application.Services.RouteService
 {
@@ -36,7 +37,7 @@ namespace Application.Services.RouteService
 
             var routeDtos = route.Select(route => RouteMapper.RouteToGetAllRoutesDto(route));
 
-            var pagedResponse = PaginationResponse<GetAllRoutesDto>.CreatepagedResponse(routeDtos, filterParams.PageNumber, filterParams.PageSize);
+            var pagedResponse = new PaginationResponse<GetAllRoutesDto>(routeDtos, filterParams.PageNumber, filterParams.PageSize);
 
             return pagedResponse;
         }

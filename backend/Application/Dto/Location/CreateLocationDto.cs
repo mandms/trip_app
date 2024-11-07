@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Application.Dto.Coordinates;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Location
@@ -14,11 +15,10 @@ namespace Application.Dto.Location
         [DataType(DataType.MultilineText)]
         [MaxLength(1000)]
         [MinLength(1)]
-        public string? Description { get; set; } = null!;
+        public string? Description { get; set; }
 
         [Required]
-        public Coordinates Coordinates { get; set; } = null!;
-
-        public List<string>? Images { get; set; } = null!;
+        public CoordinatesDto Coordinates { get; set; } = null!;
+        public List<string>? Images { get; set; }
     }
 }

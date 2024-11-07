@@ -3,6 +3,7 @@ using Application.Services.RouteService;
 using Domain.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.Dto.Pagination;
 
 namespace WebApi.Controllers
 {
@@ -25,18 +26,14 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<RouteDto>> Get(int id)
+        public async Task<ActionResult<RouteDto>> Get(long id)
         {
             var route = await _service.GetRoute(id);
-            if (route == null)
-            {
-                return NotFound();
-            }
             return new ObjectResult(route);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult> Delete(long id, CancellationToken cancellationToken)
         {
             await _service.DeleteRoute(id, cancellationToken);
             return Ok();

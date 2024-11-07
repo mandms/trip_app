@@ -1,0 +1,47 @@
+﻿using Application.Dto.Coordinates;
+using Application.Dto.Moment;
+using Domain.Entities;
+
+namespace Application.Mappers
+{
+    public class MomentMapper
+    {
+        public static MomentDto MomentToMomentDto(Moment moment)
+        {
+            var coordinates = moment.Coordinates.Coordinate.CoordinateValue;
+
+            return new MomentDto
+            {
+                Id = moment.Id,
+                Description = moment.Description,
+                Coordinates = new CoordinatesDto
+                {
+                    Latitude = coordinates.X,
+                    Longitude = coordinates.Y,
+                },
+                CreatedAt = moment.CreatedAt,
+                User = UserMapper.UserCurrentUser(moment.User),
+                Status = moment.Status,
+                Images = ImageMapper.ImageMomentToString(moment.Images)
+            };
+        }
+
+        public static Moment ToMoment(CreateMomentDto createMomentDto)
+        {
+            return new Moment
+            {
+                Coordinates = CoordinatesDto.CreatePoint(createMomentDto.Coordinates),
+                Description = createMomentDto.Description,
+                Status = createMomentDto.Status,
+                UserId = createMomentDto.UserId
+            };
+        }
+
+        public static void UpdateMoment(Moment moment, UpdateMomentDto updateMomentDto)
+        {
+            moment.Coordinates = CoordinatesDto.CreatePoint(updateMomentDto.Coordinates);
+            moment.Description = updateMomentDto.Description;
+            moment.Status = updateMomentDto.Status;
+        }
+    }
+}

@@ -2,27 +2,19 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Dto.Location
+namespace Application.Dto.Moment
 {
-    [DisplayName("Update location")]
-    public class UpdateLocationDto
+    [DisplayName("Update moment")]
+    public class UpdateMomentDto
     {
-        [Required]
-        [MaxLength(100)]
-        [MinLength(1)]
-        public string Name { get; set; } = null!;
-
         [DataType(DataType.MultilineText)]
         [MaxLength(1000)]
         [MinLength(1)]
         public string? Description { get; set; }
-
         [Required]
         public CoordinatesDto Coordinates { get; set; } = null!;
-
         [Required]
-        [Range(1, Int32.MaxValue)]
-        public int Order { get; set; } = 0!;
+        public int Status { get; set; }
         [Required]
         public List<string> Images { get; set; } = new();
     }

@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<ILocationRepository, LocationRepository>();
         services.AddScoped<IUserRouteRepository, UserRouteRepository>();
+        services.AddScoped<IMomentRepository, MomentRepository>();
         services.AddTransient<IDbTransaction, DbTransaction>();
     }
 

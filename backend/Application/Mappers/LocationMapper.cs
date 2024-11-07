@@ -1,4 +1,5 @@
-﻿using Application.Dto.Location;
+﻿using Application.Dto.Coordinates;
+using Application.Dto.Location;
 using Application.Dto.Route;
 using Domain.Entities;
 
@@ -15,7 +16,7 @@ namespace Application.Mappers
                 Id = location.Id,
                 Description = location.Description,
                 Name = location.Name,
-                Coordinates = new Coordinates
+                Coordinates = new CoordinatesDto
                 {
                     Latitude = coordinates.X,
                     Longitude = coordinates.Y,
@@ -35,7 +36,7 @@ namespace Application.Mappers
             return createRouteDto.Locations.Select(
                (CreateLocationDto location, int i) => new Location
                {
-                   Coordinates = CreatePoint(location.Coordinates),
+                   Coordinates = CoordinatesDto.CreatePoint(location.Coordinates),
                    Description = location.Description,
                    Name = location.Name,
                    RouteId = routeId,
@@ -47,24 +48,16 @@ namespace Application.Mappers
         {
             return new Location
             {
-                Coordinates = CreatePoint(createRouteDto.Coordinates),
+                Coordinates = CoordinatesDto.CreatePoint(createRouteDto.Coordinates),
                 Description = createRouteDto.Description,
                 Name = createRouteDto.Name,
                 RouteId = routeId
             };
         }
 
-        private static NetTopologySuite.Geometries.Point CreatePoint(Coordinates coordinates)
-        {
-            return new NetTopologySuite.Geometries.Point( 
-                new NetTopologySuite.Geometries.Coordinate(
-                    coordinates.Longitude,
-                    coordinates.Latitude));
-        }
-
         public static void UpdateLocationDtoLocation(Location location, UpdateLocationDto updateLocationDto)
         {
-            location.Coordinates = CreatePoint(updateLocationDto.Coordinates);
+            location.Coordinates = CoordinatesDto.CreatePoint(updateLocationDto.Coordinates);
             location.Description = updateLocationDto.Description;
             location.Name = updateLocationDto.Name;
             location.Order = updateLocationDto.Order;
