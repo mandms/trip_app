@@ -5,22 +5,42 @@ using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Filters;
 using Application.Dto.Pagination;
+using Application.Services.FileService;
 
 namespace Application.Services.MomentService
 {
     public class MomentService : IMomentService
     {
         private readonly IMomentRepository _repository;
+        private readonly IFileService _fileService;
+        private readonly IDbTransaction _dbTransaction;
 
-        public MomentService(IMomentRepository repository)
+        public MomentService(
+            IMomentRepository repository, 
+            IFileService fileService, 
+            IDbTransaction dbTransaction)
         {
             _repository = repository;
+            _fileService = fileService;
+            _dbTransaction = dbTransaction;
         }
 
         public async Task Create(CreateMomentDto createMomentDto, CancellationToken cancellationToken)
         {
+            var createMoment = () => CreateMoment(createMomentDto, cancellationToken);
+            await _dbTransaction.Transaction(createMoment);
+        }
+
+        private async Task CreateMoment(CreateMomentDto createMomentDto, CancellationToken cancellationToken)
+        {
             Moment moment = MomentMapper.ToMoment(createMomentDto);
             await _repository.Add(moment, cancellationToken);
+
+            if ((createMomentDto.Images != null) && (createMomentDto.Images.Count() > 0))
+            {
+                var tasks = _fileService.SaveImages(createMomentDto.Images, cancellationToken);
+                await Task.WhenAll(tasks);
+            }
         }
 
         public async Task Delete(long id, CancellationToken cancellationToken)

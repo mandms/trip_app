@@ -53,9 +53,9 @@ namespace Application.Mappers
             }
             return new Location
             {
-                Coordinates = CoordinatesDto.CreatePoint(createRouteDto.Coordinates),
-                Description = createRouteDto.Description,
-                Name = createRouteDto.Name,
+                Coordinates = CoordinatesDto.CreatePoint(createLocationDto.Coordinates),
+                Description = createLocationDto.Description,
+                Name = createLocationDto.Name,
                 RouteId = routeId,
                 Images = images
             };

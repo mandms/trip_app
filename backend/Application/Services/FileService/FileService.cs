@@ -25,7 +25,7 @@ namespace Application.Services.FileService
             }
         }
 
-        public async Task<string> SaveFileAsync(string base64Image, string[] allowedFileExtensions)
+        public async Task<string> SaveFileAsync(string base64Image, string[] allowedFileExtensions, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(base64Image))
             {
@@ -48,7 +48,7 @@ namespace Application.Services.FileService
             var fileName = $"{Guid.NewGuid().ToString()}.{ext}";
             var fileNameWithPath = Path.Combine(path, fileName);
             byte[] imageBytes = Convert.FromBase64String(base64Image);
-            await File.WriteAllBytesAsync(fileNameWithPath, imageBytes);
+            await File.WriteAllBytesAsync(fileNameWithPath, imageBytes, cancellationToken);
             return fileName;
         }
 
@@ -68,11 +68,11 @@ namespace Application.Services.FileService
             File.Delete(path);
         }
 
-        public List<Task<CreateImageDto>> SaveImages(List<CreateImageDto> createImageDtos)
+        public List<Task<CreateImageDto>> SaveImages(List<CreateImageDto> createImageDtos, CancellationToken cancellationToken)
         {
             return createImageDtos.Select(async image =>
              {
-                 image.Path = await SaveFileAsync(image.Image, ["jpg", "png", "jpeg"]);
+                 image.Path = await SaveFileAsync(image.Image, ["jpg", "png", "jpeg"], cancellationToken);
                  return image;
              }).ToList();
         }

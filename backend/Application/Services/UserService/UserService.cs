@@ -12,7 +12,6 @@ namespace Application.Services.UserService
         private readonly IUserRepository _repository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IJwtProvider _jwtProvider;
-        private const string UsernamePrefix = "user";
 
         public UserService(
             IUserRepository repository, 

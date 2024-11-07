@@ -26,22 +26,22 @@ namespace Application.Services.LocationService
 
         public async Task Create(CreateLocationDto createLocationDto, long routeId, CancellationToken cancellationToken)
         {
-            if ((createLocationDto.Images != null) && (createLocationDto.Images.Count() > 0))
-            {
-                var tasks = _fileService.SaveImages(createLocationDto.Images);
-                await Task.WhenAll(tasks);
-            }
-            
-            Location location = LocationMapper.ToLocation(createLocationDto, routeId);
-            var createLocation = () => CreateLocation(routeId, location, cancellationToken);
+            var createLocation = () => CreateLocation(routeId, createLocationDto, cancellationToken);
             await _dbTransaction.Transaction(createLocation);
         }
 
-        private async Task CreateLocation(long routeId, Location location, CancellationToken cancellationToken)
+        private async Task CreateLocation(long routeId, CreateLocationDto createLocationDto, CancellationToken cancellationToken)
         {
+            Location location = LocationMapper.ToLocation(createLocationDto, routeId);
             var maxOrder = _repository.GetMaxOrder(routeId);
             location.Order = maxOrder + 1;
             await _repository.Add(location, cancellationToken);
+
+            if ((createLocationDto.Images != null) && (createLocationDto.Images.Count() > 0))
+            {
+                var tasks = _fileService.SaveImages(createLocationDto.Images, cancellationToken);
+                await Task.WhenAll(tasks);
+            }
         }
 
         public async Task Put(long id, UpdateLocationDto updateLocationDto, CancellationToken cancellationToken)

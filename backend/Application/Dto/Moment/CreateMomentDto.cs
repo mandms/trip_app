@@ -1,4 +1,5 @@
 ﻿using Application.Dto.Coordinates;
+using Application.Dto.Image;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,6 +18,6 @@ namespace Application.Dto.Moment
         public int Status { get; set; }
         [Required]
         public long UserId { get; set; } = 0!;
-        public List<string>? Images { get; set; }
+        public List<CreateImageDto>? Images { get; set; }
     }
 }
