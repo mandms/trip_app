@@ -2,6 +2,7 @@
 using Application.Dto.Image;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Application.Dto.Moment
 {
@@ -16,7 +17,7 @@ namespace Application.Dto.Moment
         public CoordinatesDto Coordinates { get; set; } = null!;
         [Required]
         public int Status { get; set; }
-        [Required]
+        [JsonIgnore]
         public long UserId { get; set; } = 0!;
         public List<CreateImageDto>? Images { get; set; }
     }

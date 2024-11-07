@@ -3,6 +3,8 @@ using Application.Services.MomentService;
 using Domain.Filters;
 using Application.Dto.Pagination;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -37,9 +39,12 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<CreateMomentDto>> Post([FromBody] CreateMomentDto createMomentDto, CancellationToken cancellationToken)
         {
+            long id = (long)HttpContext.Items[ClaimTypes.Sid]!;
+            createMomentDto.UserId = id;
             await _service.Create(createMomentDto, cancellationToken);
             return Ok();
         }
@@ -50,6 +55,5 @@ namespace WebApi.Controllers
             await _service.Put(id, updateMomentDto, cancellationToken);
             return Ok();
         }
-
     }
 }
