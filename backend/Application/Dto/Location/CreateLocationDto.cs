@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Application.Dto.Image;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Location
@@ -19,6 +20,6 @@ namespace Application.Dto.Location
         [Required]
         public Coordinates Coordinates { get; set; } = null!;
 
-        public List<string>? Images { get; set; } = null!;
+        public List<CreateImageDto>? Images { get; set; } = null!;
     }
 }

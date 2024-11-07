@@ -4,23 +4,25 @@ using Application.DependencyInjection;
 using WebApi.ExeptionHandlers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WebApi.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers().AddJsonOptions(options => {
-    options.JsonSerializerOptions.Converters.Add(new NetTopologySuite.IO.Converters.GeoJsonConverterFactory());
+    options.JsonSerializerOptions.Converters.Add(
+        new NetTopologySuite.IO.Converters.GeoJsonConverterFactory()
+        );
 });
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.CustomSchemaIds(x => x.GetCustomAttributes(false).OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.Name);
+    c.CustomSchemaIds(
+        x => x.GetCustomAttributes(false)
+        .OfType<DisplayNameAttribute>()
+        .FirstOrDefault()?.DisplayName ?? x.Name);
 });
 
 builder.Services.AddDataAccessLayer(builder.Configuration);
@@ -42,6 +44,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+    RequestPath = "/Resources"
+});
 
 app.UseExceptionHandler();
 

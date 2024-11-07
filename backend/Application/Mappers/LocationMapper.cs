@@ -43,14 +43,20 @@ namespace Application.Mappers
                }).ToList();
         }
 
-        public static Location ToLocation(CreateLocationDto createRouteDto, long routeId)
+        public static Location ToLocation(CreateLocationDto createLocationDto, long routeId)
         {
+            List<ImageLocation> images = new();
+            if ((createLocationDto.Images != null) && (createLocationDto.Images.Count() > 0))
+            {
+                images = createLocationDto.Images.Select(image => new ImageLocation { Image = image.Path }).ToList();
+            }
             return new Location
             {
-                Coordinates = CreatePoint(createRouteDto.Coordinates),
-                Description = createRouteDto.Description,
-                Name = createRouteDto.Name,
-                RouteId = routeId
+                Coordinates = CreatePoint(createLocationDto.Coordinates),
+                Description = createLocationDto.Description,
+                Name = createLocationDto.Name,
+                RouteId = routeId,
+                Images = images
             };
         }
 
