@@ -16,8 +16,8 @@ namespace WebApi.Controllers
             _service = service;
         }
 
-        [HttpGet]
         [Authorize]
+        [HttpGet]
         public ActionResult<PaginationResponse<GetAllRoutesDto>> GetAll([FromQuery] FilterParams filterParams)
         {
             var pagedResponse = _service.GetAllRoutes(filterParams); 
