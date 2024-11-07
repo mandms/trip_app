@@ -27,6 +27,13 @@ namespace Application.Services.UserService
         public async Task Create(CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
             User user = UserMapper.CreateUserDtoUser(createUserDto);
+            User? foundUser = await _repository.GetUserByEmail(createUserDto.Email, cancellationToken);
+
+            if (foundUser != null)
+            {
+                throw new Exception("User already exist");
+            }
+
             user.Username = user.Email.Substring(0, 14);
             user.Password = _passwordHasher.Hash(user.Password);
             await _repository.Add(user, cancellationToken);
@@ -48,7 +55,7 @@ namespace Application.Services.UserService
             var user = await _repository.GetById(id);
             if (user == null)
             {
-                return;
+                throw new UserNotFoundException(id);
             }
             UserMapper.UpdateUserDtoUser(user, updateUserDto);
             await _repository.Update(user, cancellationToken);
@@ -60,10 +67,15 @@ namespace Application.Services.UserService
 
             if (user == null)
             {
-                throw new Exception();
+                throw new UserNotFoundException(0);
             }
 
             var result = _passwordHasher.Verify(createUserDto.Password, user.Password);
+
+            if (!result)
+            {
+                throw new UserNotFoundException(0);
+            }
 
             string jwt = _jwtProvider.GenerateToken(user);
 

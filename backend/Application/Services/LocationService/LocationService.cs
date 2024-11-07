@@ -3,6 +3,7 @@ using Application.Mappers;
 using Domain.Contracts.Repositories;
 using Application.Dto.Location;
 using Domain.Exceptions;
+using Application.Services.FileService;
 
 namespace Application.Services.LocationService
 {
@@ -10,15 +11,27 @@ namespace Application.Services.LocationService
     {
         private readonly ILocationRepository _repository;
         private readonly IDbTransaction _dbTransaction;
+        private readonly IFileService _fileService;
 
-        public LocationService(ILocationRepository repository, IDbTransaction dbTransaction) 
+        public LocationService(
+            ILocationRepository repository, 
+            IDbTransaction dbTransaction,
+            IFileService fileService
+            ) 
         {
             _repository = repository;
             _dbTransaction = dbTransaction;
+            _fileService = fileService;
         }
 
         public async Task Create(CreateLocationDto createLocationDto, long routeId, CancellationToken cancellationToken)
         {
+            if ((createLocationDto.Images != null) && (createLocationDto.Images.Count() > 0))
+            {
+                var tasks = _fileService.SaveImages(createLocationDto.Images);
+                await Task.WhenAll(tasks);
+            }
+            
             Location location = LocationMapper.ToLocation(createLocationDto, routeId);
             var createLocation = () => CreateLocation(routeId, location, cancellationToken);
             await _dbTransaction.Transaction(createLocation);

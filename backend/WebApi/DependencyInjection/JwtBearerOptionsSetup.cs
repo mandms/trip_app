@@ -6,7 +6,7 @@ using System.Text;
 
 namespace WebApi.DependencyInjection
 {
-    public class JwtBearerOptionsSetup: IConfigureOptions<JwtBearerOptions>
+    public class JwtBearerOptionsSetup: IConfigureNamedOptions<JwtBearerOptions>
     {
         private readonly JwtOptions _jwtOptions;
         public JwtBearerOptionsSetup(IOptions<JwtOptions> jwtOptions)
@@ -16,18 +16,21 @@ namespace WebApi.DependencyInjection
 
         public void Configure(JwtBearerOptions options)
         {
+            options.UseSecurityTokenValidators = true;
+            options.MapInboundClaims = false;
             options.TokenValidationParameters = new()
             {
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(
-                            _jwtOptions.SecretKey
-                            )
-                        )
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
             };
+        }
+
+        public void Configure(string? name, JwtBearerOptions options)
+        {
+            Configure(options);
         }
     }
 }
