@@ -18,13 +18,16 @@ namespace Infrastructure.Foundation.Repositories
                     Id = u.Id,
                     Email = u.Email,
                     Username = u.Username,
-                    Avatar = u.Avatar
+                    Avatar = u.Avatar,
+                    Roles = u.Roles
                 }).FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken)
         {
-            return await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+            return await _context.Set<User>()
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
     }
 }

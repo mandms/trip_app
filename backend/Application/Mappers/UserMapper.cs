@@ -18,7 +18,10 @@ namespace Application.Mappers
 
         public static void UpdateUserDtoUser(User user, UpdateUserDto userDto)
         {
-            user.Avatar = userDto.Avatar;
+            if (userDto.Avatar != null)
+            {
+                user.Avatar = userDto.Avatar.Path;
+            }
             user.Biography = userDto.Biography;
             user.Username = userDto.Username;
         }
@@ -35,6 +38,16 @@ namespace Application.Mappers
         public static List<UserDto> UsersToUserDtos(List<User> users)
         {
             return users.Select(UserCurrentUser).ToList();
+        }
+
+        public static UserRouteDto UserUserRoute(User user)
+        {
+            return new UserRouteDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Avatar = user.Avatar,
+            };
         }
     }
 }

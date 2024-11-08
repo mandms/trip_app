@@ -28,6 +28,12 @@ public static class DependencyInjection
     { 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
+        services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<ILocationRepository, LocationRepository>();
+        services.AddScoped<IUserRouteRepository, UserRouteRepository>();
+        services.AddScoped<IMomentRepository, MomentRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddTransient<IDbTransaction, DbTransaction>();
     }
 
     private static void InitUtils(this IServiceCollection services)

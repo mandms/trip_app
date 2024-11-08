@@ -2,8 +2,8 @@
 {
     public class UserNotFoundException : Exception
     {
-        public UserNotFoundException(long id) 
-        :base($"Пользователь с ID {id} не найден")
+        public UserNotFoundException(long id = 0) 
+        :base((id == 0) ? "User not found" : $"User with ID {id} does not exist")
         { 
         }
     }

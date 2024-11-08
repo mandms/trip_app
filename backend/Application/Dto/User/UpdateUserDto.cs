@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Application.Dto.Image;
+using System.ComponentModel;
 
 namespace Application.Dto.User
 {
@@ -8,6 +9,6 @@ namespace Application.Dto.User
         public string Username { get; set; } = null!;
         public string? Biography { get; set; }
         public string Name { get; set; } = null!;
-        public string Avatar { get; set; } = null!;
+        public CreateImageDto? Avatar { get; set; }
     }
 }

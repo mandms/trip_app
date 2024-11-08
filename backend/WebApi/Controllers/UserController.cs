@@ -7,7 +7,6 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _service;
@@ -16,17 +15,17 @@ namespace WebApi.Controllers
             _service = service;
         }
 
-        [HttpPost("/registration")]
+        [HttpPost("registration")]
         public async Task<ActionResult<CreateUserDto>> Post([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
             await _service.Create(createUserDto, cancellationToken);
             return Ok();
         }
 
-        [HttpPost("/login")]
-        public async Task<ActionResult<CreateUserDto>> PostLogin([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
+        [HttpPost("login")]
+        public async Task<ActionResult<CreateUserDto>> PostLogin([FromBody] LoginUserDto loginUserDto, CancellationToken cancellationToken)
         {
-            string token = await _service.Login(createUserDto, cancellationToken);
+            string token = await _service.Login(loginUserDto, cancellationToken);
             return Ok(token);
         }
 

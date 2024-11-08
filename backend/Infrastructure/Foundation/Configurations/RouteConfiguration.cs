@@ -30,7 +30,7 @@ internal class RouteConfiguration : IEntityTypeConfiguration<Route>
                .WithOne(r => r.Route)
                .HasForeignKey(r => r.RouteId);
 
-        builder.HasMany<Location>()
+        builder.HasMany(r => r.Locations)
                .WithOne(l => l.Route)
                .HasForeignKey(l => l.RouteId);
 

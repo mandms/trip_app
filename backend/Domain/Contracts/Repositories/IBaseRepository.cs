@@ -11,6 +11,6 @@ namespace Domain.Contracts.Repositories
         Task Add(T entity, CancellationToken cancellationToken);
         Task AddRange(IEnumerable<T> entities, CancellationToken cancellationToken);
         Task Remove(T entity, CancellationToken cancellationToken);
-        Task Update(T entity, CancellationToken cancellationToken);
+        Task<T> Update(T entity, CancellationToken cancellationToken);
     }
 }

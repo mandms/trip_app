@@ -40,7 +40,12 @@ namespace WebApi.ExeptionHandlers
             return exception switch
             {
                 UserNotFoundException => (StatusCodes.Status404NotFound, "User Not Found Exception"),
+                RouteNotFoundException => (StatusCodes.Status404NotFound, "Route Not Found Exception"),
+                LocationNotFoundException => (StatusCodes.Status404NotFound, "Location Not Found Exception"),
+                TagNotFoundException => (StatusCodes.Status404NotFound, "Tag Not Found Exception"),
+                MomentNotFoundException => (StatusCodes.Status404NotFound, "Moment Not Found Exception"),
                 _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
+
             };
         }
     }

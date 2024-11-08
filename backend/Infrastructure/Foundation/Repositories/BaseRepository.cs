@@ -32,7 +32,7 @@ namespace Infrastructure.Foundation.Repositories
 
         public IQueryable<T> GetAll()
         {
-            return _context.Set<T>().AsNoTracking().Where(u => u.Id == 1);
+            return _context.Set<T>().AsNoTracking();
         }
 
         public async Task<T?> GetById(long id)
@@ -46,9 +46,11 @@ namespace Infrastructure.Foundation.Repositories
             await SaveAsync(cancellationToken);
         }
 
-        public async Task Update(T entity, CancellationToken cancellationToken)
+        public async Task<T> Update(T entity, CancellationToken cancellationToken)
         {
+            var updatedEntity = _context.Set<T>().Update(entity);
             await SaveAsync(cancellationToken);
+            return updatedEntity.Entity;
         }
 
         protected async Task SaveAsync(CancellationToken cancellationToken)

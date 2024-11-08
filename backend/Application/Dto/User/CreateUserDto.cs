@@ -11,6 +11,11 @@ namespace Application.Dto.User
         [Required]
         public string Email { get; set; } = null!;
 
+        [Required]
+        [MaxLength(15)]
+        [MinLength(4)]
+        public string Username { get; set; } = null!;
+
         [MaxLength(64)]
         [MinLength(8)]
         [PasswordPropertyText]

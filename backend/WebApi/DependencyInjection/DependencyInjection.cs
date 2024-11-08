@@ -1,28 +1,55 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
-using System.Text;
+﻿using Application.Dto.Pagination;
+using Microsoft.OpenApi.Models;
+using System.ComponentModel;
 
 namespace WebApi.DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static void AddAuthentication(this IServiceCollection services)
+        public static void InitSwaggerGen(this IServiceCollection services)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                {
-                    options.TokenValidationParameters = new()
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = false,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("lol"))
-                    };
-                });
+            services.AddSwaggerGen(c =>
+             {
+                 c.CustomSchemaIds(type =>
+                 {
+                     var displayNameAttribute = type.GetCustomAttributes(false)
+                                                     .OfType<DisplayNameAttribute>()
+                                                     .FirstOrDefault();
 
-            services.AddAuthorization();
+                     if (displayNameAttribute != null)
+                     {
+                         return displayNameAttribute.DisplayName;
+                     }
+
+                     if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(PaginationResponse<>))
+                     {
+                         var genericArgument = type.GetGenericArguments()[0];
+                         return $"PaginationResponse-{genericArgument.Name}";
+                     }
+
+                     return type.Name;
+                 });
+                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                 {
+                     Name = "Authorization",
+                     Type = SecuritySchemeType.ApiKey,
+                     Scheme = "Bearer",
+                     BearerFormat = "JWT",
+                     In = ParameterLocation.Header,
+                     Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+                 });
+                 c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                     {
+                         new OpenApiSecurityScheme {
+                             Reference = new OpenApiReference {
+                                 Type = ReferenceType.SecurityScheme,
+                                 Id = "Bearer"
+                             }
+                         },
+                         new string[] {}
+                     }
+                });
+             });
         }
     }
 }
