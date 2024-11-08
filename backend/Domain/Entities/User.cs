@@ -10,4 +10,5 @@ public class User : IEntity
     public string? Biography { get; set; }
     public string Password { get; set; } = null!;
     public string Avatar { get; set; } = null!;
+    public List<Role> Roles { get; set; } = new();
 }

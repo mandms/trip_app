@@ -13,7 +13,14 @@ namespace Infrastructure.Providers
         private readonly JwtOptions _options = options.Value;
         public string GenerateToken(User user)
         {
-            Claim[] claims = [new(ClaimTypes.Sid, user.Id.ToString())];
+            List<Claim> claims = [
+                new(ClaimTypes.Sid, user.Id.ToString())
+            ];
+
+            foreach (var role in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.Name));
+            }
 
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),

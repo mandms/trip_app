@@ -5,6 +5,7 @@ namespace Application.Services.FileService
     public class FileService : IFileService
     {
         private static string _contentRootPath = Path.Combine(Directory.GetCurrentDirectory());
+        private static string[] _allowedFileExtensions = ["jpg", "png", "jpeg"];
         public FileService()
         {
         }
@@ -25,7 +26,7 @@ namespace Application.Services.FileService
             }
         }
 
-        public async Task<string> SaveFileAsync(string base64Image, string[] allowedFileExtensions, CancellationToken cancellationToken)
+        public async Task<string> SaveFileAsync(string base64Image, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(base64Image))
             {
@@ -40,9 +41,9 @@ namespace Application.Services.FileService
             }
 
             var ext = GetFileExtension(base64Image);
-            if (!allowedFileExtensions.Contains(ext))
+            if (!_allowedFileExtensions.Contains(ext))
             {
-                throw new ArgumentException($"Only {string.Join(",", allowedFileExtensions)} are allowed.");
+                throw new ArgumentException($"Only {string.Join(",", _allowedFileExtensions)} are allowed.");
             }
 
             var fileName = $"{Guid.NewGuid().ToString()}.{ext}";
@@ -72,7 +73,7 @@ namespace Application.Services.FileService
         {
             return createImageDtos.Select(async image =>
              {
-                 image.Path = await SaveFileAsync(image.Image, ["jpg", "png", "jpeg"], cancellationToken);
+                 image.Path = await SaveFileAsync(image.Image, cancellationToken);
                  return image;
              }).ToList();
         }

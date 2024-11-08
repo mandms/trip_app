@@ -33,14 +33,14 @@ namespace Application.Services.MomentService
 
         private async Task CreateMoment(CreateMomentDto createMomentDto, CancellationToken cancellationToken)
         {
-            Moment moment = MomentMapper.ToMoment(createMomentDto);
-            await _repository.Add(moment, cancellationToken);
-
             if ((createMomentDto.Images != null) && (createMomentDto.Images.Count() > 0))
             {
                 var tasks = _fileService.SaveImages(createMomentDto.Images, cancellationToken);
                 await Task.WhenAll(tasks);
             }
+
+            Moment moment = MomentMapper.ToMoment(createMomentDto);
+            await _repository.Add(moment, cancellationToken);
         }
 
         public async Task Delete(long id, CancellationToken cancellationToken)

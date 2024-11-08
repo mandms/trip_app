@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Foundation.Configurations;
-internal class ReviewConfigurationcs : IEntityTypeConfiguration<Review>
+internal class ReviewConfiguration : IEntityTypeConfiguration<Review>
 {
     public void Configure(EntityTypeBuilder<Review> builder)
     {

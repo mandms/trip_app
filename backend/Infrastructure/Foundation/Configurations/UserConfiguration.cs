@@ -13,7 +13,6 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.Username)
                .HasMaxLength(15)
-               //.HasDefaultValueSql("nextval('trip.\"seq\"')")
                .IsRequired();
 
         builder.Property(u => u.Biography)
@@ -29,7 +28,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.Avatar)
               .HasMaxLength(150)
-              .HasDefaultValue("/user-default.png")
+              .HasDefaultValue("user-default.png")
               .IsRequired();
 
         builder.HasMany<Moment>()
@@ -49,5 +48,8 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(u => u.Username)
                .IsUnique();
+
+        builder.HasMany(u => u.Roles)
+               .WithMany(r => r.Users);
     }
 }

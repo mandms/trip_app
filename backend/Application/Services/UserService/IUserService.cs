@@ -7,6 +7,6 @@ namespace Application.Services.UserService
         Task Create(CreateUserDto createUserDto, CancellationToken cancellationToken);
         Task<UserDto?> GetUser(long id);
         Task Put(long id, UpdateUserDto updateUserDto, CancellationToken cancellationToken);
-        public Task<string> Login(CreateUserDto createUserDto, CancellationToken cancellationToken);
+        public Task<string> Login(LoginUserDto loginUserDto, CancellationToken cancellationToken);
     }
 }

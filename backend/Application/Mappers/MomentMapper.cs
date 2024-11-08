@@ -28,12 +28,18 @@ namespace Application.Mappers
 
         public static Moment ToMoment(CreateMomentDto createMomentDto)
         {
+            List<ImageMoment> images = new();
+            if ((createMomentDto.Images != null) && (createMomentDto.Images.Count > 0))
+            {
+                images = createMomentDto.Images.Select(image => new ImageMoment { Image = image.Path }).ToList();
+            }
             return new Moment
             {
                 Coordinates = CoordinatesDto.CreatePoint(createMomentDto.Coordinates),
                 Description = createMomentDto.Description,
                 Status = createMomentDto.Status,
-                UserId = createMomentDto.UserId
+                UserId = createMomentDto.UserId,
+                Images = images
             };
         }
 

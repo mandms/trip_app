@@ -1,5 +1,7 @@
 ﻿using Domain.Entities;
+using Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Infrastructure.Foundation
 {
@@ -14,15 +16,39 @@ namespace Infrastructure.Foundation
 
         public void Seed()
         {
+            Role roleUser = new Role()
+            {
+                Id = 1,
+                Name = "User",
+            };
+
+            Role roleAdmin = new Role()
+            {
+                Id = 2,
+                Name = "Admin",
+            };
+
+            Role roleSuperUser = new Role()
+            {
+                Id = 3,
+                Name = "Superuser",
+            };
+
             User john = new User()
             {
                 Id = 1,
                 Avatar = "avatar1.jpg",
                 Biography = "Biography1..",
                 Email = "one@mail.com",
-                Password = "ddfsdfwfe",
+                Password = new PasswordHasher().Hash("123123123"),
                 Username = "john1"
             };
+
+            modelBuilder.Entity<Role>().HasData(
+                roleAdmin,
+                roleSuperUser,
+                roleUser
+            );
 
             User paul = new User()
             {
@@ -30,7 +56,7 @@ namespace Infrastructure.Foundation
                 Avatar = "avatar2.jpg",
                 Biography = "Biography2..",
                 Email = "two@mail.com",
-                Password = "ddfsdfwfe",
+                Password = new PasswordHasher().Hash("123123123"),
                 Username = "paul1"
             };
 
@@ -40,7 +66,7 @@ namespace Infrastructure.Foundation
                 Avatar = "avatar3.jpg",
                 Biography = "Biography3..",
                 Email = "three@mail.com",
-                Password = "dfghjkj",
+                Password = new PasswordHasher().Hash("123123123"),
                 Username = "bob1"
             };
 
@@ -49,6 +75,15 @@ namespace Infrastructure.Foundation
                 paul,
                 bob
             );
+
+            modelBuilder.Entity("RoleUser")
+                .HasData(new[]
+                    {
+                        new { UsersId = john.Id, RolesId = roleSuperUser.Id },
+                        new { UsersId = paul.Id, RolesId = roleAdmin.Id },
+                        new { UsersId = bob.Id , RolesId = roleUser.Id }
+                    }
+                );
 
             Category availability = new Category()
             {
@@ -370,7 +405,6 @@ namespace Infrastructure.Foundation
                 paulMountainTour,
                 bobEuropeanTravel
             );
-
         }
     }
 }

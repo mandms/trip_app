@@ -12,9 +12,11 @@ namespace Application.Services.LocationService
         private readonly ILocationRepository _repository;
         private readonly IDbTransaction _dbTransaction;
         private readonly IFileService _fileService;
+        private readonly IRouteRepository _routeRepository;
 
         public LocationService(
             ILocationRepository repository, 
+            IRouteRepository routeRepository,
             IDbTransaction dbTransaction,
             IFileService fileService
             ) 
@@ -22,26 +24,31 @@ namespace Application.Services.LocationService
             _repository = repository;
             _dbTransaction = dbTransaction;
             _fileService = fileService;
+            _routeRepository = routeRepository;
         }
 
         public async Task Create(CreateLocationDto createLocationDto, long routeId, CancellationToken cancellationToken)
         {
+            var route = await _routeRepository.GetById(routeId);
+            if (route == null)
+            {
+                throw new RouteNotFoundException(routeId);
+            }
             var createLocation = () => CreateLocation(routeId, createLocationDto, cancellationToken);
             await _dbTransaction.Transaction(createLocation);
         }
 
         private async Task CreateLocation(long routeId, CreateLocationDto createLocationDto, CancellationToken cancellationToken)
         {
-            Location location = LocationMapper.ToLocation(createLocationDto, routeId);
-            var maxOrder = _repository.GetMaxOrder(routeId);
-            location.Order = maxOrder + 1;
-            await _repository.Add(location, cancellationToken);
-
             if ((createLocationDto.Images != null) && (createLocationDto.Images.Count() > 0))
             {
                 var tasks = _fileService.SaveImages(createLocationDto.Images, cancellationToken);
                 await Task.WhenAll(tasks);
             }
+            Location location = LocationMapper.ToLocation(createLocationDto, routeId);
+            var maxOrder = _repository.GetMaxOrder(routeId);
+            location.Order = maxOrder + 1;
+            await _repository.Add(location, cancellationToken);
         }
 
         public async Task Put(long id, UpdateLocationDto updateLocationDto, CancellationToken cancellationToken)

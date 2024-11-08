@@ -13,11 +13,14 @@ namespace WebApi.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            context.Items.Add(ClaimTypes.Sid, Convert.ToInt64(
-                context.User.Claims.Where(c => c.Type == ClaimTypes.Sid)
-                .Select(c => c.Value)
-                .SingleOrDefault()
-                ));
+            if ((context.User.Identity != null) && context.User.Identity.IsAuthenticated)
+            {
+                context.Items.Add(ClaimTypes.Sid, Convert.ToInt64(
+                                context.User.Claims.Where(c => c.Type == ClaimTypes.Sid)
+                                .Select(c => c.Value)
+                                .SingleOrDefault()
+                                ));
+            }
             await _next(context);
         }
     }

@@ -17,7 +17,7 @@ namespace WebApi.Controllers
             _service = service;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult<PaginationResponse<GetAllRoutesDto>> GetAll([FromQuery] FilterParams filterParams)
         {
