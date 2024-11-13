@@ -15,10 +15,12 @@ namespace Application.Services.RouteService
         private readonly ILocationRepository _locationRepository;
         private readonly IDbTransaction _dbTransaction;
         private readonly IUserRouteRepository _userRouteRepository;
+        private readonly IReviewRepository _reviewRepository;
 
         public RouteService(
             IRouteRepository routeRepository, 
             ITagRepository tagRepository, 
+            IReviewRepository reviewRepository,
             ILocationRepository locationRepository,
             IDbTransaction dbTransaction,
             IUserRouteRepository userRouteRepository
@@ -29,15 +31,22 @@ namespace Application.Services.RouteService
             _locationRepository = locationRepository;
             _dbTransaction = dbTransaction;
             _userRouteRepository = userRouteRepository;
+            _reviewRepository = reviewRepository;
         }
 
         public PaginationResponse<GetAllRoutesDto> GetAllRoutes(FilterParams filterParams)
         {
-            var route = _routeRepository.GetAllRoutes(filterParams);
+            var routes = _routeRepository.GetAllRoutes(filterParams).ToList();
 
-            var routeDtos = route.Select(route => RouteMapper.RouteToGetAllRoutesDto(route));
+            List<GetAllRoutesDto> routeDtos = new();
 
-            var pagedResponse = new PaginationResponse<GetAllRoutesDto>(routeDtos, filterParams.PageNumber, filterParams.PageSize);
+            routes.ForEach(route => {
+                double rate = _reviewRepository.GetAverageRate(route.Id);
+                var getAllRouteDtos = RouteMapper.RouteToGetAllRoutesDto(route, rate);
+                routeDtos.Add(getAllRouteDtos);
+                });
+
+            var pagedResponse = new PaginationResponse<GetAllRoutesDto>(routeDtos.AsQueryable(), filterParams.PageNumber, filterParams.PageSize);
 
             return pagedResponse;
         }

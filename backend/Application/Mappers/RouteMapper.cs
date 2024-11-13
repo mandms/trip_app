@@ -5,7 +5,7 @@ namespace Application.Mappers
 {
     public static class RouteMapper
     {
-        public static GetAllRoutesDto RouteToGetAllRoutesDto(Route route)
+        public static GetAllRoutesDto RouteToGetAllRoutesDto(Route route, double rating)
         {
             return new GetAllRoutesDto
             {
@@ -15,7 +15,8 @@ namespace Application.Mappers
                 Duration = route.Duration,
                 Status = route.Status,
                 User = UserMapper.UserUserRoute(route.User),
-                Tags = TagMapper.TagsToTagDtos(route.Tags)
+                Tags = TagMapper.TagsToTagDtos(route.Tags),
+                Rating = rating
             };
         }
 

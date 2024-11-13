@@ -32,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRouteRepository, UserRouteRepository>();
         services.AddScoped<IMomentRepository, MomentRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddTransient<IDbTransaction, DbTransaction>();
     }
 

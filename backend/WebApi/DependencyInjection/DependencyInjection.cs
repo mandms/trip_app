@@ -9,8 +9,19 @@ namespace WebApi.DependencyInjection
         public static void InitSwaggerGen(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
-             {
-                 c.CustomSchemaIds(type =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Trip App API",
+                    Description = "An ASP.NET Core Web API for trip app",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Our repo",
+                        Url = new Uri("https://github.com/mandms/trip_app")
+                    }
+                });
+                c.CustomSchemaIds(type =>
                  {
                      var displayNameAttribute = type.GetCustomAttributes(false)
                                                      .OfType<DisplayNameAttribute>()

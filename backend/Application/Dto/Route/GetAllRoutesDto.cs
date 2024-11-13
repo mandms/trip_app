@@ -13,6 +13,7 @@ namespace Application.Dto.Route
         public int? Duration { get; set; }
         public UserRouteDto User { get; set; } = null!;
         public int Status { get; set; }
+        public double Rating { get; set; }
         public List<TagDto> Tags { get; set; } = new();
     }
 }
