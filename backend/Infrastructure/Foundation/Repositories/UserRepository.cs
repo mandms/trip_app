@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts.Repositories;
 using Domain.Entities;
+using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Foundation.Repositories
@@ -8,6 +9,15 @@ namespace Infrastructure.Foundation.Repositories
     {
         public UserRepository(TripAppDbContext context) : base(context)
         {
+        }
+
+        public IQueryable<User> GetAllUsers(FilterParams filterParams)
+        {
+            var query = _context.Set<User>().
+                Include(u => u.Roles).
+                Sort(filterParams);
+
+            return query.AsNoTracking();
         }
 
         public async Task<User?> GetCurrentUser(long id)

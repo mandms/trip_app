@@ -1,6 +1,6 @@
-﻿using Application.Dto.Tag;
+﻿using Application.Dto.Location;
+using Application.Dto.Tag;
 using Application.Dto.User;
-using Application.Dto.Location;
 using System.ComponentModel;
 
 namespace Application.Dto.Route
@@ -12,10 +12,8 @@ namespace Application.Dto.Route
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public int? Duration { get; set; }
-        public UserDto User { get; set; } = null!;
+        public AuthorUserDto User { get; set; } = null!;
         public List<TagDto> Tags { get; set; } = new();
         public List<LocationDto> Locations { get; set; } = new();
-        public int Status { get; set; }
-        public int? State { get; set; }
     }
 }

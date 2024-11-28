@@ -13,8 +13,7 @@ internal class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder.Property(r => r.Rate)
                .IsRequired();
 
-        builder.Property(r => r.Text)
-               .IsRequired();
+        builder.Property(r => r.Text);
 
         builder.Property(r => r.CreatedAt)
                .IsRequired();

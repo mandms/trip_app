@@ -1,6 +1,6 @@
 ﻿using Application.Dto.Moment;
-using Domain.Filters;
 using Application.Dto.Pagination;
+using Domain.Filters;
 
 namespace Application.Services.MomentService
 {
@@ -9,7 +9,7 @@ namespace Application.Services.MomentService
         PaginationResponse<MomentDto> GetAllMoments(FilterParams filterParams);
         Task<MomentDto?> GetMoment(long id);
         Task Create(CreateMomentDto createMomentDto, CancellationToken cancellationToken);
-        Task<MomentDto> Put(long id, UpdateMomentDto updateMomentDto, CancellationToken cancellationToken);
-        Task Delete(long id, CancellationToken cancellationToken);
+        Task<MomentDto> Put(long id, long userId, UpdateMomentDto updateMomentDto, CancellationToken cancellationToken);
+        Task Delete(long id, long userId, CancellationToken cancellationToken);
     }
 }

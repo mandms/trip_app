@@ -11,8 +11,7 @@ namespace Application.Dto.Route
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public int? Duration { get; set; }
-        public UserRouteDto User { get; set; } = null!;
-        public int Status { get; set; }
+        public AuthorUserDto User { get; set; } = null!;
         public double Rating { get; set; }
         public List<TagDto> Tags { get; set; } = new();
     }

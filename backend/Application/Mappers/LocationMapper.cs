@@ -18,8 +18,8 @@ namespace Application.Mappers
                 Name = location.Name,
                 Coordinates = new CoordinatesDto
                 {
-                    Latitude = coordinates.X,
-                    Longitude = coordinates.Y,
+                    Longitude = coordinates.X,
+                    Latitude = coordinates.Y,
                 },
                 Order = location.Order,
                 Images = ImageMapper.ImageLocationToString(location.Images)

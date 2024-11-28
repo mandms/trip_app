@@ -1,10 +1,12 @@
-﻿using Domain.Entities;
-using Domain.Exceptions;
-using Application.Mappers;
-using Domain.Contracts.Repositories;
+﻿using Application.Dto.Pagination;
 using Application.Dto.User;
-using Domain.Contracts.Utils;
+using Application.Mappers;
 using Application.Services.FileService;
+using Domain.Contracts.Repositories;
+using Domain.Contracts.Utils;
+using Domain.Entities;
+using Domain.Exceptions;
+using Domain.Filters;
 
 namespace Application.Services.UserService
 {
@@ -18,12 +20,12 @@ namespace Application.Services.UserService
         private readonly IDbTransaction _dbTransaction;
 
         public UserService(
-            IUserRepository repository, 
+            IUserRepository repository,
             IRoleRepository roleRepository,
             IPasswordHasher passwordHasher,
             IFileService fileService,
             IDbTransaction transaction,
-            IJwtProvider jwtProvider) 
+            IJwtProvider jwtProvider)
         {
             _repository = repository;
             _roleRepository = roleRepository;
@@ -56,6 +58,17 @@ namespace Application.Services.UserService
             await _repository.Add(user, cancellationToken);
         }
 
+        public PaginationResponse<GetAllUsersDto> GetAllUsers(FilterParams filterParams)
+        {
+            var users = _repository.GetAllUsers(filterParams);
+
+            var usersDto = users.Select(user => UserMapper.UserGetAllUsersDto(user));
+
+            var pagedResponse = new PaginationResponse<GetAllUsersDto>(usersDto, filterParams.PageNumber, filterParams.PageSize);
+
+            return pagedResponse;
+        }
+
         public async Task<UserDto?> GetUser(long id)
         {
             var user = await _repository.GetCurrentUser(id);
@@ -63,7 +76,7 @@ namespace Application.Services.UserService
             {
                 throw new UserNotFoundException(id);
             }
-            UserDto userDto = UserMapper.UserCurrentUser(user);
+            UserDto userDto = UserMapper.UserUserDto(user);
             return userDto;
         }
 

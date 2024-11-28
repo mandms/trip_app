@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.User
 {
-     [DisplayName("Login user")]
+    [DisplayName("Login user")]
     public class LoginUserDto
     {
         [MaxLength(320)]

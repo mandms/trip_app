@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 
 namespace WebApi.DependencyInjection
 {
-    public class JwtOptionsSetup: IConfigureOptions<JwtOptions>
+    public class JwtOptionsSetup : IConfigureOptions<JwtOptions>
     {
         private readonly IConfiguration _configuration;
 

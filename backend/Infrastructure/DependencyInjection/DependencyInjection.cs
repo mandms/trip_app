@@ -24,7 +24,7 @@ public static class DependencyInjection
     }
 
     private static void InitRepositories(this IServiceCollection services)
-    { 
+    {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
@@ -33,6 +33,7 @@ public static class DependencyInjection
         services.AddScoped<IMomentRepository, MomentRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddTransient<IDbTransaction, DbTransaction>();
     }
 

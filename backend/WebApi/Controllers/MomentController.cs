@@ -1,9 +1,9 @@
 ﻿using Application.Dto.Moment;
+using Application.Dto.Pagination;
 using Application.Services.MomentService;
 using Domain.Filters;
-using Application.Dto.Pagination;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace WebApi.Controllers
@@ -32,10 +32,12 @@ namespace WebApi.Controllers
             return new ObjectResult(route);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id, CancellationToken cancellationToken)
         {
-            await _service.Delete(id, cancellationToken);
+            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
+            await _service.Delete(id, userId, cancellationToken);
             return Ok();
         }
 
@@ -49,10 +51,12 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<UpdateMomentDto>> Put(long id, UpdateMomentDto updateMomentDto, CancellationToken cancellationToken)
         {
-            await _service.Put(id, updateMomentDto, cancellationToken);
+            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
+            await _service.Put(id, userId, updateMomentDto, cancellationToken);
             return Ok();
         }
     }

@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using Application.Dto.Coordinates;
+﻿using Application.Dto.Coordinates;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Location
@@ -8,7 +8,7 @@ namespace Application.Dto.Location
     public class LocationDto
     {
         [Required]
-        [MinLength(1)]
+        [Range(1, System.Int32.MaxValue)]
         public long Id { get; set; }
         [Required]
         [MaxLength(100)]
@@ -21,6 +21,7 @@ namespace Application.Dto.Location
         [Required]
         public CoordinatesDto Coordinates { get; set; } = null!;
         [Required]
+        [Range(0, 1000)]
         public int Order { get; set; }
         [Required]
         public List<string> Images { get; set; } = new();

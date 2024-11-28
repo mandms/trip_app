@@ -6,12 +6,12 @@ using System.Text;
 
 namespace WebApi.DependencyInjection
 {
-    public class JwtBearerOptionsSetup: IConfigureNamedOptions<JwtBearerOptions>
+    public class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
     {
         private readonly JwtOptions _jwtOptions;
         public JwtBearerOptionsSetup(IOptions<JwtOptions> jwtOptions)
         {
-            _jwtOptions = jwtOptions.Value;   
+            _jwtOptions = jwtOptions.Value;
         }
 
         public void Configure(JwtBearerOptions options)

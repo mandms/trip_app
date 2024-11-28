@@ -1,9 +1,9 @@
-﻿using Domain.Entities;
+﻿using Application.Dto.Location;
 using Application.Mappers;
-using Domain.Contracts.Repositories;
-using Application.Dto.Location;
-using Domain.Exceptions;
 using Application.Services.FileService;
+using Domain.Contracts.Repositories;
+using Domain.Entities;
+using Domain.Exceptions;
 
 namespace Application.Services.LocationService
 {
@@ -15,11 +15,11 @@ namespace Application.Services.LocationService
         private readonly IRouteRepository _routeRepository;
 
         public LocationService(
-            ILocationRepository repository, 
+            ILocationRepository repository,
             IRouteRepository routeRepository,
             IDbTransaction dbTransaction,
             IFileService fileService
-            ) 
+            )
         {
             _repository = repository;
             _dbTransaction = dbTransaction;
@@ -51,18 +51,21 @@ namespace Application.Services.LocationService
             await _repository.Add(location, cancellationToken);
         }
 
-        public async Task Put(long id, UpdateLocationDto updateLocationDto, CancellationToken cancellationToken)
+        public async Task Put(long id, long userId, UpdateLocationDto updateLocationDto, CancellationToken cancellationToken)
         {
             var location = await _repository.GetById(id);
             if (location == null)
             {
                 throw new LocationNotFoundException(id);
             }
+
+            await CheckUser(userId, location);
+
             LocationMapper.UpdateLocationDtoLocation(location, updateLocationDto);
             await _repository.Update(location, cancellationToken);
         }
 
-        public async Task Delete(long id, CancellationToken cancellationToken)
+        public async Task Delete(long id, long userId, CancellationToken cancellationToken)
         {
             var location = await _repository.GetById(id);
             if (location == null)
@@ -70,7 +73,22 @@ namespace Application.Services.LocationService
                 throw new LocationNotFoundException(id);
             }
 
+            await CheckUser(userId, location);
+
             await _repository.Remove(location, cancellationToken);
+        }
+
+        private async Task CheckUser(long userId, Location location)
+        {
+            var route = await _routeRepository.GetById(location.RouteId);
+            if (route == null)
+            {
+                throw new RouteNotFoundException(location.RouteId);
+            }
+            if (route.UserId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not authorized to edit this location.");
+            }
         }
     }
 }

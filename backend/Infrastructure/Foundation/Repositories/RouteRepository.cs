@@ -29,6 +29,7 @@ namespace Infrastructure.Foundation.Repositories
                 Include(r => r.User).
                 Include(r => r.Tags).
                 Where(r => r.Status == 1).
+                Filter(filterParams).
                 Sort(filterParams);
 
             return query.AsNoTracking();

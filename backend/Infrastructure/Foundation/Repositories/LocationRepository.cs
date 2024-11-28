@@ -11,7 +11,7 @@ namespace Infrastructure.Foundation.Repositories
 
         public int GetMaxOrder(long routeId)
         {
-            return _context.Set<Location>().Where( l => l.RouteId == routeId).Max(l => l.Order);
+            return _context.Set<Location>().Where(l => l.RouteId == routeId).Max(l => l.Order);
         }
     }
 }

@@ -1,14 +1,14 @@
-﻿using Domain.Entities;
+﻿using Domain.Contracts.Utils;
+using Domain.Entities;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Domain.Contracts.Utils;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Providers
 {
-    public class JwtProvider(IOptions<JwtOptions> options): IJwtProvider
+    public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
     {
         private readonly JwtOptions _options = options.Value;
         public string GenerateToken(User user)

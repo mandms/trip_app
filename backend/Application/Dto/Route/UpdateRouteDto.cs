@@ -14,10 +14,9 @@ namespace Application.Dto.Route
         [MaxLength(1000)]
         [MinLength(1)]
         public string? Description { get; set; }
-        [Range(1, System.Int32.MaxValue)]
+        [Range(1, 1000)]
         public int? Duration { get; set; }
         [Required]
         public int Status { get; set; }
-        public int? State { get; set; }
     }
 }

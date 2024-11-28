@@ -1,6 +1,8 @@
 ﻿using Application.Dto.Location;
 using Application.Services.LocationService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -21,17 +23,21 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<UpdateLocationDto>> Put(long id, UpdateLocationDto updatelocationDto, CancellationToken cancellationToken)
         {
-            await _service.Put(id, updatelocationDto, cancellationToken);
+            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
+            await _service.Put(id, userId, updatelocationDto, cancellationToken);
             return Ok();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id, CancellationToken cancellationToken)
         {
-            await _service.Delete(id, cancellationToken);
+            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
+            await _service.Delete(id, userId, cancellationToken);
             return Ok();
         }
     }

@@ -18,5 +18,20 @@ namespace Application.Mappers
         {
             return tags.Select(TagToTagDto).ToList();
         }
+
+        public static Tag ToTag(CreateTagDto createTagDto, long categoryId)
+        {
+            return new Tag
+            {
+                Name = createTagDto.Name,
+                CategoryId = categoryId
+            };
+        }
+
+        public static void UpdateTag(UpdateTagDto updateTagDto, Tag tag)
+        {
+            tag.Name = updateTagDto.Name;
+            tag.CategoryId = updateTagDto.CategoryId;
+        }
     }
 }

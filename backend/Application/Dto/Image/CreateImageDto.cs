@@ -9,6 +9,6 @@ namespace Application.Dto.Image
         [Required]
         public string Image { get; set; } = string.Empty;
         [JsonIgnore]
-        public string Path { get; set; } =  string.Empty;
+        public string Path { get; set; } = string.Empty;
     }
 }

@@ -249,7 +249,7 @@ namespace Infrastructure.Migrations
                         {
                             Id = 1L,
                             Coordinates = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (48.858779767208894 2.294590215790281)"),
-                            CreatedAt = new DateTime(2024, 11, 2, 17, 47, 21, 115, DateTimeKind.Utc).AddTicks(6833),
+                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1301),
                             Description = "Moment description 1",
                             Status = 4,
                             UserId = 1L
@@ -258,7 +258,7 @@ namespace Infrastructure.Migrations
                         {
                             Id = 2L,
                             Coordinates = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (55.751165864532894 37.61726058361952)"),
-                            CreatedAt = new DateTime(2024, 11, 2, 17, 47, 21, 115, DateTimeKind.Utc).AddTicks(6836),
+                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1305),
                             Description = "Moment description 2",
                             Status = 5,
                             UserId = 2L
@@ -267,7 +267,7 @@ namespace Infrastructure.Migrations
                         {
                             Id = 3L,
                             Coordinates = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (50.04278538093594 87.40137428089643)"),
-                            CreatedAt = new DateTime(2024, 11, 2, 17, 47, 21, 115, DateTimeKind.Utc).AddTicks(6839),
+                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1309),
                             Description = "Moment description 3",
                             Status = 3,
                             UserId = 3L
@@ -302,21 +302,21 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 11, 2, 17, 47, 21, 115, DateTimeKind.Utc).AddTicks(6761),
+                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1160),
                             RouteId = 1L,
                             Text = "Text 1"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 11, 2, 17, 47, 21, 115, DateTimeKind.Utc).AddTicks(6763),
+                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1162),
                             RouteId = 2L,
                             Text = "Text 2"
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 11, 2, 17, 47, 21, 115, DateTimeKind.Utc).AddTicks(6764),
+                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1163),
                             RouteId = 3L,
                             Text = "Text 3"
                         });
@@ -340,7 +340,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<long>("UserId")
@@ -358,7 +357,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 11, 2, 17, 47, 21, 115, DateTimeKind.Utc).AddTicks(6794),
+                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1205),
                             Rate = 5,
                             RouteId = 3L,
                             Text = "Text 1",
@@ -367,7 +366,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 11, 2, 17, 47, 21, 115, DateTimeKind.Utc).AddTicks(6796),
+                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1221),
                             Rate = 4,
                             RouteId = 1L,
                             Text = "Text 2",
@@ -376,11 +375,46 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 11, 2, 17, 47, 21, 115, DateTimeKind.Utc).AddTicks(6797),
+                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1223),
                             Rate = 3,
                             RouteId = 2L,
                             Text = "Text 3",
                             UserId = 3L
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Entities.Role", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2L,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "Superuser"
+                        },
+                        new
+                        {
+                            Id = 1L,
+                            Name = "User"
                         });
                 });
 
@@ -395,7 +429,8 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int>("Duration")
+                    b.Property<int?>("Duration")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -501,7 +536,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)")
-                        .HasDefaultValue("/user-default.png");
+                        .HasDefaultValue("user-default.png");
 
                     b.Property<string>("Biography")
                         .HasMaxLength(500)
@@ -539,7 +574,7 @@ namespace Infrastructure.Migrations
                             Avatar = "avatar1.jpg",
                             Biography = "Biography1..",
                             Email = "one@mail.com",
-                            Password = "ddfsdfwfe",
+                            Password = "$2a$11$SmyD2YXfXryrvFHyz2C64ehbmfT0D7xCRGzmlFfdltkYmLdS1pnx.",
                             Username = "john1"
                         },
                         new
@@ -548,7 +583,7 @@ namespace Infrastructure.Migrations
                             Avatar = "avatar2.jpg",
                             Biography = "Biography2..",
                             Email = "two@mail.com",
-                            Password = "ddfsdfwfe",
+                            Password = "$2a$11$iwYqm0R35nj0BxxxTwze.uIE8uo05vw5h48MgogXtws1LltRYzEx6",
                             Username = "paul1"
                         },
                         new
@@ -557,7 +592,7 @@ namespace Infrastructure.Migrations
                             Avatar = "avatar3.jpg",
                             Biography = "Biography3..",
                             Email = "three@mail.com",
-                            Password = "dfghjkj",
+                            Password = "$2a$11$sQ0DCXKl1xPMMWKcuNQroOh1ICzVfDvElSRmMZVWwikl6VB6Vz8Jy",
                             Username = "bob1"
                         });
                 });
@@ -611,6 +646,38 @@ namespace Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<long>("RolesId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UsersId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("RolesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("RoleUser");
+
+                    b.HasData(
+                        new
+                        {
+                            RolesId = 3L,
+                            UsersId = 1L
+                        },
+                        new
+                        {
+                            RolesId = 2L,
+                            UsersId = 2L
+                        },
+                        new
+                        {
+                            RolesId = 1L,
+                            UsersId = 3L
+                        });
+                });
+
             modelBuilder.Entity("RouteTag", b =>
                 {
                     b.Property<long>("RoutesId")
@@ -646,7 +713,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.ImageLocation", b =>
                 {
                     b.HasOne("Domain.Entities.Location", "Location")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -657,7 +724,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.ImageMoment", b =>
                 {
                     b.HasOne("Domain.Entities.Moment", "Moment")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("MomentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -758,6 +825,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("Domain.Entities.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("RouteTag", b =>
                 {
                     b.HasOne("Domain.Entities.Route", null)
@@ -771,6 +853,16 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Location", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Moment", b =>
+                {
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("Domain.Entities.Route", b =>

@@ -1,7 +1,10 @@
-﻿using Application.Dto.User;
-using Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Application.Dto.Pagination;
+using Application.Dto.Route;
+using Application.Dto.User;
 using Application.Services.UserService;
+using Domain.Entities;
+using Domain.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
@@ -27,6 +30,13 @@ namespace WebApi.Controllers
         {
             string token = await _service.Login(loginUserDto, cancellationToken);
             return Ok(token);
+        }
+
+        [HttpGet]
+        public ActionResult<PaginationResponse<GetAllUsersDto>> GetAll([FromQuery] FilterParams filterParams)
+        {
+            var pagedResponse = _service.GetAllUsers(filterParams);
+            return Ok(pagedResponse);
         }
 
         [HttpGet("{id}")]

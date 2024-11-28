@@ -1,6 +1,6 @@
-﻿using Application.Dto.Route;
+﻿using Application.Dto.Pagination;
+using Application.Dto.Route;
 using Domain.Filters;
-using Application.Dto.Pagination;
 
 namespace Application.Services.RouteService
 {
@@ -8,10 +8,10 @@ namespace Application.Services.RouteService
     {
         PaginationResponse<GetAllRoutesDto> GetAllRoutes(FilterParams filterParams);
         Task<RouteDto?> GetRoute(long id);
-        Task DeleteRoute(long id, CancellationToken cancellationToken);
+        Task DeleteRoute(long id, long userId, CancellationToken cancellationToken);
         Task Create(CreateRouteDto createRouteDto, CancellationToken cancellationToken);
-        Task<RouteDto> UpdateRoute(long id, UpdateRouteDto updateRouteDto, CancellationToken cancellationToken);
-        Task AddTag(long routeId, long tagId, CancellationToken cancellationToken);
-        Task DeleteTag(long routeId, long tagId, CancellationToken cancellationToken);
+        Task<RouteDto> UpdateRoute(long id, long userId, UpdateRouteDto updateRouteDto, CancellationToken cancellationToken);
+        Task AddTag(long routeId, long tagId, long userId, CancellationToken cancellationToken);
+        Task DeleteTag(long routeId, long tagId, long userId, CancellationToken cancellationToken);
     }
 }

@@ -19,8 +19,8 @@ namespace Application.Mappers
                     Latitude = coordinates.X,
                     Longitude = coordinates.Y,
                 },
-                CreatedAt = moment.CreatedAt,
-                User = UserMapper.UserCurrentUser(moment.User),
+                CreatedAt = moment.CreatedAt.ToString("dd/MM/yyyy"),
+                User = UserMapper.UserAuthor(moment.User),
                 Status = moment.Status,
                 Images = ImageMapper.ImageMomentToString(moment.Images)
             };

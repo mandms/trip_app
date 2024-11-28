@@ -2,8 +2,8 @@
 
 namespace Application.Dto.User
 {
-    [DisplayName("Route user")]
-    public class UserRouteDto
+    [DisplayName("Author")]
+    public class AuthorUserDto
     {
         public long Id { get; set; }
         public string Username { get; set; } = null!;

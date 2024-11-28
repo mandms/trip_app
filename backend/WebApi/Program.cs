@@ -1,14 +1,15 @@
-using Infrastructure.DependencyInjection;
 using Application.DependencyInjection;
-using WebApi.ExeptionHandlers;
+using Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using WebApi.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using WebApi.DependencyInjection;
+using WebApi.ExeptionHandlers;
 using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers().AddJsonOptions(options => {
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
     options.JsonSerializerOptions.Converters.Add(
         new NetTopologySuite.IO.Converters.GeoJsonConverterFactory()
         );

@@ -5,7 +5,7 @@ namespace Application.Mappers
 {
     public static class UserMapper
     {
-        public static UserDto UserCurrentUser(User user)
+        public static UserDto UserUserDto(User user)
         {
             return new UserDto
             {
@@ -13,6 +13,18 @@ namespace Application.Mappers
                 Username = user.Username,
                 Email = user.Email,
                 Avatar = user.Avatar,
+            };
+        }
+
+        public static GetAllUsersDto UserGetAllUsersDto(User user)
+        {
+            return new GetAllUsersDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Avatar = user.Avatar,
+                Roles = user.Roles.Select(r => r.Name).ToList()
             };
         }
 
@@ -35,14 +47,9 @@ namespace Application.Mappers
             };
         }
 
-        public static List<UserDto> UsersToUserDtos(List<User> users)
+        public static AuthorUserDto UserAuthor(User user)
         {
-            return users.Select(UserCurrentUser).ToList();
-        }
-
-        public static UserRouteDto UserUserRoute(User user)
-        {
-            return new UserRouteDto
+            return new AuthorUserDto
             {
                 Id = user.Id,
                 Username = user.Username,

@@ -1,7 +1,7 @@
-﻿using Application.Dto.User;
-using Application.Dto.Coordinates;
-using System.ComponentModel.DataAnnotations;
+﻿using Application.Dto.Coordinates;
+using Application.Dto.User;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Moment
 {
@@ -9,7 +9,7 @@ namespace Application.Dto.Moment
     public class MomentDto
     {
         [Required]
-        [MinLength(1)]
+        [Range(1, System.Int32.MaxValue)]
         public long Id { get; set; }
 
         [DataType(DataType.MultilineText)]
@@ -18,9 +18,9 @@ namespace Application.Dto.Moment
         public string? Description { get; set; }
         [Required]
         public CoordinatesDto Coordinates { get; set; } = null!;
-        public DateTime CreatedAt { get; set; }
+        public string CreatedAt { get; set; } = null!;
         [Required]
-        public UserDto User { get; set; } = null!;
+        public AuthorUserDto User { get; set; } = null!;
         [Required]
         public int Status { get; set; }
         [Required]

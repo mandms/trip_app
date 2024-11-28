@@ -1,14 +1,14 @@
-﻿using Application.Dto.Route;
+﻿using Application.Dto.Pagination;
+using Application.Dto.Route;
 using Application.Mappers;
 using Domain.Contracts.Repositories;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Filters;
-using Application.Dto.Pagination;
 
 namespace Application.Services.RouteService
 {
-    public class RouteService: IRouteService
+    public class RouteService : IRouteService
     {
         private readonly IRouteRepository _routeRepository;
         private readonly ITagRepository _tagRepository;
@@ -18,8 +18,8 @@ namespace Application.Services.RouteService
         private readonly IReviewRepository _reviewRepository;
 
         public RouteService(
-            IRouteRepository routeRepository, 
-            ITagRepository tagRepository, 
+            IRouteRepository routeRepository,
+            ITagRepository tagRepository,
             IReviewRepository reviewRepository,
             ILocationRepository locationRepository,
             IDbTransaction dbTransaction,
@@ -40,11 +40,12 @@ namespace Application.Services.RouteService
 
             List<GetAllRoutesDto> routeDtos = new();
 
-            routes.ForEach(route => {
+            routes.ForEach(route =>
+            {
                 double rate = _reviewRepository.GetAverageRate(route.Id);
                 var getAllRouteDtos = RouteMapper.RouteToGetAllRoutesDto(route, rate);
                 routeDtos.Add(getAllRouteDtos);
-                });
+            });
 
             var pagedResponse = new PaginationResponse<GetAllRoutesDto>(routeDtos.AsQueryable(), filterParams.PageNumber, filterParams.PageSize);
 
@@ -62,13 +63,15 @@ namespace Application.Services.RouteService
             return RouteMapper.RouteToRouteDto(route);
         }
 
-        public async Task DeleteRoute(long id, CancellationToken cancellationToken)
+        public async Task DeleteRoute(long id, long userId, CancellationToken cancellationToken)
         {
             var route = await _routeRepository.GetRouteById(id);
             if (route == null)
             {
                 throw new RouteNotFoundException(id);
             }
+
+            CheckUser(userId, route);
 
             await _routeRepository.Remove(route, cancellationToken);
         }
@@ -95,12 +98,11 @@ namespace Application.Services.RouteService
         }
 
         private async Task CreateRoute(
-            CreateRouteDto createRouteDto, 
+            CreateRouteDto createRouteDto,
             CancellationToken cancellationToken
             )
         {
-            List<Task<Tag>> tagTasks = CreateTagTasks(createRouteDto);
-            List<Tag> tags = Task.WhenAll(tagTasks).Result.ToList();
+            List<Tag> tags = _tagRepository.GetRangeTags(createRouteDto.Tags).ToList();
 
             Route route = RouteMapper.CreateRouteDtoToRoute(createRouteDto, tags);
 
@@ -114,13 +116,14 @@ namespace Application.Services.RouteService
             await _locationRepository.AddRange(locations, cancellationToken);
         }
 
-        public async Task<RouteDto> UpdateRoute(long id,  UpdateRouteDto updateRouteDto, CancellationToken cancellationToken)
+        public async Task<RouteDto> UpdateRoute(long id, long userId, UpdateRouteDto updateRouteDto, CancellationToken cancellationToken)
         {
             Route? foundRoute = await _routeRepository.GetRouteById(id);
             if (foundRoute == null)
             {
                 throw new RouteNotFoundException(id);
             }
+            CheckUser(userId, foundRoute);
 
             RouteMapper.UpdateRoute(foundRoute, updateRouteDto);
 
@@ -128,13 +131,15 @@ namespace Application.Services.RouteService
             return RouteMapper.RouteToRouteDto(route);
         }
 
-        public async Task AddTag(long routeId, long tagId, CancellationToken cancellationToken)
+        public async Task AddTag(long routeId, long tagId, long userId, CancellationToken cancellationToken)
         {
             var route = await _routeRepository.GetRouteById(routeId);
             if (route == null)
             {
                 throw new RouteNotFoundException(routeId);
             }
+
+            CheckUser(userId, route);
 
             var tag = await _tagRepository.GetById(tagId);
             if (tag == null)
@@ -145,13 +150,15 @@ namespace Application.Services.RouteService
             await _routeRepository.AddTag(route, tag, cancellationToken);
         }
 
-        public async Task DeleteTag(long routeId, long tagId, CancellationToken cancellationToken)
+        public async Task DeleteTag(long routeId, long tagId, long userId, CancellationToken cancellationToken)
         {
             var route = await _routeRepository.GetRouteById(routeId);
             if (route == null)
             {
                 throw new RouteNotFoundException(routeId);
             }
+
+            CheckUser(userId, route);
 
             var tag = await _tagRepository.GetById(tagId);
             if (tag == null)
@@ -160,6 +167,14 @@ namespace Application.Services.RouteService
             }
 
             await _routeRepository.DeleteTag(route, tag, cancellationToken);
+        }
+
+        private void CheckUser(long userId, Route route)
+        {
+            if (route.UserId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not authorized to edit this location.");
+            }
         }
     }
 }

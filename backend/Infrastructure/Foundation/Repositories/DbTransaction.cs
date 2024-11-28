@@ -20,7 +20,7 @@ namespace Domain.Contracts.Repositories
             {
                 await operation();
                 transactionScope.Complete();
-                
+
             }
             catch (Exception ex)
             {

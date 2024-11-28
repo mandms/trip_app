@@ -1,6 +1,7 @@
 ﻿using Application.Dto.Location;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Application.Dto.Route
 {
@@ -16,10 +17,9 @@ namespace Application.Dto.Route
         [MinLength(1)]
         public string? Description { get; set; }
         [Required]
-        [MaxLength(1000)]
-        [MinLength(1)]
+        [Range(1, 1000)]
         public int Duration { get; set; }
-        [Required]
+        [JsonIgnore]
         public long UserId { get; set; } = 0!;
         [Required]
         public List<long> Tags { get; set; } = new();
