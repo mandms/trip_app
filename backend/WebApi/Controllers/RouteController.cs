@@ -40,8 +40,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreateRouteDto>> Post([FromBody] CreateRouteDto createRouteDto, CancellationToken cancellationToken)
+        public async Task<ActionResult> Post([FromBody] CreateRouteDto createRouteDto, CancellationToken cancellationToken)
         {
+            createRouteDto.UserId = 1;
             await _service.Create(createRouteDto, cancellationToken);
             return Ok();
         }
