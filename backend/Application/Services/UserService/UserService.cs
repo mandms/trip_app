@@ -42,14 +42,14 @@ namespace Application.Services.UserService
 
             if (foundUser != null)
             {
-                throw new Exception("User already exist");
+                throw new UserAlreadyExistsException();
             }
 
             var role = await _roleRepository.GetRoleByName("User");
 
             if (role == null)
             {
-                throw new Exception("Role not found");
+                throw new EntityNotFoundException("Role");
             }
 
             user.Roles.Add(role);
@@ -74,7 +74,7 @@ namespace Application.Services.UserService
             var user = await _repository.GetCurrentUser(id);
             if (user == null)
             {
-                throw new UserNotFoundException(id);
+                throw new EntityNotFoundException("User", id);
             }
             UserDto userDto = UserMapper.UserUserDto(user);
             return userDto;
@@ -85,7 +85,7 @@ namespace Application.Services.UserService
             var user = await _repository.GetById(id);
             if (user == null)
             {
-                throw new UserNotFoundException(id);
+                throw new EntityNotFoundException("User", id);
             }
             var updateUser = () => UpdateUser(user, updateUserDto, cancellationToken);
             await _dbTransaction.Transaction(updateUser);
@@ -107,14 +107,14 @@ namespace Application.Services.UserService
 
             if (user == null)
             {
-                throw new UserNotFoundException();
+                throw new EntityNotFoundException("User");
             }
 
             var result = _passwordHasher.Verify(loginUserDto.Password, user.Password);
 
             if (!result)
             {
-                throw new UserNotFoundException();
+                throw new InvalidPasswordException();
             }
 
             string jwt = _jwtProvider.GenerateToken(user);

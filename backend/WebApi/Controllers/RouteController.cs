@@ -18,9 +18,9 @@ namespace WebApi.Controllers
             _service = service;
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpGet]
-        public ActionResult<PaginationResponse<GetAllRoutesDto>> GetAll([FromQuery] FilterParams filterParams)
+        public ActionResult<PaginationResponse<GetAllRoutesDto>> GetAll([FromQuery] FilterParamsWithTag filterParams)
         {
             var pagedResponse = _service.GetAllRoutes(filterParams);
             return Ok(pagedResponse);

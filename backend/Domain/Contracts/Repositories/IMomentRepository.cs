@@ -5,7 +5,7 @@ namespace Domain.Contracts.Repositories
 {
     public interface IMomentRepository : IBaseRepository<Moment>
     {
-        IQueryable<Moment> GetAllMoments(FilterParams filterParams);
+        IQueryable<Moment> GetAllMoments(FilterParamsWithDate filterParams);
         Task<Moment?> GetMomentById(long id);
     }
 }

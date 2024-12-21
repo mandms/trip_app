@@ -11,20 +11,23 @@ namespace Infrastructure.Foundation.Repositories
         {
         }
 
-        public IQueryable<Review> GetAllReviews(FilterParams filterParams)
+        public IQueryable<Review> GetAllReviews(FilterParamsWithDate filterParams)
         {
             var query = _context.Set<Review>().
                 Include(review => review.User).
+                Filter(filterParams).
                 Sort(filterParams);
 
             return query.AsNoTracking();
         }
 
-        public IQueryable<Review> GetAllByRouteId(long routeId)
+        public IQueryable<Review> GetAllByRouteId(long routeId, FilterParamsWithDate filterParams)
         {
             var query = _context.Set<Review>().
                 Where(review => review.RouteId == routeId).
-                Include(review => review.User);
+                Include(review => review.User).
+                Filter(filterParams).
+                Sort(filterParams);
 
             return query.AsNoTracking();
         }

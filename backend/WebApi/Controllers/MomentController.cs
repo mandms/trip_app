@@ -19,7 +19,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<PaginationResponse<MomentDto>> GetAll([FromQuery] FilterParams filterParams)
+        public ActionResult<PaginationResponse<MomentDto>> GetAll([FromQuery] FilterParamsWithDate filterParams)
         {
             var pagedResponse = _service.GetAllMoments(filterParams);
             return Ok(pagedResponse);

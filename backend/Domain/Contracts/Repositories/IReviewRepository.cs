@@ -6,8 +6,8 @@ namespace Domain.Contracts.Repositories
     public interface IReviewRepository : IBaseRepository<Review>
     {
         double GetAverageRate(long routeId);
-        IQueryable<Review> GetAllByRouteId(long routeId);
-        IQueryable<Review> GetAllReviews(FilterParams filterParams);
+        IQueryable<Review> GetAllByRouteId(long routeId, FilterParamsWithDate filterParams);
+        IQueryable<Review> GetAllReviews(FilterParamsWithDate filterParams);
         Task<Review?> GetReviewById(long id);
     }
 }

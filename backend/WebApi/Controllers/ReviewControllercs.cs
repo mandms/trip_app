@@ -19,14 +19,14 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<PaginationResponse<ReviewDto>> GetAll([FromQuery] FilterParams filterParams)
+        public ActionResult<PaginationResponse<ReviewDto>> GetAll([FromQuery] FilterParamsWithDate filterParams)
         {
             var pagedResponse = _service.GetAllReviews(filterParams);
             return Ok(pagedResponse);
         }
 
         [HttpGet("route/{routeId}")]
-        public ActionResult<PaginationResponse<ReviewDto>> GetAllByRouteId(long routeId, [FromQuery] FilterParams filterParams)
+        public ActionResult<PaginationResponse<ReviewDto>> GetAllByRouteId(long routeId, [FromQuery] FilterParamsWithDate filterParams)
         {
             var pagedResponse = _service.GetReviewsByRouteId(routeId, filterParams);
             return Ok(pagedResponse);

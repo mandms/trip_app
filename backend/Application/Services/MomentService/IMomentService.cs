@@ -6,7 +6,7 @@ namespace Application.Services.MomentService
 {
     public interface IMomentService
     {
-        PaginationResponse<MomentDto> GetAllMoments(FilterParams filterParams);
+        PaginationResponse<MomentDto> GetAllMoments(FilterParamsWithDate filterParams);
         Task<MomentDto?> GetMoment(long id);
         Task Create(CreateMomentDto createMomentDto, CancellationToken cancellationToken);
         Task<MomentDto> Put(long id, long userId, UpdateMomentDto updateMomentDto, CancellationToken cancellationToken);

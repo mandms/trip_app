@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts.Entities;
 using Domain.Contracts.Repositories;
+using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -30,9 +31,11 @@ namespace Infrastructure.Foundation.Repositories
             return _context.Set<T>().AsNoTracking().Where(expression);
         }
 
-        public IQueryable<T> GetAll()
+        public IQueryable<T> GetAll(FilterParams filterParams)
         {
-            return _context.Set<T>().AsNoTracking();
+            return _context.Set<T>().
+                Sort(filterParams).
+                AsNoTracking();
         }
 
         public async Task<T?> GetById(long id)

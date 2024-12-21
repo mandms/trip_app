@@ -1,4 +1,5 @@
 ﻿using Application.Dto.Coordinates;
+using Application.Dto.Image;
 using Application.Dto.Location;
 using Application.Dto.Route;
 using Domain.Entities;
@@ -33,33 +34,34 @@ namespace Application.Mappers
 
         public static List<Location> ToLocations(CreateRouteDto createRouteDto, long routeId)
         {
-            return createRouteDto.Locations.Select(
-               (CreateLocationDto location, int i) => new Location
-               {
-                   Coordinates = CoordinatesDto.CreatePoint(location.Coordinates),
-                   Description = location.Description,
-                   Name = location.Name,
-                   RouteId = routeId,
-                   Order = i++
-               }).ToList();
+            return createRouteDto.Locations.Select((location, index) => ToLocation(location, routeId, index)).ToList();
         }
 
-        public static Location ToLocation(CreateLocationDto createLocationDto, long routeId)
+        public static Location ToLocation(CreateLocationDto createLocationDto, long routeId, int? order = null)
         {
-            List<ImageLocation> images = new();
-            if ((createLocationDto.Images != null) && (createLocationDto.Images.Count() > 0))
-            {
-                images = createLocationDto.Images.Select(image => new ImageLocation { Image = image.Path }).ToList();
-            }
+            List<ImageLocation> images = GetImages(createLocationDto.Images);
+
             return new Location
             {
                 Coordinates = CoordinatesDto.CreatePoint(createLocationDto.Coordinates),
                 Description = createLocationDto.Description,
                 Name = createLocationDto.Name,
                 RouteId = routeId,
+                Order = order ?? 0, 
                 Images = images
             };
         }
+
+        private static List<ImageLocation> GetImages(List<CreateImageDto>? imageDtos)
+        {
+            List<ImageLocation> images = new();
+            if ((imageDtos != null) && (imageDtos.Count() > 0))
+            {
+                images = imageDtos.Select(image => new ImageLocation { Image = image.Path }).ToList();
+            }
+            return images;
+        }
+
 
         public static void UpdateLocationDtoLocation(Location location, UpdateLocationDto updateLocationDto)
         {

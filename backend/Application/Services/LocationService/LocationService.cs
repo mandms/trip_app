@@ -32,7 +32,7 @@ namespace Application.Services.LocationService
             var route = await _routeRepository.GetById(routeId);
             if (route == null)
             {
-                throw new RouteNotFoundException(routeId);
+                throw new EntityNotFoundException("Route", routeId);
             }
             var createLocation = () => CreateLocation(routeId, createLocationDto, cancellationToken);
             await _dbTransaction.Transaction(createLocation);
@@ -56,7 +56,7 @@ namespace Application.Services.LocationService
             var location = await _repository.GetById(id);
             if (location == null)
             {
-                throw new LocationNotFoundException(id);
+                throw new EntityNotFoundException("Location", id);
             }
 
             await CheckUser(userId, location);
@@ -70,7 +70,7 @@ namespace Application.Services.LocationService
             var location = await _repository.GetById(id);
             if (location == null)
             {
-                throw new LocationNotFoundException(id);
+                throw new EntityNotFoundException("Location", id);
             }
 
             await CheckUser(userId, location);
@@ -83,7 +83,7 @@ namespace Application.Services.LocationService
             var route = await _routeRepository.GetById(location.RouteId);
             if (route == null)
             {
-                throw new RouteNotFoundException(location.RouteId);
+                throw new EntityNotFoundException("Route", location.RouteId);
             }
             if (route.UserId != userId)
             {

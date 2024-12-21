@@ -10,11 +10,12 @@ namespace Infrastructure.Foundation.Repositories
         public MomentRepository(TripAppDbContext context) : base(context)
         {
         }
-        public IQueryable<Moment> GetAllMoments(FilterParams filterParams)
+        public IQueryable<Moment> GetAllMoments(FilterParamsWithDate filterParams)
         {
             var query = _context.Set<Moment>().
                 Include(m => m.User).
                 Include(m => m.Images).
+                Filter(filterParams).
                 Sort(filterParams);
 
             return query.AsNoTracking();

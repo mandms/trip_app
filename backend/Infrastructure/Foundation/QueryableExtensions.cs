@@ -1,52 +1,76 @@
 ﻿using Domain.Entities;
 using Domain.Filters;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Infrastructure.Foundation
 {
     public static class QueryableExtensions
     {
-        public static IQueryable<T> Filter<T>(this IQueryable<T> query, FilterParams filterParams)
+        public static IQueryable<T> Filter<T>(this IQueryable<T> query, object filterParams)
         {
-            if (string.IsNullOrWhiteSpace(filterParams.TagFilter))
-                return query;
-
-            var parameter = Expression.Parameter(typeof(T), "x");
-            var property = Expression.Property(parameter, "Tags");
-
-            var tagParameter = Expression.Parameter(typeof(Tag), "tag");
-            var tagNameProperty = Expression.Property(tagParameter, "Name");
-
-            var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-
-            if (containsMethod == null)
+            switch (filterParams)
             {
-                throw new InvalidOperationException("The 'Contains' method was not found on the string type.");
+                case FilterParamsWithTag tagParams when typeof(T) == typeof(Route):
+                    query = ApplyTagFilter(query, tagParams);
+                    break;
+
+                case FilterParamsWithDate dateParams when typeof(T) == typeof(Moment):
+                    query = ApplyDateFilterForMoment(query, dateParams);
+                    break;
+
+                case FilterParamsWithDate dateParams when typeof(T) == typeof(Review):
+                    query = ApplydateFilterForReview(query, dateParams);
+                    break;
+
+                default:
+                    throw new ArgumentException($"Unsupported filter parameters type or entity type: {typeof(T).Name}.", nameof(filterParams));
             }
 
-            var filterExpression = Expression.Call(tagNameProperty, containsMethod, Expression.Constant(filterParams.TagFilter));
-
-            var asQueryableMethod = typeof(Queryable)
-            .GetMethods()
-            .First(m => m.Name == "AsQueryable" && m.GetParameters().Length == 1)
-            .MakeGenericMethod(typeof(Tag));
-            var asQueryableExpression = Expression.Call(asQueryableMethod, property);
-
-            var anyMethod = typeof(Queryable).GetMethods()
-                .First(m => m.Name == "Any" && m.GetParameters().Length == 2)
-                .MakeGenericMethod(typeof(Tag));
-
-            var anyExpression = Expression.Call(
-                anyMethod,
-                asQueryableExpression,
-                Expression.Lambda<Func<Tag, bool>>(filterExpression, tagParameter)
-            );
-
-            var lambda = Expression.Lambda<Func<T, bool>>(anyExpression, parameter);
-            return query.Where(lambda);
+            return query;
         }
 
+        private static IQueryable<T> ApplydateFilterForReview<T>(IQueryable<T> query, FilterParamsWithDate dateParams)
+        {
+            if (dateParams.StartDate.HasValue)
+            {
+                dateParams.StartDate = DateTime.SpecifyKind(dateParams.StartDate.Value, DateTimeKind.Utc);
+                query = query.Where(x => (x as Review)!.CreatedAt >= dateParams.StartDate.Value);
+            }
+            if (dateParams.EndDate.HasValue)
+            {
+                dateParams.EndDate = DateTime.SpecifyKind(dateParams.EndDate.Value, DateTimeKind.Utc);
+                query = query.Where(x => (x as Review)!.CreatedAt <= dateParams.EndDate.Value);
+            }
+
+            return query;
+        }
+
+        private static IQueryable<T> ApplyDateFilterForMoment<T>(IQueryable<T> query, FilterParamsWithDate dateParams)
+        {
+            if (dateParams.StartDate.HasValue)
+            {
+                dateParams.StartDate = DateTime.SpecifyKind(dateParams.StartDate.Value, DateTimeKind.Utc);
+                query = query.Where(x => (x as Moment)!.CreatedAt >= dateParams.StartDate.Value);
+            }
+            if (dateParams.EndDate.HasValue)
+            {
+                dateParams.EndDate = DateTime.SpecifyKind(dateParams.EndDate.Value, DateTimeKind.Utc);
+                query = query.Where(x => (x as Moment)!.CreatedAt <= dateParams.EndDate.Value);
+            }
+
+            return query;
+        }
+
+        private static IQueryable<T> ApplyTagFilter<T>(IQueryable<T> query, FilterParamsWithTag tagParams)
+        {
+            if (!string.IsNullOrWhiteSpace(tagParams.Tag))
+            {
+                var tags = tagParams.Tag.Split(',').Select(tag => tag.Trim()).ToList();
+                query = query.Where(x => (x as Route)!.Tags.Any(tag => tags.Contains(tag.Name)));
+            }
+
+            return query;
+        }
 
         public static IQueryable<T> Sort<T>(this IQueryable<T> query, FilterParams filterParams)
         {
@@ -55,13 +79,11 @@ namespace Infrastructure.Foundation
 
             var parameter = Expression.Parameter(typeof(T), "x");
             var property = Expression.Property(parameter, filterParams.SortBy);
-            if (property == null)
-                throw new ArgumentException($"Property '{filterParams.SortBy}' not found on type '{typeof(T).Name}'");
 
-            var propertyAccess = Expression.Property(parameter, filterParams.SortBy);
-            var orderByExp = Expression.Lambda<Func<T, object>>(Expression.Convert(propertyAccess, typeof(object)), parameter);
+            var orderByExp = Expression.Lambda<Func<T, object>>(Expression.Convert(property, typeof(object)), parameter);
 
             return filterParams.IsAscending ? query.OrderBy(orderByExp) : query.OrderByDescending(orderByExp);
         }
+
     }
 }

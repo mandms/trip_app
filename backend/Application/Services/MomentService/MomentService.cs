@@ -48,7 +48,7 @@ namespace Application.Services.MomentService
             var moment = await _repository.GetMomentById(id);
             if (moment == null)
             {
-                throw new MomentNotFoundException(id);
+                throw new EntityNotFoundException("Moment", id);
             }
 
             CheckUser(userId, moment);
@@ -56,7 +56,7 @@ namespace Application.Services.MomentService
             await _repository.Remove(moment, cancellationToken);
         }
 
-        public PaginationResponse<MomentDto> GetAllMoments(FilterParams filterParams)
+        public PaginationResponse<MomentDto> GetAllMoments(FilterParamsWithDate filterParams)
         {
             var moments = _repository.GetAllMoments(filterParams);
 
@@ -72,7 +72,7 @@ namespace Application.Services.MomentService
             var moment = await _repository.GetMomentById(id);
             if (moment == null)
             {
-                throw new MomentNotFoundException(id);
+                throw new EntityNotFoundException("Moment", id);
             }
 
             return MomentMapper.MomentToMomentDto(moment);
@@ -83,7 +83,7 @@ namespace Application.Services.MomentService
             Moment? foundMoment = await _repository.GetMomentById(id);
             if (foundMoment == null)
             {
-                throw new RouteNotFoundException(id);
+                throw new EntityNotFoundException("Moment", id);
             }
 
             CheckUser(userId, foundMoment);

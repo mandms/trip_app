@@ -26,7 +26,7 @@ namespace Application.Services.ReviewService
             Route? route = await _routeRepository.GetRouteById(routeId);
             if (route == null)
             {
-                throw new RouteNotFoundException(routeId);
+                throw new EntityNotFoundException("Route", routeId);
             }
 
             Review review = ReviewMapper.ToReview(routeId, createReviewDto);
@@ -38,7 +38,7 @@ namespace Application.Services.ReviewService
             var review = await _repository.GetReviewById(id);
             if (review == null)
             {
-                throw new Exception("Review not found");
+                throw new EntityNotFoundException("Review", id);
             }
 
             CheckUser(userId, review);
@@ -46,9 +46,9 @@ namespace Application.Services.ReviewService
             await _repository.Remove(review, cancellationToken);
         }
 
-        public PaginationResponse<ReviewDto> GetReviewsByRouteId(long routeId, FilterParams filterParams)
+        public PaginationResponse<ReviewDto> GetReviewsByRouteId(long routeId, FilterParamsWithDate filterParams)
         {
-            var reviews = _repository.GetAllByRouteId(routeId);
+            var reviews = _repository.GetAllByRouteId(routeId, filterParams);
 
             var reviewDtos = reviews.Select(review => ReviewMapper.ReviewToReviewDto(review));
 
@@ -57,7 +57,7 @@ namespace Application.Services.ReviewService
             return pagedResponse;
         }
 
-        public PaginationResponse<ReviewDto> GetAllReviews(FilterParams filterParams)
+        public PaginationResponse<ReviewDto> GetAllReviews(FilterParamsWithDate filterParams)
         {
             var reviews = _repository.GetAllReviews(filterParams);
 
@@ -73,7 +73,7 @@ namespace Application.Services.ReviewService
             Review? foundReview = await _repository.GetReviewById(id);
             if (foundReview == null)
             {
-                throw new Exception("Review not found");
+                throw new EntityNotFoundException("Review", id);
             }
 
             CheckUser(userId, foundReview);
@@ -89,7 +89,7 @@ namespace Application.Services.ReviewService
             var review = await _repository.GetReviewById(id);
             if (review == null)
             {
-                throw new Exception("Review not found");
+                throw new EntityNotFoundException("Review", id);
             }
 
             return ReviewMapper.ReviewToReviewDto(review);

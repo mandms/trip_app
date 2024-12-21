@@ -3,6 +3,7 @@ using Application.Dto.Tag;
 using Application.Mappers;
 using Domain.Contracts.Repositories;
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Filters;
 
 namespace Application.Services.TagService
@@ -24,7 +25,7 @@ namespace Application.Services.TagService
             Category? category = await _categoryRepository.GetById(categoryId);
             if (category == null)
             {
-                throw new Exception("Category not found");
+                throw new EntityNotFoundException("Category", categoryId);
             }
 
             Tag tag = TagMapper.ToTag(createTagDto, categoryId);
@@ -36,7 +37,7 @@ namespace Application.Services.TagService
             var tag = await _repository.GetById(id);
             if (tag == null)
             {
-                throw new Exception("Tag not found");
+                throw new EntityNotFoundException("Tag", id);
             }
 
             await _repository.Remove(tag, cancellationToken);
@@ -58,7 +59,7 @@ namespace Application.Services.TagService
             var tag = await _repository.GetById(id);
             if (tag == null)
             {
-                throw new Exception("Tag not found");
+                throw new EntityNotFoundException("Tag", id);
             }
 
             return TagMapper.TagToTagDto(tag);
@@ -69,7 +70,7 @@ namespace Application.Services.TagService
             Tag? foundTag = await _repository.GetById(id);
             if (foundTag == null)
             {
-                throw new Exception("Tag not found");
+                throw new EntityNotFoundException("Tag", id);
             }
 
             TagMapper.UpdateTag(updateTagDto, foundTag);

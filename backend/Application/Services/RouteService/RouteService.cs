@@ -1,6 +1,7 @@
 ﻿using Application.Dto.Pagination;
 using Application.Dto.Route;
 using Application.Mappers;
+using Application.Services.FileService;
 using Domain.Contracts.Repositories;
 using Domain.Entities;
 using Domain.Exceptions;
@@ -16,6 +17,7 @@ namespace Application.Services.RouteService
         private readonly IDbTransaction _dbTransaction;
         private readonly IUserRouteRepository _userRouteRepository;
         private readonly IReviewRepository _reviewRepository;
+        private readonly IFileService _fileService;
 
         public RouteService(
             IRouteRepository routeRepository,
@@ -23,7 +25,8 @@ namespace Application.Services.RouteService
             IReviewRepository reviewRepository,
             ILocationRepository locationRepository,
             IDbTransaction dbTransaction,
-            IUserRouteRepository userRouteRepository
+            IUserRouteRepository userRouteRepository,
+            IFileService fileService
             )
         {
             _routeRepository = routeRepository;
@@ -32,6 +35,7 @@ namespace Application.Services.RouteService
             _dbTransaction = dbTransaction;
             _userRouteRepository = userRouteRepository;
             _reviewRepository = reviewRepository;
+            _fileService = fileService;
         }
 
         public PaginationResponse<GetAllRoutesDto> GetAllRoutes(FilterParams filterParams)
@@ -57,7 +61,7 @@ namespace Application.Services.RouteService
             var route = await _routeRepository.GetRouteById(id);
             if (route == null)
             {
-                throw new RouteNotFoundException(id);
+                throw new EntityNotFoundException("Route", id);
             }
 
             return RouteMapper.RouteToRouteDto(route);
@@ -68,7 +72,7 @@ namespace Application.Services.RouteService
             var route = await _routeRepository.GetRouteById(id);
             if (route == null)
             {
-                throw new RouteNotFoundException(id);
+                throw new EntityNotFoundException("Route", id);
             }
 
             CheckUser(userId, route);
@@ -78,6 +82,14 @@ namespace Application.Services.RouteService
 
         public async Task Create(CreateRouteDto createRouteDto, CancellationToken cancellationToken)
         {
+            foreach (var location in createRouteDto.Locations)
+            {
+                if ((location.Images != null) && location.Images.Any())
+                {
+                    var tasks = _fileService.SaveImages(location.Images, cancellationToken);
+                    await Task.WhenAll(tasks);
+                }
+            }
             var createRoute = () => CreateRoute(createRouteDto, cancellationToken);
             await _dbTransaction.Transaction(createRoute);
         }
@@ -90,7 +102,7 @@ namespace Application.Services.RouteService
 
                 if (tag == null)
                 {
-                    throw new TagNotFoundException(tagId);
+                    throw new EntityNotFoundException("Tag", tagId);
                 }
 
                 return tag;
@@ -121,7 +133,7 @@ namespace Application.Services.RouteService
             Route? foundRoute = await _routeRepository.GetRouteById(id);
             if (foundRoute == null)
             {
-                throw new RouteNotFoundException(id);
+                throw new EntityNotFoundException("Route", id);
             }
             CheckUser(userId, foundRoute);
 
@@ -136,7 +148,7 @@ namespace Application.Services.RouteService
             var route = await _routeRepository.GetRouteById(routeId);
             if (route == null)
             {
-                throw new RouteNotFoundException(routeId);
+                throw new EntityNotFoundException("Route", routeId);
             }
 
             CheckUser(userId, route);
@@ -144,7 +156,7 @@ namespace Application.Services.RouteService
             var tag = await _tagRepository.GetById(tagId);
             if (tag == null)
             {
-                throw new TagNotFoundException(routeId);
+                throw new EntityNotFoundException("Tag", tagId);
             }
 
             await _routeRepository.AddTag(route, tag, cancellationToken);
@@ -155,7 +167,7 @@ namespace Application.Services.RouteService
             var route = await _routeRepository.GetRouteById(routeId);
             if (route == null)
             {
-                throw new RouteNotFoundException(routeId);
+                throw new EntityNotFoundException("Route", routeId);
             }
 
             CheckUser(userId, route);
@@ -163,7 +175,7 @@ namespace Application.Services.RouteService
             var tag = await _tagRepository.GetById(tagId);
             if (tag == null)
             {
-                throw new TagNotFoundException(routeId);
+                throw new EntityNotFoundException("Tag", tagId);
             }
 
             await _routeRepository.DeleteTag(route, tag, cancellationToken);
