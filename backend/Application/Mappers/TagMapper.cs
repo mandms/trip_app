@@ -11,6 +11,7 @@ namespace Application.Mappers
             {
                 Id = tag.Id,
                 Name = tag.Name,
+                category = CategoryMapper.CategoryToCategoryDto(tag.Category)
             };
         }
 

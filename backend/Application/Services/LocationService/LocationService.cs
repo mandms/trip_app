@@ -1,9 +1,11 @@
-﻿using Application.Dto.Location;
+﻿using Application.Dto.Image;
+using Application.Dto.Location;
 using Application.Mappers;
 using Application.Services.FileService;
 using Domain.Contracts.Repositories;
 using Domain.Entities;
 using Domain.Exceptions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Application.Services.LocationService
 {
@@ -13,18 +15,21 @@ namespace Application.Services.LocationService
         private readonly IDbTransaction _dbTransaction;
         private readonly IFileService _fileService;
         private readonly IRouteRepository _routeRepository;
+        private readonly IImageLocationRepository _imageLocationRepository;
 
         public LocationService(
             ILocationRepository repository,
             IRouteRepository routeRepository,
             IDbTransaction dbTransaction,
-            IFileService fileService
+            IFileService fileService,
+            IImageLocationRepository imageLocationRepository
             )
         {
             _repository = repository;
             _dbTransaction = dbTransaction;
             _fileService = fileService;
             _routeRepository = routeRepository;
+            _imageLocationRepository = imageLocationRepository;
         }
 
         public async Task Create(CreateLocationDto createLocationDto, long routeId, CancellationToken cancellationToken)
@@ -61,6 +66,11 @@ namespace Application.Services.LocationService
 
             await CheckUser(userId, location);
 
+            if(updateLocationDto.Order > _repository.GetMaxOrder(location.RouteId))
+            {
+                throw new Exception("number exceeds maximum value");
+            }
+
             LocationMapper.UpdateLocationDtoLocation(location, updateLocationDto);
             await _repository.Update(location, cancellationToken);
         }
@@ -89,6 +99,73 @@ namespace Application.Services.LocationService
             {
                 throw new UnauthorizedAccessException("You are not authorized to edit this location.");
             }
+        }
+
+        public async Task DeleteImages(long locationId, List<long> imageIds, CancellationToken cancellationToken)
+        {
+            var location = await _repository.GetById(locationId);
+            if (location == null)
+            {
+                throw new EntityNotFoundException("Location", locationId);
+            }
+
+            var deleteImages = async () =>
+            {
+                if (imageIds == null || !imageIds.Any())
+                {
+                    throw new ArgumentException("No image IDs provided.");
+                }
+
+                foreach (var imageId in imageIds)
+                {
+                    var imageToRemove = await _imageLocationRepository.GetById(imageId);
+                    if (imageToRemove == null)
+                    {
+                        throw new EntityNotFoundException("Image", imageId);
+                    }
+
+                    _fileService.DeleteFile(imageToRemove.Image);
+
+                    location.Images.Remove(imageToRemove);
+
+                    await _imageLocationRepository.Remove(imageToRemove, cancellationToken);
+                }
+
+                await _repository.Update(location, cancellationToken);
+            };
+
+            await _dbTransaction.Transaction(deleteImages);
+        }
+
+
+
+        public async Task AddImages(long locationId, CreateImagesDto createImagesDto, CancellationToken cancellationToken)
+        {
+            var location = await _repository.GetById(locationId);
+            if (location == null)
+            {
+                throw new EntityNotFoundException("Location", locationId);
+            }
+
+            var addImages = () => CreateImages(createImagesDto, location, cancellationToken);
+
+            await _dbTransaction.Transaction(addImages);
+        }
+
+        private async Task CreateImages(CreateImagesDto createImagesDto, Location location, CancellationToken cancellationToken)
+        {
+            if (createImagesDto.Images != null && createImagesDto.Images.Any())
+            {
+                var tasks = _fileService.SaveImages(createImagesDto.Images, cancellationToken);
+                await Task.WhenAll(tasks);
+
+                var images = LocationMapper.GetImages(createImagesDto.Images);
+                foreach (var image in images)
+                {
+                    location.Images.Add(image);
+                }
+            }
+            await _repository.Update(location, cancellationToken);
         }
     }
 }

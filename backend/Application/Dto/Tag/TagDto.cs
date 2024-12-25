@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Application.Dto.Category;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Tag
@@ -10,5 +11,7 @@ namespace Application.Dto.Tag
         public long Id { get; set; }
         [Required]
         public string Name { get; set; } = null!;
+        [Required]
+        public CategoryDto category { get; set; } = null!;
     }
 }

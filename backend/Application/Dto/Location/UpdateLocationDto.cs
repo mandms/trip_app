@@ -23,7 +23,5 @@ namespace Application.Dto.Location
         [Required]
         [Range(1, Int32.MaxValue)]
         public int Order { get; set; } = 0!;
-        [Required]
-        public List<string> Images { get; set; } = new();
     }
 }

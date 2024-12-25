@@ -7,9 +7,7 @@ namespace Application.Dto.Review
     {
         [DataType(DataType.MultilineText)]
         [MaxLength(1000)]
-        [MinLength(1)]
         public string? Text { get; set; }
-        [Required]
         [Range(0, 5)]
         public int Rate { get; set; }
     }

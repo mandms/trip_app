@@ -52,7 +52,7 @@ namespace Application.Mappers
             };
         }
 
-        private static List<ImageLocation> GetImages(List<CreateImageDto>? imageDtos)
+        public static List<ImageLocation> GetImages(List<CreateImageDto>? imageDtos)
         {
             List<ImageLocation> images = new();
             if ((imageDtos != null) && (imageDtos.Count() > 0))

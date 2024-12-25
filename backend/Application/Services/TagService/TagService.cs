@@ -34,7 +34,7 @@ namespace Application.Services.TagService
 
         public async Task Delete(long id, CancellationToken cancellationToken)
         {
-            var tag = await _repository.GetById(id);
+            var tag = await _repository.GetTagById(id);
             if (tag == null)
             {
                 throw new EntityNotFoundException("Tag", id);

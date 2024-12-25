@@ -95,6 +95,10 @@ namespace Application.Services.UserService
         {
             if (updateUserDto.Avatar != null)
             {
+                if (user.Avatar != null)
+                {
+                    _fileService.DeleteFile(user.Avatar);
+                }
                 updateUserDto.Avatar.Path = await _fileService.SaveFileAsync(updateUserDto.Avatar.Image, cancellationToken);
             }
             UserMapper.UpdateUserDtoUser(user, updateUserDto);

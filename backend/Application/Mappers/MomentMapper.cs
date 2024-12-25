@@ -1,4 +1,5 @@
 ﻿using Application.Dto.Coordinates;
+using Application.Dto.Image;
 using Application.Dto.Moment;
 using Domain.Entities;
 
@@ -28,11 +29,7 @@ namespace Application.Mappers
 
         public static Moment ToMoment(CreateMomentDto createMomentDto)
         {
-            List<ImageMoment> images = new();
-            if ((createMomentDto.Images != null) && (createMomentDto.Images.Count > 0))
-            {
-                images = createMomentDto.Images.Select(image => new ImageMoment { Image = image.Path }).ToList();
-            }
+            List<ImageMoment> images = GetImages(createMomentDto.Images);
             return new Moment
             {
                 Coordinates = CoordinatesDto.CreatePoint(createMomentDto.Coordinates),
@@ -41,6 +38,16 @@ namespace Application.Mappers
                 UserId = createMomentDto.UserId,
                 Images = images
             };
+        }
+
+        public static List<ImageMoment> GetImages(List<CreateImageDto>? imageDtos)
+        {
+            List<ImageMoment> images = new();
+            if ((imageDtos != null) && (imageDtos.Count() > 0))
+            {
+                images = imageDtos.Select(image => new ImageMoment { Image = image.Path }).ToList();
+            }
+            return images;
         }
 
         public static void UpdateMoment(Moment moment, UpdateMomentDto updateMomentDto)

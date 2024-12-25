@@ -23,7 +23,7 @@ namespace Application.Mappers
 
         public static void UpdateCategory(CreateCategoryDto updateCategoryDto, Category category)
         {
-            category.Name = updateCategoryDto.Name;
+            category.Name = updateCategoryDto.Name ?? category.Name;
         }
     }
 }

@@ -11,9 +11,18 @@ namespace Infrastructure.Foundation.Repositories
         {
         }
 
+        public async Task<Tag?> GetTagById(long id)
+        {
+            var query = _context.Set<Tag>().
+                Include(t => t.Category);
+
+            return await query.FirstOrDefaultAsync(t => t.Id == id);
+        }
+
         public IQueryable<Tag> GetAllTags(FilterParams filterParams)
         {
             var query = _context.Set<Tag>().
+                Include(t => t.Category).
                 Sort(filterParams);
 
             return query.AsNoTracking();

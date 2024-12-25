@@ -1,4 +1,5 @@
-﻿using Application.Dto.Location;
+﻿using Application.Dto.Image;
+using Application.Dto.Location;
 using Application.Services.LocationService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,10 +35,26 @@ namespace WebApi.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult> Delete(long id, CancellationToken cancellationToken)
         {
             long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
             await _service.Delete(id, userId, cancellationToken);
+            return Ok();
+        }
+
+        //[Authorize]
+        [HttpDelete("{locationId}/images")]
+        public async Task<ActionResult> DeleteImage(long locationId, [FromBody] List<long> imagesId, CancellationToken cancellationToken)
+        {
+            //long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
+            await _service.DeleteImages(locationId, imagesId, cancellationToken);
+            return Ok();
+        }
+
+        [HttpPost("{locationId}/images")]
+        public async Task<ActionResult<CreateLocationDto>> AddImage(long locationId, [FromBody] CreateImagesDto createImagesDto, CancellationToken cancellationToken)
+        {
+            await _service.AddImages(locationId, createImagesDto, cancellationToken);
             return Ok();
         }
     }

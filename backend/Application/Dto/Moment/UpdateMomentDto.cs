@@ -15,7 +15,5 @@ namespace Application.Dto.Moment
         public CoordinatesDto Coordinates { get; set; } = null!;
         [Required]
         public int Status { get; set; }
-        [Required]
-        public List<string> Images { get; set; } = new();
     }
 }
