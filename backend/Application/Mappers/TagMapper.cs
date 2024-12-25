@@ -20,6 +20,20 @@ namespace Application.Mappers
             return tags.Select(TagToTagDto).ToList();
         }
 
+        public static RouteTagDto TagToTagRouteDto(Tag tag)
+        {
+            return new RouteTagDto
+            {
+                Id = tag.Id,
+                Name = tag.Name
+            };
+        }
+
+        public static List<RouteTagDto> TagsToTagRouteDtos(List<Tag> tags)
+        {
+            return tags.Select(TagToTagRouteDto).ToList();
+        }
+
         public static Tag ToTag(CreateTagDto createTagDto, long categoryId)
         {
             return new Tag
