@@ -1,10 +1,11 @@
 ﻿using Application.Dto.Pagination;
-using Application.Dto.Route;
 using Application.Dto.User;
 using Application.Services.UserService;
 using Domain.Entities;
 using Domain.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -57,5 +58,13 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize]
+        [HttpDelete("avatar")]
+        public async Task<ActionResult> DeleteAvatar(CancellationToken cancellationToken)
+        {
+            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
+            await _service.DeleteAvatar(userId, cancellationToken);
+            return Ok();
+        }
     }
 }

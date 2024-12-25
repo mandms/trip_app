@@ -19,5 +19,7 @@ namespace Application.Dto.User
         [MaxLength(150)]
         [Base64String]
         public string Avatar { get; set; } = null!;
+        [MaxLength(1000)]
+        public string? Biography { get; set; }
     }
 }

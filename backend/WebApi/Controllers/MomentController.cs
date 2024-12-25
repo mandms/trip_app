@@ -1,4 +1,6 @@
-﻿using Application.Dto.Moment;
+﻿using Application.Dto.Image;
+using Application.Dto.Location;
+using Application.Dto.Moment;
 using Application.Dto.Pagination;
 using Application.Services.MomentService;
 using Domain.Filters;
@@ -57,6 +59,20 @@ namespace WebApi.Controllers
         {
             long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
             await _service.Put(id, userId, updateMomentDto, cancellationToken);
+            return Ok();
+        }
+
+        [HttpDelete("{momentId}/images")]
+        public async Task<ActionResult> DeleteImage(long momentId, [FromBody] List<long> imagesId, CancellationToken cancellationToken)
+        {
+            await _service.DeleteImages(momentId, imagesId, cancellationToken);
+            return Ok();
+        }
+
+        [HttpPost("{momentId}/images")]
+        public async Task<ActionResult<CreateLocationDto>> AddImage(long momentId, [FromBody] CreateImagesDto createImagesDto, CancellationToken cancellationToken)
+        {
+            await _service.AddImages(momentId, createImagesDto, cancellationToken);
             return Ok();
         }
     }

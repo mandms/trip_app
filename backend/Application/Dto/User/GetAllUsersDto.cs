@@ -17,5 +17,7 @@ namespace Application.Dto.User
         public string Avatar { get; set; } = null!;
         [Required]
         public List<string> Roles { get; set; } = new();
+        [MaxLength(1000)]
+        public string? Biography { get; set; }
     }
 }

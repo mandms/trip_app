@@ -125,5 +125,19 @@ namespace Application.Services.UserService
 
             return jwt;
         }
+
+        public async Task DeleteAvatar(long userId, CancellationToken cancellationToken)
+        {
+            var user = await _repository.GetById(userId);
+            if (user == null)
+            {
+                throw new EntityNotFoundException("User", userId);
+            }
+            _fileService.DeleteFile(user.Avatar);
+
+            user.Avatar = "user_default.png";
+
+            await _repository.Update(user, cancellationToken);
+        }
     }
 }

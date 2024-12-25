@@ -13,6 +13,7 @@ namespace Application.Mappers
                 Username = user.Username,
                 Email = user.Email,
                 Avatar = user.Avatar,
+                Biography = user.Biography
             };
         }
 
@@ -24,7 +25,8 @@ namespace Application.Mappers
                 Username = user.Username,
                 Email = user.Email,
                 Avatar = user.Avatar,
-                Roles = user.Roles.Select(r => r.Name).ToList()
+                Roles = user.Roles.Select(r => r.Name).ToList(),
+                Biography = user.Biography
             };
         }
 
@@ -34,7 +36,7 @@ namespace Application.Mappers
             {
                 user.Avatar = userDto.Avatar.Path;
             }
-            user.Biography = userDto.Biography;
+            user.Biography = userDto.Biography ?? user.Biography;
             user.Username = userDto.Username;
         }
 
