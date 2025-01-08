@@ -95,7 +95,7 @@ namespace Application.Services.UserService
         {
             if (updateUserDto.Avatar != null)
             {
-                if (user.Avatar != null && user.Avatar != "user_default.png")
+                if (user.Avatar != null && user.Avatar != user.DefaultAvatar)
                 {
                     _fileService.DeleteFile(user.Avatar);
                 }
@@ -133,11 +133,28 @@ namespace Application.Services.UserService
             {
                 throw new EntityNotFoundException("User", userId);
             }
-            _fileService.DeleteFile(user.Avatar);
 
-            user.Avatar = "user_default.png";
+            if (user.Avatar != null && user.Avatar != user.DefaultAvatar)
+            {
+                _fileService.DeleteFile(user.Avatar);
+            }
+
+            user.Avatar = user.DefaultAvatar;
 
             await _repository.Update(user, cancellationToken);
+        }
+
+        public async Task Delete(long id, CancellationToken cancellationToken)
+        {
+            var user = await _repository.GetById(id);
+            if (user == null)
+            {
+                throw new EntityNotFoundException("User", id);
+            }
+
+            await DeleteAvatar(user.Id, cancellationToken);
+
+            await _repository.Remove(user, cancellationToken);
         }
     }
 }

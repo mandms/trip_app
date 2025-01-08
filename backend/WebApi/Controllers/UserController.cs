@@ -61,6 +61,15 @@ namespace WebApi.Controllers
         }
 
         [Authorize]
+        [HttpDelete("{id}")]
+        [AuthorizeOwnerOrAdmin(typeof(User))]
+        public async Task<ActionResult> Delete(long id, CancellationToken cancellationToken)
+        {
+            await _service.Delete(id, cancellationToken);
+            return Ok();
+        }
+
+        [Authorize]
         [HttpDelete("{id}/avatar")]
         [AuthorizeOwnerOrAdmin(typeof(User))]
         public async Task<ActionResult> DeleteAvatar(long id, CancellationToken cancellationToken)

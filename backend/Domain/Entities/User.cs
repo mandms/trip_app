@@ -1,4 +1,5 @@
 ﻿using Domain.Contracts.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
@@ -11,4 +12,6 @@ public class User : IEntity
     public string Password { get; set; } = null!;
     public string Avatar { get; set; } = null!;
     public List<Role> Roles { get; set; } = new();
+    [NotMapped]
+    public string DefaultAvatar = "user-default.png";
 }
