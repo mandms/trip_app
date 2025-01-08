@@ -47,15 +47,13 @@ namespace Application.Services.MomentService
             await _repository.Add(moment, cancellationToken);
         }
 
-        public async Task Delete(long id, long userId, CancellationToken cancellationToken)
+        public async Task Delete(long id, CancellationToken cancellationToken)
         {
             var moment = await _repository.GetMomentById(id);
             if (moment == null)
             {
                 throw new EntityNotFoundException("Moment", id);
             }
-
-            CheckUser(userId, moment);
 
             await _repository.Remove(moment, cancellationToken);
         }
@@ -82,7 +80,7 @@ namespace Application.Services.MomentService
             return MomentMapper.MomentToMomentDto(moment);
         }
 
-        public async Task<MomentDto> Put(long id, long userId, UpdateMomentDto updateMomentDto, CancellationToken cancellationToken)
+        public async Task<MomentDto> Put(long id, UpdateMomentDto updateMomentDto, CancellationToken cancellationToken)
         {
             Moment? foundMoment = await _repository.GetMomentById(id);
             if (foundMoment == null)
@@ -90,20 +88,10 @@ namespace Application.Services.MomentService
                 throw new EntityNotFoundException("Moment", id);
             }
 
-            CheckUser(userId, foundMoment);
-
             MomentMapper.UpdateMoment(foundMoment, updateMomentDto);
 
             Moment moment = await _repository.Update(foundMoment, cancellationToken);
             return MomentMapper.MomentToMomentDto(moment);
-        }
-
-        private void CheckUser(long userId, Moment moment)
-        {
-            if (moment.UserId != userId)
-            {
-                throw new UnauthorizedAccessException("You are not authorized to edit this moment.");
-            }
         }
 
         public async Task DeleteImages(long momentId, List<long> imageIds, CancellationToken cancellationToken)
@@ -114,32 +102,34 @@ namespace Application.Services.MomentService
                 throw new EntityNotFoundException("Moment", momentId);
             }
 
-            var deleteImages = async () =>
-            {
-                if (imageIds == null || !imageIds.Any())
-                {
-                    throw new ArgumentException("No image IDs provided.");
-                }
-
-                foreach (var imageId in imageIds)
-                {
-                    var imageToRemove = await _imageMomentRepository.GetById(imageId);
-                    if (imageToRemove == null)
-                    {
-                        throw new EntityNotFoundException("Image", imageId);
-                    }
-
-                    _fileService.DeleteFile(imageToRemove.Image);
-
-                    moment.Images.Remove(imageToRemove);
-
-                    await _imageMomentRepository.Remove(imageToRemove, cancellationToken);
-                }
-
-                await _repository.Update(moment, cancellationToken);
-            };
+            var deleteImages = () => DeleteImagesTransaction(imageIds, moment, cancellationToken);
 
             await _dbTransaction.Transaction(deleteImages);
+        }
+
+        private async Task DeleteImagesTransaction(List<long> imageIds, Moment moment, CancellationToken cancellationToken)
+        {
+            if (imageIds == null || !imageIds.Any())
+            {
+                throw new ArgumentException("No image IDs provided.");
+            }
+
+            foreach (var imageId in imageIds)
+            {
+                var imageToRemove = await _imageMomentRepository.GetById(imageId);
+                if (imageToRemove == null)
+                {
+                    throw new EntityNotFoundException("Image", imageId);
+                }
+
+                _fileService.DeleteFile(imageToRemove.Image);
+
+                moment.Images.Remove(imageToRemove);
+
+                await _imageMomentRepository.Remove(imageToRemove, cancellationToken);
+            }
+
+            await _repository.Update(moment, cancellationToken);
         }
 
         public async Task AddImages(long momentId, CreateImagesDto createImagesDto, CancellationToken cancellationToken)

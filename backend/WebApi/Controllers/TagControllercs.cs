@@ -2,6 +2,7 @@
 using Application.Dto.Tag;
 using Application.Services.TagService;
 using Domain.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -30,6 +31,7 @@ namespace WebApi.Controllers
             return new ObjectResult(route);
         }
 
+        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id, CancellationToken cancellationToken)
         {
@@ -37,13 +39,15 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpPost("category/{categoryId}")]
-        public async Task<ActionResult<CreateTagDto>> Post(long categoryId, [FromBody] CreateTagDto createTagDto, CancellationToken cancellationToken)
+        public async Task<ActionResult> Post(long categoryId, [FromBody] CreateTagDto createTagDto, CancellationToken cancellationToken)
         {
             await _service.Create(categoryId, createTagDto, cancellationToken);
             return Ok();
         }
 
+        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpPut("{id}")]
         public async Task<ActionResult<UpdateTagDto>> Put(long id, UpdateTagDto updateTagDto, CancellationToken cancellationToken)
         {

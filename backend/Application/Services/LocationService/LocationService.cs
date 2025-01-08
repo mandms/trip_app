@@ -5,7 +5,6 @@ using Application.Services.FileService;
 using Domain.Contracts.Repositories;
 using Domain.Entities;
 using Domain.Exceptions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Application.Services.LocationService
 {
@@ -56,15 +55,13 @@ namespace Application.Services.LocationService
             await _repository.Add(location, cancellationToken);
         }
 
-        public async Task Put(long id, long userId, UpdateLocationDto updateLocationDto, CancellationToken cancellationToken)
+        public async Task Put(long id, UpdateLocationDto updateLocationDto, CancellationToken cancellationToken)
         {
             var location = await _repository.GetById(id);
             if (location == null)
             {
                 throw new EntityNotFoundException("Location", id);
             }
-
-            await CheckUser(userId, location);
 
             if(updateLocationDto.Order > _repository.GetMaxOrder(location.RouteId))
             {
@@ -75,7 +72,7 @@ namespace Application.Services.LocationService
             await _repository.Update(location, cancellationToken);
         }
 
-        public async Task Delete(long id, long userId, CancellationToken cancellationToken)
+        public async Task Delete(long id, CancellationToken cancellationToken)
         {
             var location = await _repository.GetById(id);
             if (location == null)
@@ -83,22 +80,7 @@ namespace Application.Services.LocationService
                 throw new EntityNotFoundException("Location", id);
             }
 
-            await CheckUser(userId, location);
-
             await _repository.Remove(location, cancellationToken);
-        }
-
-        private async Task CheckUser(long userId, Location location)
-        {
-            var route = await _routeRepository.GetById(location.RouteId);
-            if (route == null)
-            {
-                throw new EntityNotFoundException("Route", location.RouteId);
-            }
-            if (route.UserId != userId)
-            {
-                throw new UnauthorizedAccessException("You are not authorized to edit this location.");
-            }
         }
 
         public async Task DeleteImages(long locationId, List<long> imageIds, CancellationToken cancellationToken)
@@ -139,7 +121,7 @@ namespace Application.Services.LocationService
 
 
 
-        public async Task AddImages(long locationId, CreateImagesDto createImagesDto, CancellationToken cancellationToken)
+        public async Task AddImages(long locationId, List<CreateImageDto> createImagesDto, CancellationToken cancellationToken)
         {
             var location = await _repository.GetById(locationId);
             if (location == null)
@@ -152,14 +134,14 @@ namespace Application.Services.LocationService
             await _dbTransaction.Transaction(addImages);
         }
 
-        private async Task CreateImages(CreateImagesDto createImagesDto, Location location, CancellationToken cancellationToken)
+        private async Task CreateImages(List<CreateImageDto> createImagesDto, Location location, CancellationToken cancellationToken)
         {
-            if (createImagesDto.Images != null && createImagesDto.Images.Any())
+            if (createImagesDto != null && createImagesDto.Any())
             {
-                var tasks = _fileService.SaveImages(createImagesDto.Images, cancellationToken);
+                var tasks = _fileService.SaveImages(createImagesDto, cancellationToken);
                 await Task.WhenAll(tasks);
 
-                var images = LocationMapper.GetImages(createImagesDto.Images);
+                var images = LocationMapper.GetImages(createImagesDto);
                 foreach (var image in images)
                 {
                     location.Images.Add(image);

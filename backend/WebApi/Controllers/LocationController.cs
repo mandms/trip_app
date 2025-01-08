@@ -1,9 +1,10 @@
 ﻿using Application.Dto.Image;
 using Application.Dto.Location;
 using Application.Services.LocationService;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
@@ -17,7 +18,9 @@ namespace WebApi.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpPost("route/{routeId}")]
+        [AuthorizeOwnerOrAdmin(typeof(Location))]
         public async Task<ActionResult<CreateLocationDto>> Post(long routeId, [FromBody] CreateLocationDto createLocationDto, CancellationToken cancellationToken)
         {
             await _service.Create(createLocationDto, routeId, cancellationToken);
@@ -26,35 +29,36 @@ namespace WebApi.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
+        [AuthorizeOwnerOrAdmin(typeof(Location))]
         public async Task<ActionResult<UpdateLocationDto>> Put(long id, UpdateLocationDto updatelocationDto, CancellationToken cancellationToken)
         {
-            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
-            await _service.Put(id, userId, updatelocationDto, cancellationToken);
+            await _service.Put(id, updatelocationDto, cancellationToken);
             return Ok();
         }
 
         [Authorize]
         [HttpDelete("{id}")]
+        [AuthorizeOwnerOrAdmin(typeof(Location))]
         public async Task<ActionResult> Delete(long id, CancellationToken cancellationToken)
         {
-            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
-            await _service.Delete(id, userId, cancellationToken);
+            await _service.Delete(id, cancellationToken);
             return Ok();
         }
 
-        //[Authorize]
-        [HttpDelete("{locationId}/images")]
-        public async Task<ActionResult> DeleteImage(long locationId, [FromBody] List<long> imagesId, CancellationToken cancellationToken)
+        [Authorize]
+        [HttpDelete("{id}/images")]
+        [AuthorizeOwnerOrAdmin(typeof(Location))]
+        public async Task<ActionResult> DeleteImage(long id, [FromBody] List<long> imagesId, CancellationToken cancellationToken)
         {
-            //long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
-            await _service.DeleteImages(locationId, imagesId, cancellationToken);
+            await _service.DeleteImages(id, imagesId, cancellationToken);
             return Ok();
         }
 
-        [HttpPost("{locationId}/images")]
-        public async Task<ActionResult<CreateLocationDto>> AddImage(long locationId, [FromBody] CreateImagesDto createImagesDto, CancellationToken cancellationToken)
+        [HttpPost("{id}/images")]
+        [AuthorizeOwnerOrAdmin(typeof(Location))]
+        public async Task<ActionResult<CreateLocationDto>> AddImage(long id, [FromBody] List<CreateImageDto> createImagesDto, CancellationToken cancellationToken)
         {
-            await _service.AddImages(locationId, createImagesDto, cancellationToken);
+            await _service.AddImages(id, createImagesDto, cancellationToken);
             return Ok();
         }
     }

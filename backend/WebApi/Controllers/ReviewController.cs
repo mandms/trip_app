@@ -1,10 +1,12 @@
 ﻿using Application.Dto.Pagination;
 using Application.Dto.Review;
 using Application.Services.ReviewService;
+using Domain.Entities;
 using Domain.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
@@ -41,10 +43,10 @@ namespace WebApi.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
+        [AuthorizeOwnerOrAdmin(typeof(Review))]
         public async Task<ActionResult> Delete(long id, CancellationToken cancellationToken)
         {
-            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
-            await _service.Delete(id, userId, cancellationToken);
+            await _service.Delete(id, cancellationToken);
             return Ok();
         }
 
@@ -60,10 +62,10 @@ namespace WebApi.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
+        [AuthorizeOwnerOrAdmin(typeof(Review))]
         public async Task<ActionResult<UpdateReviewDto>> Put(long id, UpdateReviewDto updateReviewDto, CancellationToken cancellationToken)
         {
-            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
-            await _service.Put(id, userId, updateReviewDto, cancellationToken);
+            await _service.Put(id, updateReviewDto, cancellationToken);
             return Ok();
         }
     }

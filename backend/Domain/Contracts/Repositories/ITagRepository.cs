@@ -7,6 +7,6 @@ namespace Domain.Contracts.Repositories
     {
         IQueryable<Tag> GetAllTags(FilterParams filterParams);
         public Task<Tag?> GetTagById(long id);
-        IQueryable<Tag> GetRangeTags(List<long> tagIds);
+        Task<List<Tag>> GetRangeTags(List<long> tagIds);
     }
 }

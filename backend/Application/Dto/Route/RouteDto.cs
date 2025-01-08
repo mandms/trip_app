@@ -15,5 +15,6 @@ namespace Application.Dto.Route
         public AuthorUserDto User { get; set; } = null!;
         public List<RouteTagDto> Tags { get; set; } = new();
         public List<LocationDto> Locations { get; set; } = new();
+        public int Status { get; set; }
     }
 }

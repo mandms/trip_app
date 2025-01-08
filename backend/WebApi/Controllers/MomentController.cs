@@ -3,10 +3,12 @@ using Application.Dto.Location;
 using Application.Dto.Moment;
 using Application.Dto.Pagination;
 using Application.Services.MomentService;
+using Domain.Entities;
 using Domain.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
@@ -36,10 +38,10 @@ namespace WebApi.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
+        [AuthorizeOwnerOrAdmin(typeof(Moment))]
         public async Task<ActionResult> Delete(long id, CancellationToken cancellationToken)
         {
-            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
-            await _service.Delete(id, userId, cancellationToken);
+            await _service.Delete(id, cancellationToken);
             return Ok();
         }
 
@@ -55,24 +57,28 @@ namespace WebApi.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
+        [AuthorizeOwnerOrAdmin(typeof(Moment))]
         public async Task<ActionResult<UpdateMomentDto>> Put(long id, UpdateMomentDto updateMomentDto, CancellationToken cancellationToken)
         {
-            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
-            await _service.Put(id, userId, updateMomentDto, cancellationToken);
+            await _service.Put(id, updateMomentDto, cancellationToken);
             return Ok();
         }
 
-        [HttpDelete("{momentId}/images")]
-        public async Task<ActionResult> DeleteImage(long momentId, [FromBody] List<long> imagesId, CancellationToken cancellationToken)
+        [Authorize]
+        [HttpDelete("{id}/images")]
+        [AuthorizeOwnerOrAdmin(typeof(Moment))]
+        public async Task<ActionResult> DeleteImage(long id, [FromBody] List<long> imagesId, CancellationToken cancellationToken)
         {
-            await _service.DeleteImages(momentId, imagesId, cancellationToken);
+            await _service.DeleteImages(id, imagesId, cancellationToken);
             return Ok();
         }
 
-        [HttpPost("{momentId}/images")]
-        public async Task<ActionResult<CreateLocationDto>> AddImage(long momentId, [FromBody] CreateImagesDto createImagesDto, CancellationToken cancellationToken)
+        [Authorize]
+        [HttpPost("{id}/images")]
+        [AuthorizeOwnerOrAdmin(typeof(Moment))]
+        public async Task<ActionResult<CreateLocationDto>> AddImage(long id, [FromBody] CreateImagesDto createImagesDto, CancellationToken cancellationToken)
         {
-            await _service.AddImages(momentId, createImagesDto, cancellationToken);
+            await _service.AddImages(id, createImagesDto, cancellationToken);
             return Ok();
         }
     }

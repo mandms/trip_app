@@ -34,7 +34,7 @@ namespace Application.Mappers
 
         public static List<Location> ToLocations(CreateRouteDto createRouteDto, long routeId)
         {
-            return createRouteDto.Locations.Select((location, index) => ToLocation(location, routeId, index)).ToList();
+            return createRouteDto.Locations.Select((location, index) => ToLocation(location, routeId, index + 1)).ToList();
         }
 
         public static Location ToLocation(CreateLocationDto createLocationDto, long routeId, int? order = null)
@@ -47,7 +47,7 @@ namespace Application.Mappers
                 Description = createLocationDto.Description,
                 Name = createLocationDto.Name,
                 RouteId = routeId,
-                Order = order ?? 0, 
+                Order = order ?? 1, 
                 Images = images
             };
         }

@@ -5,7 +5,7 @@ using Domain.Entities;
 using Domain.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
@@ -33,6 +33,7 @@ namespace WebApi.Controllers
             return Ok(token);
         }
 
+        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpGet]
         public ActionResult<PaginationResponse<GetAllUsersDto>> GetAll([FromQuery] FilterParams filterParams)
         {
@@ -48,6 +49,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [AuthorizeOwnerOrAdmin(typeof(User))]
         public async Task<ActionResult<UpdateUserDto>> Put(long id, UpdateUserDto updateUserDto, CancellationToken cancellationToken)
         {
             if (updateUserDto == null)
@@ -59,11 +61,11 @@ namespace WebApi.Controllers
         }
 
         [Authorize]
-        [HttpDelete("avatar")]
-        public async Task<ActionResult> DeleteAvatar(CancellationToken cancellationToken)
+        [HttpDelete("{id}/avatar")]
+        [AuthorizeOwnerOrAdmin(typeof(User))]
+        public async Task<ActionResult> DeleteAvatar(long id, CancellationToken cancellationToken)
         {
-            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
-            await _service.DeleteAvatar(userId, cancellationToken);
+            await _service.DeleteAvatar(id, cancellationToken);
             return Ok();
         }
     }

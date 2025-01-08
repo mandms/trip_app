@@ -15,6 +15,7 @@ namespace Infrastructure.Foundation.Repositories
             var query = _context.Set<Moment>().
                 Include(m => m.User).
                 Include(m => m.Images).
+                Search(filterParams, "Description").
                 Filter(filterParams).
                 Sort(filterParams);
 

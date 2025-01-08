@@ -3,6 +3,7 @@ using Application.Dto.Category;
 using Domain.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Application.Services.CategoryService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
@@ -23,6 +24,7 @@ namespace WebApi.Controllers
             return Ok(pagedResponse);
         }
 
+        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id, CancellationToken cancellationToken)
         {
@@ -30,6 +32,7 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] CreateCategoryDto createCategoryDto, CancellationToken cancellationToken)
         {
@@ -37,6 +40,7 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(long id, CreateCategoryDto createCategoryDto, CancellationToken cancellationToken)
         {

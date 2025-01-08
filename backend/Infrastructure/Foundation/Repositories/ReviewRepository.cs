@@ -15,6 +15,7 @@ namespace Infrastructure.Foundation.Repositories
         {
             var query = _context.Set<Review>().
                 Include(review => review.User).
+                Search(filterParams, "Text").
                 Filter(filterParams).
                 Sort(filterParams);
 
@@ -26,6 +27,7 @@ namespace Infrastructure.Foundation.Repositories
             var query = _context.Set<Review>().
                 Where(review => review.RouteId == routeId).
                 Include(review => review.User).
+                Search(filterParams, "Text").
                 Filter(filterParams).
                 Sort(filterParams);
 

@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Route : IEntity
+public class Route : IUserOwnedEntity
 {
     public long Id { get; set; }
     public string Name { get; set; } = null!;

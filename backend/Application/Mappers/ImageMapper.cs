@@ -1,17 +1,18 @@
 ﻿using Domain.Entities;
+using Application.Dto.Image;
 
 namespace Application.Mappers
 {
     public class ImageMapper
     {
-        public static List<string> ImageLocationToString(List<ImageLocation> images)
+        public static List<ImageDto> ImageLocationToString(List<ImageLocation> images)
         {
-            return images.Select(image => image.Image).ToList();
+            return images.Select(data => new ImageDto { Id = data.Id, Path = data.Image }).ToList();
         }
 
-        public static List<string> ImageMomentToString(List<ImageMoment> images)
+        public static List<ImageDto> ImageMomentToString(List<ImageMoment> images)
         {
-            return images.Select(image => image.Image).ToList();
+            return images.Select(data => new ImageDto { Id = data.Id, Path = data.Image }).ToList();
         }
     }
 }

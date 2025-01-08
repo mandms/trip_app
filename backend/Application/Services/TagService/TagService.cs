@@ -65,9 +65,9 @@ namespace Application.Services.TagService
             return TagMapper.TagToTagDto(tag);
         }
 
-        public async Task<TagDto> Put(long id, UpdateTagDto updateTagDto, CancellationToken cancellationToken)
+        public async Task Put(long id, UpdateTagDto updateTagDto, CancellationToken cancellationToken)
         {
-            Tag? foundTag = await _repository.GetById(id);
+            Tag? foundTag = await _repository.GetTagById(id);
             if (foundTag == null)
             {
                 throw new EntityNotFoundException("Tag", id);
@@ -75,8 +75,8 @@ namespace Application.Services.TagService
 
             TagMapper.UpdateTag(updateTagDto, foundTag);
 
-            Tag tag = await _repository.Update(foundTag, cancellationToken);
-            return TagMapper.TagToTagDto(tag);
+            await _repository.Update(foundTag, cancellationToken);
+            return;
         }
     }
 }

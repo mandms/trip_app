@@ -95,7 +95,7 @@ namespace Application.Services.UserService
         {
             if (updateUserDto.Avatar != null)
             {
-                if (user.Avatar != null)
+                if (user.Avatar != null && user.Avatar != "user_default.png")
                 {
                     _fileService.DeleteFile(user.Avatar);
                 }

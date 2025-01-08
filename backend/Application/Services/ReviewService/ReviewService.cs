@@ -33,15 +33,13 @@ namespace Application.Services.ReviewService
             await _repository.Add(review, cancellationToken);
         }
 
-        public async Task Delete(long id, long userId, CancellationToken cancellationToken)
+        public async Task Delete(long id, CancellationToken cancellationToken)
         {
             var review = await _repository.GetReviewById(id);
             if (review == null)
             {
                 throw new EntityNotFoundException("Review", id);
             }
-
-            CheckUser(userId, review);
 
             await _repository.Remove(review, cancellationToken);
         }
@@ -68,15 +66,13 @@ namespace Application.Services.ReviewService
             return pagedResponse;
         }
 
-        public async Task<ReviewDto> Put(long id, long userId, UpdateReviewDto updateReviewDto, CancellationToken cancellationToken)
+        public async Task<ReviewDto> Put(long id, UpdateReviewDto updateReviewDto, CancellationToken cancellationToken)
         {
             Review? foundReview = await _repository.GetReviewById(id);
             if (foundReview == null)
             {
                 throw new EntityNotFoundException("Review", id);
             }
-
-            CheckUser(userId, foundReview);
 
             ReviewMapper.UpdateReview(foundReview, updateReviewDto);
 
@@ -93,14 +89,6 @@ namespace Application.Services.ReviewService
             }
 
             return ReviewMapper.ReviewToReviewDto(review);
-        }
-
-        private void CheckUser(long userId, Review review)
-        {
-            if (review.UserId != userId)
-            {
-                throw new UnauthorizedAccessException("You are not authorized to edit this location.");
-            }
         }
     }
 }

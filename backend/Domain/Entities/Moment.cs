@@ -3,7 +3,7 @@ using NetTopologySuite.Geometries;
 
 namespace Domain.Entities;
 
-public class Moment : IEntity
+public class Moment : IUserOwnedEntity
 {
     public long Id { get; set; }
     public Point Coordinates { get; set; } = null!;

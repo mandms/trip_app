@@ -85,5 +85,39 @@ namespace Infrastructure.Foundation
             return filterParams.IsAscending ? query.OrderBy(orderByExp) : query.OrderByDescending(orderByExp);
         }
 
+        public static IQueryable<T> Search<T>(this IQueryable<T> query, FilterParams filterParams, params string[] searchFields)
+        {
+            if (string.IsNullOrWhiteSpace(filterParams.SearchTerm) || searchFields == null || searchFields.Length == 0)
+                return query;
+
+            var parameter = Expression.Parameter(typeof(T), "x");
+            Expression? combinedExpression = null;
+
+            var searchLower = filterParams.SearchTerm.ToLower();
+
+            foreach (var fieldName in searchFields)
+            {
+                var property = Expression.PropertyOrField(parameter, fieldName);
+                if (property.Type != typeof(string))
+                    continue;
+
+                var toLowerMethod = typeof(string).GetMethod("ToLower", Type.EmptyTypes);
+                var propertyToLower = Expression.Call(property, toLowerMethod!);
+
+                var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+                var searchExpression = Expression.Call(propertyToLower, containsMethod!, Expression.Constant(filterParams.SearchTerm, typeof(string)));
+
+                combinedExpression = combinedExpression == null
+                    ? searchExpression
+                    : Expression.OrElse(combinedExpression, searchExpression);
+            }
+
+            if (combinedExpression == null)
+                return query;
+
+            var lambda = Expression.Lambda<Func<T, bool>>(combinedExpression, parameter);
+            return query.Where(lambda);
+        }
+
     }
 }

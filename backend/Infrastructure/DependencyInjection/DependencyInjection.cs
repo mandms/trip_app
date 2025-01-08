@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
         services.AddTransient<IDbTransaction, DbTransaction>();
         services.AddTransient<IImageLocationRepository, ImageLocationRepository>();
         services.AddTransient<IImageMomentRepository, ImageMomentRepository>();

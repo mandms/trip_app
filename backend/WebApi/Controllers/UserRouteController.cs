@@ -3,6 +3,7 @@ using Application.Dto.Pagination;
 using Domain.Filters;
 using Application.Services.UserRouteService;
 using Application.Dto.UserRoute;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -19,7 +20,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public ActionResult<PaginationResponse<UserRouteDto>> GetAll([FromQuery] FilterParams filterParams)
         {
-            long userId = 1;// (long)HttpContext.Items[ClaimTypes.Sid]!;
+            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
             var pagedResponse = _service.GetRoutesByUserId(userId, filterParams);
             return Ok(pagedResponse);
         }
@@ -27,7 +28,7 @@ namespace WebApi.Controllers
         [HttpDelete("route/{routeId}")]
         public async Task<ActionResult> Delete(long routeId, CancellationToken cancellationToken)
         {
-            long userId = 1;// (long)HttpContext.Items[ClaimTypes.Sid]!;
+            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
             await _service.Delete(userId, routeId, cancellationToken);
             return Ok();
         }
@@ -35,7 +36,7 @@ namespace WebApi.Controllers
         [HttpPost("route/{routeId}")]
         public async Task<ActionResult> Post(long routeId, [FromBody] CreateUserRouteDto createUserRouteDto, CancellationToken cancellationToken)
         {
-            long userId = 1;// (long)HttpContext.Items[ClaimTypes.Sid]!;
+            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
             await _service.Create(userId, routeId, createUserRouteDto, cancellationToken);
             return Ok();
         }
@@ -43,7 +44,7 @@ namespace WebApi.Controllers
         [HttpPut("route/{routeId}")]
         public async Task<ActionResult> Put(long routeId, CreateUserRouteDto createUserRouteDto, CancellationToken cancellationToken)
         {
-            long userId = 1;// (long)HttpContext.Items[ClaimTypes.Sid]!;
+            long userId = (long)HttpContext.Items[ClaimTypes.Sid]!;
             await _service.Put(userId, routeId, createUserRouteDto, cancellationToken);
             return Ok();
         }

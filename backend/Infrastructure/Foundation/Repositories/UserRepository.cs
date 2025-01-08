@@ -15,6 +15,7 @@ namespace Infrastructure.Foundation.Repositories
         {
             var query = _context.Set<User>().
                 Include(u => u.Roles).
+                Search(filterParams, "Username", "Biography").
                 Sort(filterParams);
 
             return query.AsNoTracking();

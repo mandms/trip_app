@@ -23,24 +23,21 @@ namespace Infrastructure.Foundation.Repositories
         {
             var query = _context.Set<Tag>().
                 Include(t => t.Category).
+                Search(filterParams, "Name").
                 Sort(filterParams);
 
             return query.AsNoTracking();
         }
 
-        public IQueryable<Tag> GetRangeTags(List<long> tagIds)
+        public async Task<List<Tag>> GetRangeTags(List<long> tagIds)
         {
-            var query = tagIds.Select(tagId =>
-            {
-                Tag tag = new Tag
-                {
-                    Id = tagId
-                };
-                _context.Entry(tag).State = EntityState.Unchanged;
-                return tag;
-            });
+            var tags = await _context.Set<Tag>()
+                .Where(t => tagIds.Contains(t.Id))
+                .AsNoTracking() 
+                .ToListAsync();
 
-            return query.AsQueryable();
+            return tags;
         }
+
     }
 }

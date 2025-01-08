@@ -19,7 +19,8 @@ namespace Infrastructure.Foundation.Repositories
 
         public async Task DeleteTag(Route route, Tag tag, CancellationToken cancellationToken)
         {
-            route.Tags.Remove(tag);
+            route.Tags = route.Tags.Where(t => t.Id != tag.Id).ToList();
+
             await SaveAsync(cancellationToken);
         }
 
@@ -28,7 +29,20 @@ namespace Infrastructure.Foundation.Repositories
             var query = _context.Set<Route>().
                 Include(r => r.User).
                 Include(r => r.Tags).
+                Search(filterParams, "Name", "Description").
+                Filter(filterParams).
+                Sort(filterParams);
+
+            return query.AsNoTracking();
+        }
+
+        public IQueryable<Route> GetAllPublishedRoutes(FilterParams filterParams)
+        {
+            var query = _context.Set<Route>().
+                Include(r => r.User).
+                Include(r => r.Tags).
                 Where(r => r.Status == 1).
+                Search(filterParams, "Name", "Description").
                 Filter(filterParams).
                 Sort(filterParams);
 
