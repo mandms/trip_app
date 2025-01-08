@@ -132,7 +132,7 @@ namespace Application.Services.MomentService
             await _repository.Update(moment, cancellationToken);
         }
 
-        public async Task AddImages(long momentId, CreateImagesDto createImagesDto, CancellationToken cancellationToken)
+        public async Task AddImages(long momentId, List<CreateImageDto> createImagesDto, CancellationToken cancellationToken)
         {
             var moment = await _repository.GetById(momentId);
             if (moment == null)
@@ -145,14 +145,14 @@ namespace Application.Services.MomentService
             await _dbTransaction.Transaction(addImages);
         }
 
-        private async Task CreateImages(CreateImagesDto createImagesDto, Moment moment, CancellationToken cancellationToken)
+        private async Task CreateImages(List<CreateImageDto> createImagesDto, Moment moment, CancellationToken cancellationToken)
         {
-            if (createImagesDto.Images != null && createImagesDto.Images.Any())
+            if (createImagesDto != null && createImagesDto.Any())
             {
-                var tasks = _fileService.SaveImages(createImagesDto.Images, cancellationToken);
+                var tasks = _fileService.SaveImages(createImagesDto, cancellationToken);
                 await Task.WhenAll(tasks);
 
-                var images = MomentMapper.GetImages(createImagesDto.Images);
+                var images = MomentMapper.GetImages(createImagesDto);
                 foreach (var image in images)
                 {
                     moment.Images.Add(image);

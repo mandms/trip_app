@@ -13,6 +13,6 @@ namespace Application.Services.MomentService
         Task<MomentDto> Put(long id, UpdateMomentDto updateMomentDto, CancellationToken cancellationToken);
         Task Delete(long id, CancellationToken cancellationToken);
         Task DeleteImages(long momentId, List<long> imageIds, CancellationToken cancellationToken);
-        Task AddImages(long momentId, CreateImagesDto createImagesDto, CancellationToken cancellationToken);
+        Task AddImages(long momentId, List<CreateImageDto> createImagesDto, CancellationToken cancellationToken);
     }
 }

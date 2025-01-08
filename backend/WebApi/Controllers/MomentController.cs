@@ -76,7 +76,7 @@ namespace WebApi.Controllers
         [Authorize]
         [HttpPost("{id}/images")]
         [AuthorizeOwnerOrAdmin(typeof(Moment))]
-        public async Task<ActionResult<CreateLocationDto>> AddImage(long id, [FromBody] CreateImagesDto createImagesDto, CancellationToken cancellationToken)
+        public async Task<ActionResult<CreateLocationDto>> AddImage(long id, [FromBody] List<CreateImageDto> createImagesDto, CancellationToken cancellationToken)
         {
             await _service.AddImages(id, createImagesDto, cancellationToken);
             return Ok();

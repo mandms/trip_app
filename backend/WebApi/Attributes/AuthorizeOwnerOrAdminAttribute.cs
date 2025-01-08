@@ -104,12 +104,16 @@ namespace WebApi.Attributes
 
         private long GetRouteIdFromArguments(ActionExecutingContext context)
         {
-            if (!context.ActionArguments.TryGetValue("routeId", out var idValue) || !long.TryParse(idValue?.ToString(), out var routeId))
+            if (context.ActionArguments.TryGetValue("routeId", out var routeIdValue) && long.TryParse(routeIdValue?.ToString(), out var routeId))
             {
-                throw new BadHttpRequestException("Invalid route ID");
+                return routeId;
+            }
+            else if (context.ActionArguments.TryGetValue("id", out var idValue) && long.TryParse(idValue?.ToString(), out var resourceId))
+            {
+                return resourceId;
             }
 
-            return routeId;
+            throw new BadHttpRequestException("Invalid resource ID");
         }
 
         private void HandleUserModification(HttpContext context, long resourceId, long userId)
