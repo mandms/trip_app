@@ -82,7 +82,7 @@ namespace Infrastructure.Foundation
 
             var orderByExp = Expression.Lambda<Func<T, object>>(Expression.Convert(property, typeof(object)), parameter);
 
-            return filterParams.IsAscending ? query.OrderBy(orderByExp) : query.OrderByDescending(orderByExp);
+            return (filterParams.Ordering.ToString() == "Asc") ? query.OrderBy(orderByExp) : query.OrderByDescending(orderByExp);
         }
 
         public static IQueryable<T> Search<T>(this IQueryable<T> query, FilterParams filterParams, params string[] searchFields)

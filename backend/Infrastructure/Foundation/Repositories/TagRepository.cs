@@ -1,6 +1,5 @@
 ﻿using Domain.Contracts.Repositories;
 using Domain.Entities;
-using Domain.Exceptions;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,7 +43,7 @@ namespace Infrastructure.Foundation.Repositories
                 return tag;
             });
 
-            return query.AsQueryable();
+            return query.AsQueryable().AsNoTracking();
         }
 
     }
