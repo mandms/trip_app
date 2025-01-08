@@ -17,8 +17,8 @@ namespace Application.Mappers
                 Description = moment.Description,
                 Coordinates = new CoordinatesDto
                 {
-                    Latitude = coordinates.X,
-                    Longitude = coordinates.Y,
+                    Latitude = coordinates.Y,
+                    Longitude = coordinates.X,
                 },
                 CreatedAt = moment.CreatedAt.ToString("dd/MM/yyyy"),
                 User = UserMapper.UserAuthor(moment.User),

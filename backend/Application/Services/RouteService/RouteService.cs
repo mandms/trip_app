@@ -2,6 +2,7 @@
 using Application.Dto.Route;
 using Application.Mappers;
 using Application.Services.FileService;
+using Application.Services.LocationService;
 using Domain.Contracts.Repositories;
 using Domain.Entities;
 using Domain.Exceptions;
@@ -18,6 +19,7 @@ namespace Application.Services.RouteService
         private readonly IUserRouteRepository _userRouteRepository;
         private readonly IReviewRepository _reviewRepository;
         private readonly IFileService _fileService;
+        private readonly ILocationService _locationService;
 
         public RouteService(
             IRouteRepository routeRepository,
@@ -26,7 +28,8 @@ namespace Application.Services.RouteService
             ILocationRepository locationRepository,
             IDbTransaction dbTransaction,
             IUserRouteRepository userRouteRepository,
-            IFileService fileService
+            IFileService fileService,
+            ILocationService locationService
             )
         {
             _routeRepository = routeRepository;
@@ -36,6 +39,7 @@ namespace Application.Services.RouteService
             _userRouteRepository = userRouteRepository;
             _reviewRepository = reviewRepository;
             _fileService = fileService;
+            _locationService = locationService;
         }
 
         public PaginationResponse<GetAllRoutesDto> GetAllRoutes(FilterParams filterParams)
@@ -130,7 +134,7 @@ namespace Application.Services.RouteService
             CancellationToken cancellationToken
             )
         {
-            List<Tag> tags = await _tagRepository.GetRangeTags(createRouteDto.Tags);
+            List<Tag> tags = _tagRepository.GetRangeTags(createRouteDto.Tags).ToList();
 
             Route route = RouteMapper.CreateRouteDtoToRoute(createRouteDto, tags);
 
@@ -166,7 +170,7 @@ namespace Application.Services.RouteService
                 throw new EntityNotFoundException("Route", routeId);
             }
 
-            var tags = await _tagRepository.GetRangeTags(tagIds);
+            var tags = _tagRepository.GetRangeTags(tagIds).ToList();
             if (tags.Count != tagIds.Count)
             {
                 var missingTagIds = tagIds.Except(tags.Select(t => t.Id)).ToList();
@@ -201,7 +205,7 @@ namespace Application.Services.RouteService
                 throw new EntityNotFoundException("Route", routeId);
             }
 
-            var tags = await _tagRepository.GetRangeTags(tagIds);
+            var tags = _tagRepository.GetRangeTags(tagIds).ToList();
             if (tags.Count != tagIds.Count)
             {
                 var missingTagIds = tagIds.Except(tags.Select(t => t.Id)).ToList();

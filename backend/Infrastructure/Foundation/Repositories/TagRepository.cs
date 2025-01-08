@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts.Repositories;
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,14 +30,21 @@ namespace Infrastructure.Foundation.Repositories
             return query.AsNoTracking();
         }
 
-        public async Task<List<Tag>> GetRangeTags(List<long> tagIds)
+        public IQueryable<Tag> GetRangeTags(List<long> tagIds)
         {
-            var tags = await _context.Set<Tag>()
-                .Where(t => tagIds.Contains(t.Id))
-                .AsNoTracking() 
-                .ToListAsync();
+            var query = tagIds.Select(tagId =>
+            {
+                Tag tag = new Tag
+                {
+                    Id = tagId
+                };
 
-            return tags;
+                _context.Entry(tag).State = EntityState.Unchanged;
+
+                return tag;
+            });
+
+            return query.AsQueryable();
         }
 
     }
