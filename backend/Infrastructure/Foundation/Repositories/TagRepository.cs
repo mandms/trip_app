@@ -46,5 +46,9 @@ namespace Infrastructure.Foundation.Repositories
             return query.AsQueryable().AsNoTracking();
         }
 
+        public IQueryable<Tag> GetRangeAddedTags(List<long> tagIds)
+        {
+            return _context.Set<Tag>().Where(tag => tagIds.Contains(tag.Id)).AsNoTracking();
+        }
     }
 }

@@ -205,17 +205,16 @@ namespace Application.Services.RouteService
                 throw new EntityNotFoundException("Route", routeId);
             }
 
-            var tags = _tagRepository.GetRangeTags(tagIds).ToList();
+            var tags = _tagRepository.GetRangeAddedTags(tagIds).ToList();
             if (tags.Count != tagIds.Count)
             {
                 var missingTagIds = tagIds.Except(tags.Select(t => t.Id)).ToList();
                 throw new EntityNotFoundException("Tags", missingTagIds);
             }
 
-            var deleteTagsTransaction = () => DeleteTagsTransaction(route, tags, cancellationToken);
-
-            await _dbTransaction.Transaction(deleteTagsTransaction);
+            await _dbTransaction.Transaction(() => DeleteTagsTransaction(route, tags, cancellationToken));
         }
+
 
         private async Task DeleteTagsTransaction(Route route, List<Tag> tags, CancellationToken cancellationToken)
         {

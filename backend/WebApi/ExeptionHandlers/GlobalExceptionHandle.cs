@@ -41,6 +41,7 @@ namespace WebApi.ExeptionHandlers
             {
                 EntityNotFoundException => (StatusCodes.Status404NotFound, "Not Found"),
                 InvalidPasswordException => (StatusCodes.Status400BadRequest, "Invalid Password"),
+                ArgumentException => (StatusCodes.Status400BadRequest, "Invalid argument"),
                 UserAlreadyExistsException => (StatusCodes.Status409Conflict, "User Already Exists"),
                 PermissionException => (StatusCodes.Status403Forbidden, "No permission"),
                 UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized"),

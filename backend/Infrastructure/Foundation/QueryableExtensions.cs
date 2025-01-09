@@ -82,7 +82,7 @@ namespace Infrastructure.Foundation
 
             var orderByExp = Expression.Lambda<Func<T, object>>(Expression.Convert(property, typeof(object)), parameter);
 
-            return (filterParams.Ordering.ToString() == "Asc") ? query.OrderBy(orderByExp) : query.OrderByDescending(orderByExp);
+            return (filterParams.Ordering.ToString() == "asc") ? query.OrderBy(orderByExp) : query.OrderByDescending(orderByExp);
         }
 
         public static IQueryable<T> Search<T>(this IQueryable<T> query, FilterParams filterParams, params string[] searchFields)
@@ -105,7 +105,7 @@ namespace Infrastructure.Foundation
                 var propertyToLower = Expression.Call(property, toLowerMethod!);
 
                 var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-                var searchExpression = Expression.Call(propertyToLower, containsMethod!, Expression.Constant(filterParams.SearchTerm, typeof(string)));
+                var searchExpression = Expression.Call(propertyToLower, containsMethod!, Expression.Constant(searchLower, typeof(string)));
 
                 combinedExpression = combinedExpression == null
                     ? searchExpression

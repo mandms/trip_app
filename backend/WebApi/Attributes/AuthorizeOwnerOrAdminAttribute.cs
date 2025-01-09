@@ -33,7 +33,7 @@ namespace WebApi.Attributes
                 return;
             }
 
-            if (httpContext.Request.Method == HttpMethods.Put || httpContext.Request.Method == HttpMethods.Delete || httpContext.Request.Method == HttpMethods.Post)
+            if (httpContext.Request.Method == HttpMethods.Post || httpContext.Request.Method == HttpMethods.Put || httpContext.Request.Method == HttpMethods.Delete)
             {
                 await HandleEntityModification(context);
             }
@@ -43,21 +43,18 @@ namespace WebApi.Attributes
 
         private async Task HandleLocationPostRequest(ActionExecutingContext context)
         {
-            var httpContext = context.HttpContext;
-            var userId = GetUserId(httpContext);
-            var routeId = GetRouteIdFromArguments(context);
-
-            var routeRepository = GetService<IBaseRepository<Domain.Entities.Route>>(httpContext);
-
-            var route = await routeRepository.GetById(routeId);
-            if (route == null)
+            var userId = GetUserId(context.HttpContext);
+            if (TryGetArgument(context, "routeId", out long routeId))
             {
-                throw new EntityNotFoundException("Route", routeId);
+                await ValidateRouteOwnership(context.HttpContext, routeId, userId);
             }
-
-            if (route.UserId != userId && !IsAdmin(httpContext))
+            else if (TryGetArgument(context, "id", out long locationId))
             {
-                throw new PermissionException();
+                await HandleLocationModification(context.HttpContext, locationId, userId);
+            }
+            else
+            {
+                throw new BadHttpRequestException("Invalid resource ID");
             }
         }
 
@@ -67,17 +64,17 @@ namespace WebApi.Attributes
             var userId = GetUserId(httpContext);
             var resourceId = GetResourceIdFromArguments(context);
 
-            if (_entityType == typeof(User))
+            switch (_entityType.Name)
             {
-                HandleUserModification(httpContext, resourceId, userId);
-            }
-            else if (_entityType == typeof(Location))
-            {
-                await HandleLocationModification(httpContext, resourceId, userId);
-            }
-            else
-            {
-                await HandleGenericEntityModification(httpContext, resourceId, userId);
+                case nameof(User):
+                    HandleUserModification(httpContext, resourceId, userId);
+                    break;
+                case nameof(Location):
+                    await HandleLocationModification(httpContext, resourceId, userId);
+                    break;
+                default:
+                    await HandleGenericEntityModification(httpContext, resourceId, userId);
+                    break;
             }
         }
 
@@ -86,29 +83,27 @@ namespace WebApi.Attributes
             var userIdClaim = context.User.FindFirst(ClaimTypes.Sid);
             if (userIdClaim == null)
             {
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException("User is not authenticated.");
             }
 
             return long.Parse(userIdClaim.Value);
         }
 
-        private long GetResourceIdFromArguments(ActionExecutingContext context)
+        private static bool TryGetArgument(ActionExecutingContext context, string argumentName, out long value)
         {
-            if (!context.ActionArguments.TryGetValue("id", out var idValue) || !long.TryParse(idValue?.ToString(), out var resourceId))
+            value = 0;
+            if (context.ActionArguments.TryGetValue(argumentName, out var argumentValue) && long.TryParse(argumentValue?.ToString(), out var parsedValue))
             {
-                throw new BadHttpRequestException("Invalid resource ID");
+                value = parsedValue;
+                return true;
             }
 
-            return resourceId;
+            return false;
         }
 
-        private long GetRouteIdFromArguments(ActionExecutingContext context)
+        private long GetResourceIdFromArguments(ActionExecutingContext context)
         {
-            if (context.ActionArguments.TryGetValue("routeId", out var routeIdValue) && long.TryParse(routeIdValue?.ToString(), out var routeId))
-            {
-                return routeId;
-            }
-            else if (context.ActionArguments.TryGetValue("id", out var idValue) && long.TryParse(idValue?.ToString(), out var resourceId))
+            if (TryGetArgument(context, "id", out var resourceId))
             {
                 return resourceId;
             }
@@ -124,21 +119,37 @@ namespace WebApi.Attributes
             }
         }
 
-        private async Task HandleLocationModification(HttpContext context, long resourceId, long userId)
+        private async Task HandleLocationModification(HttpContext context, long locationId, long userId)
         {
             var locationRepository = GetService<IBaseRepository<Location>>(context);
             var routeRepository = GetService<IBaseRepository<Domain.Entities.Route>>(context);
 
-            var location = await locationRepository.GetById(resourceId);
+            var location = await locationRepository.GetById(locationId);
             if (location == null)
             {
-                throw new EntityNotFoundException("Location", resourceId);
+                throw new EntityNotFoundException(nameof(Location), locationId);
             }
 
             var route = await routeRepository.GetById(location.RouteId);
             if (route == null)
             {
-                throw new EntityNotFoundException("Route", location.RouteId);
+                throw new EntityNotFoundException(nameof(Domain.Entities.Route), location.RouteId);
+            }
+
+            if (route.UserId != userId && !IsAdmin(context))
+            {
+                throw new PermissionException();
+            }
+        }
+
+        private async Task ValidateRouteOwnership(HttpContext context, long routeId, long userId)
+        {
+            var routeRepository = GetService<IBaseRepository<Domain.Entities.Route>>(context);
+
+            var route = await routeRepository.GetById(routeId);
+            if (route == null)
+            {
+                throw new EntityNotFoundException(nameof(Domain.Entities.Route), routeId);
             }
 
             if (route.UserId != userId && !IsAdmin(context))
