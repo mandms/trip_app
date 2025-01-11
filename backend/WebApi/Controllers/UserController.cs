@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<CreateUserDto>> PostLogin([FromBody] LoginUserDto loginUserDto, CancellationToken cancellationToken)
         {
-            string token = await _service.Login(loginUserDto, cancellationToken);
+            string token = await _service.LoginPage(loginUserDto, cancellationToken);
             return Ok(token);
         }
 

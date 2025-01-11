@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import Sidebar from './components/Sidebar';
+import Sidebar from './features/Sidebar/Sidebar';
 import { Box } from '@mui/material';
-import Content from './components/Content';
+import Content from './features/Content/Content';
 
 const queryClient = new QueryClient();
 

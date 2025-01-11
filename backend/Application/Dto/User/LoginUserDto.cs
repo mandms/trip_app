@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Application.Dto.User
 {
-     [DisplayName("Login user")]
+     [DisplayName("LoginPage user")]
     public class LoginUserDto
     {
         [MaxLength(320)]

@@ -75,7 +75,7 @@ namespace Application.Services.RouteService
 
         public async Task Create(CreateRouteDto createRouteDto, CancellationToken cancellationToken)
         {
-            var createRoute = () => CreateRoute(createRouteDto, cancellationToken);
+            var createRoute = () => CreateRouteModal(createRouteDto, cancellationToken);
             await _dbTransaction.Transaction(createRoute);
         }
 
@@ -94,7 +94,7 @@ namespace Application.Services.RouteService
             }).ToList();
         }
 
-        private async Task CreateRoute(
+        private async Task CreateRouteModal(
             CreateRouteDto createRouteDto, 
             CancellationToken cancellationToken
             )
@@ -114,7 +114,7 @@ namespace Application.Services.RouteService
             await _locationRepository.AddRange(locations, cancellationToken);
         }
 
-        public async Task<RouteDto> UpdateRoute(long id,  UpdateRouteDto updateRouteDto, CancellationToken cancellationToken)
+        public async Task<RouteDto> UpdateRouteModal(long id,  UpdateRouteDto updateRouteDto, CancellationToken cancellationToken)
         {
             Route? foundRoute = await _routeRepository.GetRouteById(id);
             if (foundRoute == null)
@@ -122,7 +122,7 @@ namespace Application.Services.RouteService
                 throw new RouteNotFoundException(id);
             }
 
-            RouteMapper.UpdateRoute(foundRoute, updateRouteDto);
+            RouteMapper.UpdateRouteModal(foundRoute, updateRouteDto);
 
             Route route = await _routeRepository.Update(foundRoute, cancellationToken);
             return RouteMapper.RouteToRouteDto(route);

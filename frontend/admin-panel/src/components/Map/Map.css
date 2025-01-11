@@ -1,0 +1,19 @@
+.leaflet-control-attribution {
+  display: none;
+}
+
+.map-location-icon {
+  border-radius: 50%;
+  border: 2px solid #1976d2;
+  background-image: url('../../images/location-map-default.png');
+}
+
+.map-location-icon:before {
+  display: block;
+  width: 40px;
+  height: 40px;
+  content: "";
+  background-image: url('../../images/location-map-default.png');
+  background-size: 40px 40px;
+  border-radius: 50%;
+}

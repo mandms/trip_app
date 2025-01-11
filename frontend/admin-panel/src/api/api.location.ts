@@ -10,11 +10,6 @@ const LocationService = {
     return data;
   },
 
-  async getById(id: string) {
-    const { data } = await instance.get(`/location/${id}`);
-    return data;
-  },
-
   async create(routeId: string, location: ICreateLocation) {
     const { data } = await instance.post(
       `/location/route/${routeId}`,

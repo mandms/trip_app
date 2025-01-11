@@ -43,7 +43,7 @@ namespace Application.Mappers
             };
         }
 
-        public static void UpdateMoment(Moment moment, UpdateMomentDto updateMomentDto)
+        public static void UpdateMomentModal(Moment moment, UpdateMomentDto updateMomentDto)
         {
             moment.Coordinates = CoordinatesDto.CreatePoint(updateMomentDto.Coordinates);
             moment.Description = updateMomentDto.Description;

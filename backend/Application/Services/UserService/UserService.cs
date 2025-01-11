@@ -74,11 +74,11 @@ namespace Application.Services.UserService
             {
                 throw new UserNotFoundException(id);
             }
-            var updateUser = () => UpdateUser(user, updateUserDto, cancellationToken);
+            var updateUser = () => UpdateUserModal(user, updateUserDto, cancellationToken);
             await _dbTransaction.Transaction(updateUser);
         }
 
-        private async Task UpdateUser(User user, UpdateUserDto updateUserDto, CancellationToken cancellationToken)
+        private async Task UpdateUserModal(User user, UpdateUserDto updateUserDto, CancellationToken cancellationToken)
         {
             if (updateUserDto.Avatar != null)
             {
@@ -88,7 +88,7 @@ namespace Application.Services.UserService
             await _repository.Update(user, cancellationToken);
         }
 
-        public async Task<string> Login(LoginUserDto loginUserDto, CancellationToken cancellationToken)
+        public async Task<string> LoginPage(LoginUserDto loginUserDto, CancellationToken cancellationToken)
         {
             var user = await _repository.GetUserByEmail(loginUserDto.Email, cancellationToken);
 

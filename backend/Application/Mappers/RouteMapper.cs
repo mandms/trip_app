@@ -48,7 +48,7 @@ namespace Application.Mappers
             };
         }
 
-        public static void UpdateRoute(Route route, UpdateRouteDto updateRouteDto)
+        public static void UpdateRouteModal(Route route, UpdateRouteDto updateRouteDto)
         {
             route.Description = updateRouteDto.Description;
             route.Duration = updateRouteDto.Duration;

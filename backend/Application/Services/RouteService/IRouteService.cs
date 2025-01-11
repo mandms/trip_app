@@ -10,7 +10,7 @@ namespace Application.Services.RouteService
         Task<RouteDto?> GetRoute(long id);
         Task DeleteRoute(long id, CancellationToken cancellationToken);
         Task Create(CreateRouteDto createRouteDto, CancellationToken cancellationToken);
-        Task<RouteDto> UpdateRoute(long id, UpdateRouteDto updateRouteDto, CancellationToken cancellationToken);
+        Task<RouteDto> UpdateRouteModal(long id, UpdateRouteDto updateRouteDto, CancellationToken cancellationToken);
         Task AddTag(long routeId, long tagId, CancellationToken cancellationToken);
         Task DeleteTag(long routeId, long tagId, CancellationToken cancellationToken);
     }

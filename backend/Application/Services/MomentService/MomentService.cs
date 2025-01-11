@@ -27,11 +27,11 @@ namespace Application.Services.MomentService
 
         public async Task Create(CreateMomentDto createMomentDto, CancellationToken cancellationToken)
         {
-            var createMoment = () => CreateMoment(createMomentDto, cancellationToken);
+            var createMoment = () => CreateMomentModal(createMomentDto, cancellationToken);
             await _dbTransaction.Transaction(createMoment);
         }
 
-        private async Task CreateMoment(CreateMomentDto createMomentDto, CancellationToken cancellationToken)
+        private async Task CreateMomentModal(CreateMomentDto createMomentDto, CancellationToken cancellationToken)
         {
             if ((createMomentDto.Images != null) && (createMomentDto.Images.Count() > 0))
             {
@@ -84,7 +84,7 @@ namespace Application.Services.MomentService
                 throw new RouteNotFoundException(id);
             }
 
-            MomentMapper.UpdateMoment(foundMoment, updateMomentDto);
+            MomentMapper.UpdateMomentModal(foundMoment, updateMomentDto);
 
             Moment moment = await _repository.Update(foundMoment, cancellationToken);
             return MomentMapper.MomentToMomentDto(moment);

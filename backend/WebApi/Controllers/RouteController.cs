@@ -64,7 +64,7 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<RouteDto>> Put(long id, UpdateRouteDto updateRouteDto, CancellationToken cancellationToken)
         {
-            var route = await _service.UpdateRoute(id, updateRouteDto, cancellationToken);
+            var route = await _service.UpdateRouteModal(id, updateRouteDto, cancellationToken);
             return Ok(route);
         }
     }
