@@ -8,7 +8,7 @@ export const useRouteMap = (points: LatLngExpression[]) => {
   const apiKey = process.env.REACT_APP_GRAPHHOPPER_API_KEY;
 
   useEffect(() => {
-    if (points.length < 2 && points.length > 5) {
+    if (points.length < 2 || points.length > 5) {
       setError(
         'Кол-во точек маршрута должно быть не менее двух и не более пяти',
       );

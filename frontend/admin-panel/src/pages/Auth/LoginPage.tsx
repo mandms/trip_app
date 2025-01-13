@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, TextField, Box, Typography } from '@mui/material';
 import { useMutation } from 'react-query';
 import UserService from '../../api/api.user';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { CurrentUserContext } from '../../stores/CurrentUserContext';
 
 type LoginError = { Error: string[] };
 
@@ -13,8 +14,11 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
+  const { setUser } = useContext(CurrentUserContext);
+
   const mutation = useMutation(UserService.login, {
     onSuccess: (data) => {
+      getUserMutation.mutate();
       navigate('/route');
     },
     onError: (error: any) => {
@@ -25,6 +29,10 @@ const LoginPage = () => {
         setError({ Error: ['Ошибка авторизации'] });
       }
     },
+  });
+
+  const getUserMutation = useMutation(UserService.me, {
+    onSuccess: (user) => setUser(user),
   });
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -25,15 +25,17 @@ interface ICreateReview {
   rate: number;
 }
 
+const InitialReview = {
+  routeId: '',
+  text: '',
+  rate: 0,
+};
+
 const CreateReviewModal: React.FC<ICreateReviewModalProps> = ({
   close,
   open,
 }) => {
-  const [review, setReview] = useState<ICreateReview>({
-    routeId: '',
-    text: '',
-    rate: 0,
-  });
+  const [review, setReview] = useState<ICreateReview>(InitialReview);
   const [error, setError] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
@@ -48,7 +50,8 @@ const CreateReviewModal: React.FC<ICreateReviewModalProps> = ({
       await ReviewService.create(routeId, reviewBody);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries('reviews'); // Обновляем список отзывов
+      await queryClient.invalidateQueries('reviews');
+      clear();
       close();
     },
     onError: (error: unknown) => {
@@ -76,10 +79,20 @@ const CreateReviewModal: React.FC<ICreateReviewModalProps> = ({
     mutation.mutate();
   };
 
+  const clear = () => {
+    setReview(InitialReview);
+    setError(null);
+  };
+
+  const handleClose = () => {
+    clear();
+    close();
+  };
+
   return (
     <Dialog
       open={open}
-      onClose={close}
+      onClose={handleClose}
       maxWidth="sm"
       fullWidth
       aria-modal={true}
@@ -137,7 +150,7 @@ const CreateReviewModal: React.FC<ICreateReviewModalProps> = ({
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={close} color="secondary">
+        <Button onClick={handleClose} color="secondary">
           Закрыть
         </Button>
       </DialogActions>

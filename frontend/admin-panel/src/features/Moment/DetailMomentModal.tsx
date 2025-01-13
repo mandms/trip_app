@@ -11,22 +11,22 @@ import {
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import MomentService from '../../api/api.moment';
-import { LatLngExpression } from 'leaflet';
+import { LatLngExpression, LatLngLiteral } from 'leaflet';
 import ImagesSlider from '../../components/Slider/ImagesSlider';
 import MomentMap from './MomentMap';
 
 interface IDetailMomentModalProps {
   momentId: string;
-  onClose: () => void;
+  close: () => void;
   open: boolean;
 }
 
 const DetailMomentModal: React.FC<IDetailMomentModalProps> = ({
   momentId,
   open,
-  onClose,
+  close,
 }) => {
-  const [coords, setCoords] = useState<LatLngExpression>();
+  const [coords, setCoords] = useState<LatLngLiteral>();
 
   const { data: moment, isLoading } = useQuery(
     ['moment', momentId],
@@ -41,8 +41,13 @@ const DetailMomentModal: React.FC<IDetailMomentModalProps> = ({
     },
   );
 
+  const handleClose = () => {
+    close();
+    setCoords(undefined);
+  };
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>Момент</DialogTitle>
       <DialogContent>
         <Box mb={2} sx={{ height: '400px' }}>
@@ -70,7 +75,7 @@ const DetailMomentModal: React.FC<IDetailMomentModalProps> = ({
         <Typography mt={2}>Дата создания: {moment?.createdAt}</Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={handleClose} color="primary">
           Закрыть
         </Button>
       </DialogActions>

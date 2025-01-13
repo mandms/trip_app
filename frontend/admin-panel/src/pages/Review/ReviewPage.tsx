@@ -188,12 +188,7 @@ const ReviewPage: React.FC = () => {
             </TableHead>
             <TableBody>
               {data?.data.map((review: IReview) => (
-                <TableRow
-                  hover
-                  sx={{ cursor: 'pointer' }}
-                  onClick={() => handleRowClick(review.id)}
-                  key={review.id}
-                >
+                <TableRow hover key={review.id}>
                   <TableCell>{review.text}</TableCell>
                   <TableCell>{review.user.username}</TableCell>
                   <TableCell>{review.createdAt}</TableCell>

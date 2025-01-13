@@ -6,6 +6,7 @@ import {
   Popup,
   useMapEvents,
   Tooltip,
+  useMap,
 } from 'react-leaflet';
 import { LatLngExpression, LatLngLiteral } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -15,13 +16,13 @@ import { IImage } from '../../types/types.image';
 import { MapLocationIcon } from '../../components/Map/MapIcon';
 
 const MapClickHandler: React.FC<{
-  setPoint: React.Dispatch<React.SetStateAction<LatLngExpression | null>>;
+  setPoint: React.Dispatch<React.SetStateAction<LatLngLiteral | null>>;
   addLocation: (latitude: number, longitude: number) => void;
 }> = ({ setPoint, addLocation }) => {
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
-      setPoint([lat, lng]);
+      setPoint(e.latlng);
       addLocation(lat, lng);
     },
   });
@@ -30,27 +31,39 @@ const MapClickHandler: React.FC<{
 
 interface ICreateRouteMapProps {
   addLocation?: (latitude: number, longitude: number) => void;
-  location?: { coords?: LatLngExpression; image?: IImage };
+  location?: { coords?: LatLngLiteral; image?: IImage };
 }
 
 const MomentMap: React.FC<ICreateRouteMapProps> = ({
   addLocation,
   location,
 }) => {
-  const [point, setPoint] = useState<LatLngExpression | null>(null);
+  const [point, setPoint] = useState<LatLngLiteral | null>(null);
 
   useEffect(() => {
     if (!location || !location.coords) return;
     setPoint(location.coords);
   }, [location]);
 
+  const mapZoom = 13;
+  const defaultCenter = { lat: 56.63616, lng: 47.9035 };
+
+  const UpdateMapCenter = () => {
+    const map = useMap();
+    let center = defaultCenter;
+    if (point) center = point;
+    map.flyTo(center, mapZoom);
+    return null;
+  };
+
   return (
     <div style={location ? { height: '100%' } : { height: '350px' }}>
       <MapContainer
-        center={location?.coords ?? [43, 56]}
         zoom={13}
+        center={point ?? defaultCenter}
         style={{ height: '100%' }}
       >
+        <UpdateMapCenter />
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {addLocation && (
           <MapClickHandler setPoint={setPoint} addLocation={addLocation} />

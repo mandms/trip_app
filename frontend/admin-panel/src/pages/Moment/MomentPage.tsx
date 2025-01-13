@@ -175,7 +175,7 @@ const MomentPage: React.FC = () => {
         <DetailMomentModal
           momentId={momentId}
           open={open.detail}
-          onClose={() => handleClose('detail')}
+          close={() => handleClose('detail')}
         />
         <TableContainer>
           <Table style={{ height: '100%', tableLayout: 'fixed' }}>

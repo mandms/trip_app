@@ -127,6 +127,7 @@ const RouteLocationsTab: React.FC<IRouteLocationsProps> = ({
           variant="contained"
           color="success"
           size="medium"
+          disabled={locations.length >= 5}
           onClick={handleOpen}
         >
           Добавить
@@ -225,6 +226,7 @@ const RouteLocationsTab: React.FC<IRouteLocationsProps> = ({
                 fullWidth
                 variant={'contained'}
                 color="secondary"
+                disabled={locations.length <= 2}
               >
                 Удалить локацию
               </Button>
