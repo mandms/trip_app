@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System;
 
 #nullable disable
 
@@ -10,7 +10,7 @@ using System;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -341,9 +341,9 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "Avatar", "Biography", "Email", "Password", "Username" },
                 values: new object[,]
                 {
-                    { 1L, "avatar1.jpg", "Biography1..", "one@mail.com", "$2a$11$SmyD2YXfXryrvFHyz2C64ehbmfT0D7xCRGzmlFfdltkYmLdS1pnx.", "john1" },
-                    { 2L, "avatar2.jpg", "Biography2..", "two@mail.com", "$2a$11$iwYqm0R35nj0BxxxTwze.uIE8uo05vw5h48MgogXtws1LltRYzEx6", "paul1" },
-                    { 3L, "avatar3.jpg", "Biography3..", "three@mail.com", "$2a$11$sQ0DCXKl1xPMMWKcuNQroOh1ICzVfDvElSRmMZVWwikl6VB6Vz8Jy", "bob1" }
+                    { 1L, "user-default.png", "Biography1..", "one@mail.com", "$2a$11$l50CAQH262G7Dw6wlyw5sOfkhy15vePK8W2ZPUIbfGZj9x92Ika1y", "john1" },
+                    { 2L, "user-default.png", "Biography2..", "two@mail.com", "$2a$11$6Le4mi8Qe9mLnYu8i0eN..S3ORLXT2YPNv/tax6FLOgqadcorG92G", "paul1" },
+                    { 3L, "user-default.png", "Biography3..", "three@mail.com", "$2a$11$Wgntwuk13OYsivxgYT61PuCBlCJS1YWUDC/Z2btRks7tJUnw6tCnu", "bob1" }
                 });
 
             migrationBuilder.InsertData(
@@ -351,9 +351,9 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "Coordinates", "CreatedAt", "Description", "Status", "UserId" },
                 values: new object[,]
                 {
-                    { 1L, (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (48.858779767208894 2.294590215790281)"), new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1301), "Moment description 1", 4, 1L },
-                    { 2L, (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (55.751165864532894 37.61726058361952)"), new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1305), "Moment description 2", 5, 2L },
-                    { 3L, (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (50.04278538093594 87.40137428089643)"), new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1309), "Moment description 3", 3, 3L }
+                    { 1L, (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (48.858779767208894 2.294590215790281)"), new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(8063), "Moment description 1", 4, 1L },
+                    { 2L, (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (55.751165864532894 37.61726058361952)"), new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(8068), "Moment description 2", 5, 2L },
+                    { 3L, (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (50.04278538093594 87.40137428089643)"), new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(8073), "Moment description 3", 3, 3L }
                 });
 
             migrationBuilder.InsertData(
@@ -411,9 +411,9 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedAt", "RouteId", "Text" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1160), 1L, "Text 1" },
-                    { 2L, new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1162), 2L, "Text 2" },
-                    { 3L, new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1163), 3L, "Text 3" }
+                    { 1L, new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7895), 1L, "Text 1" },
+                    { 2L, new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7898), 2L, "Text 2" },
+                    { 3L, new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7900), 3L, "Text 3" }
                 });
 
             migrationBuilder.InsertData(
@@ -421,9 +421,9 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedAt", "Rate", "RouteId", "Text", "UserId" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1205), 5, 3L, "Text 1", 1L },
-                    { 2L, new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1221), 4, 1L, "Text 2", 2L },
-                    { 3L, new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1223), 3, 2L, "Text 3", 3L }
+                    { 1L, new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7957), 5, 3L, "Text 1", 1L },
+                    { 2L, new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7965), 4, 1L, "Text 2", 2L },
+                    { 3L, new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7967), 3, 2L, "Text 3", 3L }
                 });
 
             migrationBuilder.InsertData(
@@ -451,9 +451,9 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "Image", "LocationId" },
                 values: new object[,]
                 {
-                    { 1L, "Image1.jpg", 1L },
-                    { 2L, "Image2.jpg", 2L },
-                    { 3L, "Image3.jpg", 3L }
+                    { 1L, "image-location.jpg", 1L },
+                    { 2L, "image-location.jpg", 2L },
+                    { 3L, "image-location.jpg", 3L }
                 });
 
             migrationBuilder.CreateIndex(

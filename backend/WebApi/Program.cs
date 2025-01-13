@@ -50,16 +50,16 @@ app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
+app.UseCors(policy => policy
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.UserRequestUserMiddleware();
-
-app.UseCors(x => x
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
 
 app.MapControllers();
 

@@ -37,7 +37,7 @@ namespace Infrastructure.Foundation
             User john = new User()
             {
                 Id = 1,
-                Avatar = "avatar1.jpg",
+                Avatar = "user-default.png",
                 Biography = "Biography1..",
                 Email = "one@mail.com",
                 Password = new PasswordHasher().Hash("123123123"),
@@ -53,7 +53,7 @@ namespace Infrastructure.Foundation
             User paul = new User()
             {
                 Id = 2,
-                Avatar = "avatar2.jpg",
+                Avatar = "user-default.png",
                 Biography = "Biography2..",
                 Email = "two@mail.com",
                 Password = new PasswordHasher().Hash("123123123"),
@@ -63,7 +63,7 @@ namespace Infrastructure.Foundation
             User bob = new User()
             {
                 Id = 3,
-                Avatar = "avatar3.jpg",
+                Avatar = "user-default.png",
                 Biography = "Biography3..",
                 Email = "three@mail.com",
                 Password = new PasswordHasher().Hash("123123123"),
@@ -223,21 +223,21 @@ namespace Infrastructure.Foundation
             ImageLocation moscowImg = new ImageLocation
             {
                 Id = 1,
-                Image = "Image1.jpg",
+                Image = "image-location.jpg",
                 LocationId = moscow.Id
             };
 
             ImageLocation altaiImg = new ImageLocation
             {
                 Id = 2,
-                Image = "Image2.jpg",
+                Image = "image-location.jpg",
                 LocationId = altai.Id
             };
 
             ImageLocation parisImg = new ImageLocation
             {
                 Id = 3,
-                Image = "Image3.jpg",
+                Image = "image-location.jpg",
                 LocationId = paris.Id
             };
 

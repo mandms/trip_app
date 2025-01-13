@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebApi.Attributes;
 
 namespace WebApi.Controllers
@@ -41,9 +42,11 @@ namespace WebApi.Controllers
             return Ok(pagedResponse);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserDto>> GetUser(long id)
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDto>> GetMe()
         {
+            long id = (long)HttpContext.Items[ClaimTypes.Sid]!;
             var user = await _service.GetUser(id);
             return new ObjectResult(user);
         }

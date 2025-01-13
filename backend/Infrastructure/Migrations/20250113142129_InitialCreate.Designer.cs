@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(TripAppDbContext))]
-    [Migration("20241114203015_init")]
-    partial class init
+    [Migration("20250113142129_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,19 +95,19 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            Image = "Image1.jpg",
+                            Image = "image-location.jpg",
                             LocationId = 1L
                         },
                         new
                         {
                             Id = 2L,
-                            Image = "Image2.jpg",
+                            Image = "image-location.jpg",
                             LocationId = 2L
                         },
                         new
                         {
                             Id = 3L,
-                            Image = "Image3.jpg",
+                            Image = "image-location.jpg",
                             LocationId = 3L
                         });
                 });
@@ -252,7 +252,7 @@ namespace Infrastructure.Migrations
                         {
                             Id = 1L,
                             Coordinates = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (48.858779767208894 2.294590215790281)"),
-                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1301),
+                            CreatedAt = new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(8063),
                             Description = "Moment description 1",
                             Status = 4,
                             UserId = 1L
@@ -261,7 +261,7 @@ namespace Infrastructure.Migrations
                         {
                             Id = 2L,
                             Coordinates = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (55.751165864532894 37.61726058361952)"),
-                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1305),
+                            CreatedAt = new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(8068),
                             Description = "Moment description 2",
                             Status = 5,
                             UserId = 2L
@@ -270,7 +270,7 @@ namespace Infrastructure.Migrations
                         {
                             Id = 3L,
                             Coordinates = (NetTopologySuite.Geometries.Point)new NetTopologySuite.IO.WKTReader().Read("SRID=0;POINT (50.04278538093594 87.40137428089643)"),
-                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1309),
+                            CreatedAt = new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(8073),
                             Description = "Moment description 3",
                             Status = 3,
                             UserId = 3L
@@ -305,21 +305,21 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1160),
+                            CreatedAt = new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7895),
                             RouteId = 1L,
                             Text = "Text 1"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1162),
+                            CreatedAt = new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7898),
                             RouteId = 2L,
                             Text = "Text 2"
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1163),
+                            CreatedAt = new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7900),
                             RouteId = 3L,
                             Text = "Text 3"
                         });
@@ -360,7 +360,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1205),
+                            CreatedAt = new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7957),
                             Rate = 5,
                             RouteId = 3L,
                             Text = "Text 1",
@@ -369,7 +369,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1221),
+                            CreatedAt = new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7965),
                             Rate = 4,
                             RouteId = 1L,
                             Text = "Text 2",
@@ -378,7 +378,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 11, 14, 20, 30, 14, 431, DateTimeKind.Utc).AddTicks(1223),
+                            CreatedAt = new DateTime(2025, 1, 13, 14, 21, 28, 307, DateTimeKind.Utc).AddTicks(7967),
                             Rate = 3,
                             RouteId = 2L,
                             Text = "Text 3",
@@ -574,28 +574,28 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            Avatar = "avatar1.jpg",
+                            Avatar = "user-default.png",
                             Biography = "Biography1..",
                             Email = "one@mail.com",
-                            Password = "$2a$11$SmyD2YXfXryrvFHyz2C64ehbmfT0D7xCRGzmlFfdltkYmLdS1pnx.",
+                            Password = "$2a$11$l50CAQH262G7Dw6wlyw5sOfkhy15vePK8W2ZPUIbfGZj9x92Ika1y",
                             Username = "john1"
                         },
                         new
                         {
                             Id = 2L,
-                            Avatar = "avatar2.jpg",
+                            Avatar = "user-default.png",
                             Biography = "Biography2..",
                             Email = "two@mail.com",
-                            Password = "$2a$11$iwYqm0R35nj0BxxxTwze.uIE8uo05vw5h48MgogXtws1LltRYzEx6",
+                            Password = "$2a$11$6Le4mi8Qe9mLnYu8i0eN..S3ORLXT2YPNv/tax6FLOgqadcorG92G",
                             Username = "paul1"
                         },
                         new
                         {
                             Id = 3L,
-                            Avatar = "avatar3.jpg",
+                            Avatar = "user-default.png",
                             Biography = "Biography3..",
                             Email = "three@mail.com",
-                            Password = "$2a$11$sQ0DCXKl1xPMMWKcuNQroOh1ICzVfDvElSRmMZVWwikl6VB6Vz8Jy",
+                            Password = "$2a$11$Wgntwuk13OYsivxgYT61PuCBlCJS1YWUDC/Z2btRks7tJUnw6tCnu",
                             Username = "bob1"
                         });
                 });
